@@ -8,7 +8,10 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1CEAF1E4-F62E-4307-B1A4-09523CE5FB69}"
 	ProjectSection(SolutionItems) = preProject
 		appveyor.yml = appveyor.yml
+		CustomDictionary.xml = CustomDictionary.xml
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OBeautifulCode.AutoFakeItEasy.Test", "OBeautifulCode.AutoFakeItEasy.Test\OBeautifulCode.AutoFakeItEasy.Test.csproj", "{F81F7A20-0B67-48C3-91D5-1B4313D06AC2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -20,6 +23,10 @@ Global
 		{6CA8C72F-009E-4CE9-B3B9-2D1E9A883F50}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6CA8C72F-009E-4CE9-B3B9-2D1E9A883F50}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6CA8C72F-009E-4CE9-B3B9-2D1E9A883F50}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F81F7A20-0B67-48C3-91D5-1B4313D06AC2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F81F7A20-0B67-48C3-91D5-1B4313D06AC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F81F7A20-0B67-48C3-91D5-1B4313D06AC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F81F7A20-0B67-48C3-91D5-1B4313D06AC2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
