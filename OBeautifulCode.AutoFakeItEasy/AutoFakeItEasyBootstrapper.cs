@@ -11,10 +11,8 @@ namespace OBeautifulCode.AutoFakeItEasy
 {
     using System.Collections.Generic;
 
-    using OBeautifulCode.AutoFakeItEasy;
-
     /// <summary>
-    /// Bootstrapper for <see cref="AutoFixtureBackedDummyFactory"/>.
+    /// Bootstraps AutoFakeItEasy.
     /// </summary>
     [System.Diagnostics.DebuggerStepThrough]
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
