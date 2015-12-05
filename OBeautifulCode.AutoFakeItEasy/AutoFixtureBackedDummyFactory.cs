@@ -39,6 +39,14 @@ namespace OBeautifulCode.AutoFakeItEasy
         /// <inheritdoc />
         public int Priority => int.MinValue;
 
+        /// <summary>
+        /// Loads this factory in the app domain, which makes it
+        /// visible to FakeItEasy's extension point scanner.
+        /// </summary>
+        public static void LoadInAppDomain()
+        {
+        }
+
         /// <inheritdoc />
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "factory caller will ensure this is not null")]
         public bool CanCreate(Type type)

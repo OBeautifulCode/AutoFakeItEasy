@@ -64,6 +64,7 @@
   <ItemGroup>
     <Compile Include="AutoFixtureBackedDummyFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="AutoFakeItEasyBootstrapper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config">
