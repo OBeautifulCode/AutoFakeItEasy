@@ -27,6 +27,10 @@ namespace OBeautifulCode.AutoFakeItEasy
         /// </returns>
         public override IEnumerable<string> GetAssemblyFileNamesToScanForExtensions()
         {
+            // calling a static method on the factory loads it into the app domain, 
+            // exposing it as an extension point during FakeItEasy's scan.
+            // That's a lot easier than trying to find the path to the assembly, which
+            // is typically what you would do here.
             AutoFixtureBackedDummyFactory.LoadInAppDomain();
             return base.GetAssemblyFileNamesToScanForExtensions();
         }
