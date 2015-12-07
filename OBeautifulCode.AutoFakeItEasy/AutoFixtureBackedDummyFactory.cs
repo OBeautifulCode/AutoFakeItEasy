@@ -76,8 +76,8 @@ namespace OBeautifulCode.AutoFakeItEasy
                 timesToCallAutoFixtureCreateMethod = ThreadSafeRandom.Next(1, 10);
             }
 
+            // call the AutoFixture Create() method
             MethodInfo autoFixtureGenericCreateMethod = this.autoFixtureCreateMethod.MakeGenericMethod(type);
-
             object result = null;
             for (int i = 0; i < timesToCallAutoFixtureCreateMethod; i++)
             {
