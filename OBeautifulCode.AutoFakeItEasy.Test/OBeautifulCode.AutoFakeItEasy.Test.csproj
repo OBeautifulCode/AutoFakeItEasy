@@ -62,6 +62,10 @@
       <HintPath>..\packages\OBeautifulCode.Math.1.0.5\lib\45\OBeautifulCode.Math.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Ploeh.AutoFixture, Version=3.37.1.0, Culture=neutral, PublicKeyToken=b24654c590009d4f, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoFixture.3.37.1\lib\net40\Ploeh.AutoFixture.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
@@ -93,6 +97,8 @@
     <Compile Include="CustomTypes\PositiveIntegerTest.cs" />
     <Compile Include="CustomTypes\ZeroOrNegativeIntegerTest.cs" />
     <Compile Include="CustomTypes\ZeroOrPositiveIntegerTest.cs" />
+    <Compile Include="Generators\DummySpecimenContext.cs" />
+    <Compile Include="Generators\RandomBoolSequenceGeneratorTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Number.cs" />
   </ItemGroup>
