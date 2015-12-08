@@ -23,7 +23,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
     public static class RandomEnumSequenceGeneratorTest
     {
         [Fact]
-        public static void Constructor___When_object_is_constructed__Then_resulting_object_is_assignable_to_ISpecimenBuilder()
+        public static void Constructor___When_object_is_constructed__Return_an_object_that_is_assignable_to_ISpecimenBuilder()
         {
             // Arrange, Act
             var systemUnderTest = new RandomEnumSequenceGenerator();
@@ -33,7 +33,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         }
 
         [Fact]
-        public static void Create___When_called_with_null_request___Then_method_returns_object_equal_to_NoSpecimen()
+        public static void Create___When_called_with_null_request___Returns_an_object_equal_to_NoSpecimen()
         {
             // Arrange
             var dummyContainer = new DummySpecimenContext();
@@ -48,7 +48,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         }
 
         [Fact]
-        public static void Create___When_called_with_null_container___Then_method_does_not_throw()
+        public static void Create___When_called_with_null_container___Does_not_throw()
         {
             // Arrange
             var systemUnderTest = new RandomEnumSequenceGenerator();
@@ -62,7 +62,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         }
 
         [Fact]
-        public static void Create___When_request_is_not_an_enum___Then_method_returns_object_equal_to_NoSpecimen()
+        public static void Create___When_request_is_not_an_enum___Returns_an_object_equal_to_NoSpecimen()
         {
             // Arrange
             var dummyContainer = new DummySpecimenContext();
@@ -78,7 +78,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         }
 
         [Fact]
-        public static void Create___When_request_is_for_an_enum___Then_method_returns_result_of_same_enum_type_as_request()
+        public static void Create___When_request_is_for_an_enum___Returns_an_enum_of_the_same_type_as_request()
         {
             // Arrange
             var dummyContainer = new DummySpecimenContext();
@@ -93,7 +93,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         }
 
         [Fact]
-        public static void Create___When_multiple_requests_are_made_for_enum___Then_method_returns_random_enum_values()
+        public static void Create___When_multiple_requests_are_made_for_enum___Returns_random_enum_values()
         {
             // Arrange
             var dummyContainer = new DummySpecimenContext();
@@ -109,7 +109,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         }
 
         [Fact]
-        public static void Create___When_many_requests_are_made_for_an_enum___Then_result_contains_all_enum_values()
+        public static void Create___When_many_requests_are_made_for_an_enum___Returns_all_enum_values_at_least_once()
         {
             // Arrange
             var dummyContainer = new DummySpecimenContext();

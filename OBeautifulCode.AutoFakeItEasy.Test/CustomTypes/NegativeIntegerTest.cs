@@ -22,7 +22,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
     public static class NegativeIntegerTest
     {
         [Fact]
-        public static void Constructor___When_the_value_parameter_is_zero_or_positive___Then_constructor_throws_ArgumentOutOfRangeException()
+        public static void Constructor___When_the_value_parameter_is_zero_or_positive___Throws_ArgumentOutOfRangeException()
         {
             // Arrange, Act
             var ex1 = Record.Exception(() => new NegativeInteger(0));
@@ -38,7 +38,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         }
 
         [Fact]
-        public static void Constructor___When_the_value_parameter_is_negative___Then_constructor_does_not_throw()
+        public static void Constructor___When_the_value_parameter_is_negative___Does_not_throw()
         {
             // Arrange, Act
             var ex1 = Record.Exception(() => new NegativeInteger(-1));
