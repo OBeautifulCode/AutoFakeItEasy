@@ -108,9 +108,9 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var actualResult = Enumerable.Range(1, byte.MaxValue * 20).Select(_ => A.Dummy<byte>()).ToList();
 
             // Assert
-            for (byte i = 0; i <= 255; i++)
+            for (int i = byte.MinValue; i <= 255; i++)
             {
-                actualResult.Should().Contain(i);
+                actualResult.Should().Contain((byte)i);
             }
         }
 
