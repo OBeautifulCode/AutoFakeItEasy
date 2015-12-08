@@ -52,7 +52,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         }
 
         [Fact]
-        public static void Value___When_the_object_has_been_constructed___Then_Value_returns_the_same_value_passed_to_constructor()
+        public static void Value___When_getting___Returns_the_same_value_passed_to_constructor()
         {
             // Arrange
             var expectedInt = ThreadSafeRandom.Next(int.MinValue, 0);
@@ -66,7 +66,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         }
 
         [Fact]
-        public static void Cast___When_casting_to_int___Then_the_resulting_int_is_the_same_value_passed_to_constructor()
+        public static void Cast___When_casting_to_int___Returns_the_same_value_passed_to_constructor()
         {
             // Arrange
             var expectedInt = ThreadSafeRandom.Next(int.MinValue, 0);
