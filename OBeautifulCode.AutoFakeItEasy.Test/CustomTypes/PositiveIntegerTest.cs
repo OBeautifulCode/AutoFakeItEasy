@@ -22,7 +22,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
     public static class PositiveIntegerTest
     {
         [Fact]
-        public static void Constructor_When_the_value_parameter_is_zero_or_negative_Then_constructor_throws_ArgumentOutOfRangeException()
+        public static void Constructor___When_the_value_parameter_is_zero_or_negative___Then_constructor_throws_ArgumentOutOfRangeException()
         {
             // Arrange, Act
             var ex1 = Record.Exception(() => new PositiveInteger(0));
@@ -38,7 +38,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         }
 
         [Fact]
-        public static void Constructor_When_the_value_parameter_is_positive_Then_constructor_does_not_throw()
+        public static void Constructor___When_the_value_parameter_is_positive___Then_constructor_does_not_throw()
         {
             // Arrange, Act
             var ex1 = Record.Exception(() => new PositiveInteger(1));
@@ -52,7 +52,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         }
 
         [Fact]
-        public static void Value_When_the_object_has_been_constructed_Then_Value_returns_the_same_value_passed_to_constructor()
+        public static void Value___When_the_object_has_been_constructed___Then_Value_returns_the_same_value_passed_to_constructor()
         {
             // Arrange
             var expectedInt = ThreadSafeRandom.Next(1, int.MaxValue);
@@ -66,7 +66,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         }
 
         [Fact]
-        public static void Cast_When_casting_to_int_Then_the_resulting_int_is_the_same_value_passed_to_constructor()
+        public static void Cast___When_casting_to_int___Then_the_resulting_int_is_the_same_value_passed_to_constructor()
         {
             // Arrange
             var expectedInt = ThreadSafeRandom.Next(1, int.MaxValue);
