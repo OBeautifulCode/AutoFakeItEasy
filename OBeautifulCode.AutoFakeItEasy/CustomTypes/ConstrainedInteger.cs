@@ -48,6 +48,7 @@ namespace OBeautifulCode.AutoFakeItEasy
         /// <returns>
         /// The result of the conversion.
         /// </returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "int", Justification = "We have to use this exact method name to be CLS-compliant.")]
         public static int ToInt(ConstrainedInteger from)
         {
             return from.Value;
