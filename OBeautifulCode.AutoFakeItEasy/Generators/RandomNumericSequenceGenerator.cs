@@ -115,8 +115,8 @@ namespace OBeautifulCode.AutoFakeItEasy
             byte[] buffer = new byte[8];
             ThreadSafeRandom.NextBytes(buffer);
             long longRand = BitConverter.ToInt64(buffer, 0);
-
-            return Math.Abs(longRand % (exclusiveMax - inclusiveMin)) + inclusiveMin;
+            var result = Math.Abs(longRand % (exclusiveMax - inclusiveMin)) + inclusiveMin;
+            return result;
         }
     }
 }

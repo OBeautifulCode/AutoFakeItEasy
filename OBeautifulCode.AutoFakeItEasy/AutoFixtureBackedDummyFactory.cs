@@ -12,10 +12,10 @@ namespace OBeautifulCode.AutoFakeItEasy
 
     using FakeItEasy;
 
-    using OBeautifulCode.Math;
-
     using Ploeh.AutoFixture;
     using Ploeh.AutoFixture.Kernel;
+
+    using Spritely.Redo;
 
     /// <summary>
     /// A dummy factory backed by AutoFixture.
@@ -23,6 +23,8 @@ namespace OBeautifulCode.AutoFakeItEasy
     public class AutoFixtureBackedDummyFactory : IDummyFactory
     {
         private readonly Fixture fixture = new Fixture();
+
+        private readonly object fixtureLock = new object();
 
         private readonly MethodInfo autoFixtureCreateMethod;
 
@@ -34,6 +36,17 @@ namespace OBeautifulCode.AutoFakeItEasy
             this.autoFixtureCreateMethod = typeof(SpecimenFactory)
                 .GetMethods()
                 .Single(_ => (_.Name == "Create") && (_.GetParameters().Length == 1) && (_.GetParameters().Single().ParameterType == typeof(ISpecimenBuilder)));
+
+            // defined in this project:
+            this.fixture.Customizations.Insert(0, new AutoFakeItEasy.RandomNumericSequenceGenerator(short.MinValue, short.MaxValue + 2));
+            this.fixture.Customizations.Insert(0, new RandomBoolSequenceGenerator());
+            this.fixture.Customizations.Insert(0, new RandomEnumSequenceGenerator());
+
+            // custom types
+            this.fixture.Register(() => new PositiveInteger(Math.Abs(Try.Running(this.fixture.Create<int>).Until(result => result != 0))));
+            this.fixture.Register(() => new NegativeInteger(-1 * Math.Abs(Try.Running(this.fixture.Create<int>).Until(result => result != 0))));
+            this.fixture.Register(() => new ZeroOrPositiveInteger(Math.Abs(this.fixture.Create<int>())));
+            this.fixture.Register(() => new ZeroOrNegativeInteger(-1 * Math.Abs(this.fixture.Create<int>())));
         }
 
         /// <inheritdoc />
@@ -62,29 +75,14 @@ namespace OBeautifulCode.AutoFakeItEasy
         /// <inheritdoc />
         public object Create(Type type)
         {
-            int timesToCallAutoFixtureCreateMethod = 1;
-
-            if (type.IsEnum)
-            {
-                // autofixture creates enum values sequentially, this makes it random
-                var enumCount = Enum.GetNames(type).Length;
-                timesToCallAutoFixtureCreateMethod = ThreadSafeRandom.Next(1, enumCount);
-            }
-            else if (type == typeof(bool))
-            {
-                // autofixture creates bools sequentially, this makes it random
-                timesToCallAutoFixtureCreateMethod = ThreadSafeRandom.Next(1, 10);
-            }
-
-            // call the AutoFixture Create() method
+            // call the AutoFixture Create() method, lock because AutoFixture is not thread safe.
             MethodInfo autoFixtureGenericCreateMethod = this.autoFixtureCreateMethod.MakeGenericMethod(type);
-            object result = null;
-            for (int i = 0; i < timesToCallAutoFixtureCreateMethod; i++)
-            {
-                result = autoFixtureGenericCreateMethod.Invoke(null, new object[] { this.fixture });
-            }
 
-            return result;
+            lock (this.fixtureLock)
+            {
+                object result = autoFixtureGenericCreateMethod.Invoke(null, new object[] { this.fixture });
+                return result;
+            }
         }
     }
 }
