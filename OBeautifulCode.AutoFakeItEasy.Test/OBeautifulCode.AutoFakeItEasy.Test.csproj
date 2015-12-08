@@ -99,6 +99,7 @@
     <Compile Include="CustomTypes\ZeroOrPositiveIntegerTest.cs" />
     <Compile Include="Generators\DummySpecimenContext.cs" />
     <Compile Include="Generators\RandomBoolSequenceGeneratorTest.cs" />
+    <Compile Include="Generators\RandomEnumSequenceGeneratorTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Number.cs" />
   </ItemGroup>

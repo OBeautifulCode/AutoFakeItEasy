@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="RandomBoolSequenceGeneratorTest.cs" company="OBeautifulCode">
+// <copyright file="RandomEnumSequenceGeneratorTest.cs" company="OBeautifulCode">
 //   Copyright (c) OBeautifulCode. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
@@ -8,8 +8,11 @@
 // ReSharper disable InconsistentNaming
 namespace OBeautifulCode.AutoFakeItEasy.Test
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
+
+    using FakeItEasy;
 
     using FluentAssertions;
 
@@ -18,15 +21,15 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
     using Xunit;
 
     /// <summary>
-    /// Tests the <see cref="RandomBoolSequenceGenerator"/> class.
+    /// Tests the <see cref="RandomEnumSequenceGenerator"/> class.
     /// </summary>
-    public static class RandomBoolSequenceGeneratorTest
+    public static class RandomEnumSequenceGeneratorTest
     {
         [Fact]
         public static void Constructor___When_object_is_constructed__Then_resulting_object_is_assignable_to_ISpecimenBuilder()
         {
             // Arrange, Act
-            var systemUnderTest = new RandomBoolSequenceGenerator();
+            var systemUnderTest = new RandomEnumSequenceGenerator();
 
             // Assert
             systemUnderTest.Should().BeAssignableTo<ISpecimenBuilder>();
@@ -37,7 +40,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         {
             // Arrange
             var dummyContainer = new DummySpecimenContext();
-            var systemUnderTest = new RandomBoolSequenceGenerator();
+            var systemUnderTest = new RandomEnumSequenceGenerator();
             var expectedResult = new NoSpecimen();
 
             // Act
@@ -51,7 +54,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         public static void Create___When_called_with_null_container___Then_method_does_not_throw()
         {
             // Arrange
-            var systemUnderTest = new RandomBoolSequenceGenerator();
+            var systemUnderTest = new RandomEnumSequenceGenerator();
             var dummyRequest = new object();
 
             // Act
@@ -62,11 +65,11 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         }
 
         [Fact]
-        public static void Create___When_request_is_not_a_boolean___Then_method_returns_object_equal_to_NoSpecimen()
+        public static void Create___When_request_is_not_an_enum___Then_method_returns_object_equal_to_NoSpecimen()
         {
             // Arrange
             var dummyContainer = new DummySpecimenContext();
-            var systemUnderTest = new RandomBoolSequenceGenerator();
+            var systemUnderTest = new RandomEnumSequenceGenerator();
             var expectedResult = new NoSpecimen();
             var request = new object();
 
@@ -78,36 +81,34 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         }
 
         [Fact]
-        public static void Create___When_request_is_for_a_boolean___Then_method_returns_result_of_type_bool()
+        public static void Create___When_request_is_for_an_enum___Then_method_returns_result_of_same_enum_type_as_request()
         {
             // Arrange
             var dummyContainer = new DummySpecimenContext();
-            var systemUnderTest = new RandomBoolSequenceGenerator();
-            var request = typeof(bool);
+            var systemUnderTest = new RandomEnumSequenceGenerator();
+            var request = typeof(Number);
 
             // Act
             var actualResult = systemUnderTest.Create(request, dummyContainer);
 
             // Assert
-            actualResult.Should().BeOfType<bool>();
+            actualResult.Should().BeOfType<Number>();
         }
 
         [Fact]
-        public static void Create___When_multiple_requests_are_made_for_booleans___Then_method_returns_random_booleans()
+        public static void Create___When_multiple_requests_are_made_for_enum___Then_method_returns_random_enum_values()
         {
             // Arrange
             var dummyContainer = new DummySpecimenContext();
-            var systemUnderTest = new RandomBoolSequenceGenerator();
-            var request = typeof(bool);
-            var sequentialBools1 = new List<bool> { true, false, true, false, true, false, true, false };
-            var sequentialBools2 = new List<bool> { false, true, false, true, false, true, false, true };
+            var systemUnderTest = new RandomEnumSequenceGenerator();
+            var request = typeof(Number);
+            var enumValuesCount = Enum.GetValues(typeof(Number)).Length;
 
             // Act
-            var actualResult = Enumerable.Range(1, sequentialBools1.Count).Select(_ => systemUnderTest.Create(request, dummyContainer)).Cast<bool>().ToList();
+            var actualResult = Enumerable.Range(1, enumValuesCount).Select(_ => systemUnderTest.Create(request, dummyContainer)).Cast<Number>().ToList();
 
             // Assert
-            actualResult.Should().NotEqual(sequentialBools1);
-            actualResult.Should().NotEqual(sequentialBools2);
+            actualResult.Should().NotBeAscendingInOrder();
         }
     }
 }
