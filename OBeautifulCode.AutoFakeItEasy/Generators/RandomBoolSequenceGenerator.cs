@@ -9,7 +9,8 @@ namespace OBeautifulCode.AutoFakeItEasy
 {
     using System;
 
-    using Ploeh.AutoFixture;
+    using OBeautifulCode.Math;
+
     using Ploeh.AutoFixture.Kernel;
 
     /// <summary>
@@ -20,17 +21,6 @@ namespace OBeautifulCode.AutoFakeItEasy
     /// </remarks>
     public class RandomBoolSequenceGenerator : ISpecimenBuilder
     {
-        private readonly RandomNumericSequenceGenerator randomBooleanNumbers;
-
-        /// <summary>
-        /// Initializes a new instance of the
-        /// <see cref="RandomBoolSequenceGenerator"/> class.
-        /// </summary>
-        public RandomBoolSequenceGenerator()
-        {
-            this.randomBooleanNumbers = new RandomNumericSequenceGenerator(0, 1);
-        }
-
         /// <summary>
         /// Returns <see langword="true"/> or <see langword="false"/> randomly.
         /// </summary>
@@ -47,12 +37,7 @@ namespace OBeautifulCode.AutoFakeItEasy
                 return new NoSpecimen();
             }
 
-            return this.GenerateBoolean(context);
-        }
-
-        private bool GenerateBoolean(ISpecimenContext context)
-        {
-            return (int)this.randomBooleanNumbers.Create(typeof(int), context) == 0;
+            return ThreadSafeRandom.Next(0, 2) == 0;
         }
     }
 }
