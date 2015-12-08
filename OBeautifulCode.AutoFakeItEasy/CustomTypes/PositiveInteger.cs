@@ -15,33 +15,16 @@ namespace OBeautifulCode.AutoFakeItEasy
     /// Represents a positive integer.
     /// </summary>
     [DebuggerDisplay("{Value}")]
-    public class PositiveInteger
+    public sealed class PositiveInteger : ConstrainedInteger
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="PositiveInteger"/> class.
         /// </summary>
         /// <param name="value">The value held by the <see cref="PositiveInteger"/> instance.</param>
         public PositiveInteger(int value)
+            : base(value)
         {
             Condition.Requires(value, nameof(value)).IsGreaterThan(0);
-            this.Value = value;
-        }
-
-        /// <summary>
-        /// Gets the underlying <see cref="int"/> value of the instance.
-        /// </summary>
-        public int Value { get; }
-
-        /// <summary>
-        /// Performs an explicit conversion from <see cref="PositiveInteger"/> to <see cref="int"/>.
-        /// </summary>
-        /// <param name="from">From.</param>
-        /// <returns>
-        ///     The result of the conversion.
-        /// </returns>
-        public static explicit operator int(PositiveInteger from)
-        {
-            return from.Value;
         }
     }
 }

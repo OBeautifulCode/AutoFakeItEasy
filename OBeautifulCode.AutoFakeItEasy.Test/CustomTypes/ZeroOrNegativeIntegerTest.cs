@@ -73,7 +73,21 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var systemUnderTest = new ZeroOrNegativeInteger(expectedInt);
 
             // Act
-            var actualInt = systemUnderTest.Value;
+            var actualInt = (int)systemUnderTest;
+
+            // Assert
+            actualInt.Should().Be(expectedInt);
+        }
+
+        [Fact]
+        public static void ToInt___Should_return_the_same_value_passed_to_constructor___When_called()
+        {
+            // Arrange
+            var expectedInt = ThreadSafeRandom.Next(int.MinValue, 0);
+            var systemUnderTest = new ZeroOrNegativeInteger(expectedInt);
+
+            // Act
+            var actualInt = ConstrainedInteger.ToInt(systemUnderTest);
 
             // Assert
             actualInt.Should().Be(expectedInt);
