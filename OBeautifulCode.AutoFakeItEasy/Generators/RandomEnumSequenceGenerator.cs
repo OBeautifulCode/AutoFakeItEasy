@@ -41,8 +41,8 @@ namespace OBeautifulCode.AutoFakeItEasy
 
             // get random enum value
             var enumValues = Enum.GetValues(t).Cast<object>().ToList();
-            var randomValueIndex = ThreadSafeRandom.Next(0, enumValues.Count - 1);
-            var result = enumValues[randomValueIndex];
+            var randomIndex = ThreadSafeRandom.Next(0, enumValues.Count);
+            var result = enumValues[randomIndex];
             return result;
         }
     }
