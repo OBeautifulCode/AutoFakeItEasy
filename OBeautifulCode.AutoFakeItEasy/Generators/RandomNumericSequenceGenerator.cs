@@ -18,7 +18,7 @@ namespace OBeautifulCode.AutoFakeItEasy
     using Ploeh.AutoFixture.Kernel;
 
     /// <summary>
-    /// Creates a sequence of random, unique, numbers.
+    /// Creates a sequence of random, unique numbers.
     /// </summary>
     public class RandomNumericSequenceGenerator : ISpecimenBuilder
     {
@@ -40,7 +40,7 @@ namespace OBeautifulCode.AutoFakeItEasy
         }
 
         /// <summary>
-        /// Creates an anonymous number.
+        /// Creates a random number.
         /// </summary>
         /// <param name="request">The request that describes what to create.</param>
         /// <param name="context">A context that can be used to create other specimens.</param>
