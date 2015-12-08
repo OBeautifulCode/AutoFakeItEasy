@@ -22,7 +22,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
     public static class NegativeIntegerTest
     {
         [Fact]
-        public static void Constructor___When_the_value_parameter_is_zero_or_positive___Throws_ArgumentOutOfRangeException()
+        public static void Constructor___Should_throw_ArgumentOutOfRangeException___When_the_value_parameter_is_zero_or_positive()
         {
             // Arrange, Act
             var ex1 = Record.Exception(() => new NegativeInteger(0));
@@ -38,7 +38,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         }
 
         [Fact]
-        public static void Constructor___When_the_value_parameter_is_negative___Does_not_throw()
+        public static void Constructor___Should_not_throw___When_the_value_parameter_is_negative()
         {
             // Arrange, Act
             var ex1 = Record.Exception(() => new NegativeInteger(-1));
@@ -52,7 +52,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         }
 
         [Fact]
-        public static void Value___When_getting___Returns_the_same_value_passed_to_constructor()
+        public static void Value___Should_return_the_same_value_passed_to_constructor___When_getting()
         {
             // Arrange
             var expectedInt = ThreadSafeRandom.Next(int.MinValue, -1);
@@ -66,7 +66,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         }
 
         [Fact]
-        public static void Cast___When_casting_to_int___Returns_the_same_value_passed_to_constructor()
+        public static void Cast___Should_return_the_same_value_passed_to_constructor___When_casting_to_int()
         {
             // Arrange
             var expectedInt = ThreadSafeRandom.Next(int.MinValue, -1);
