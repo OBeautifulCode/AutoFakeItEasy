@@ -109,6 +109,22 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             actualResult.Should().NotEqual(sequentialBools1);
             actualResult.Should().NotEqual(sequentialBools2);
         }
+
+        [Fact]
+        public static void Create___When_many_requests_are_made_for_booleans___Then_result_contains_both_true_and_false()
+        {
+            // Arrange
+            var dummyContainer = new DummySpecimenContext();
+            var systemUnderTest = new RandomBoolSequenceGenerator();
+            var request = typeof(bool);
+
+            // Act
+            var actualResult = Enumerable.Range(1, 1000).Select(_ => systemUnderTest.Create(request, dummyContainer)).Cast<bool>().ToList();
+
+            // Assert
+            actualResult.Should().Contain(true);
+            actualResult.Should().Contain(false);
+        }
     }
 }
 

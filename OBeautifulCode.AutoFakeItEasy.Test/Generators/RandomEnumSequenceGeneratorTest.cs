@@ -9,10 +9,7 @@
 namespace OBeautifulCode.AutoFakeItEasy.Test
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
-
-    using FakeItEasy;
 
     using FluentAssertions;
 
@@ -109,6 +106,25 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
 
             // Assert
             actualResult.Should().NotBeAscendingInOrder();
+        }
+
+        [Fact]
+        public static void Create___When_many_requests_are_made_for_an_enum___Then_result_contains_all_enum_values()
+        {
+            // Arrange
+            var dummyContainer = new DummySpecimenContext();
+            var systemUnderTest = new RandomEnumSequenceGenerator();
+            var request = typeof(Number);
+            var allEnumValues = Enum.GetValues(request).Cast<Number>();
+
+            // Act
+            var actualResult = Enumerable.Range(1, 1000).Select(_ => systemUnderTest.Create(request, dummyContainer)).Cast<Number>().ToList();
+
+            // Assert
+            foreach (var number in allEnumValues)
+            {
+                actualResult.Should().Contain(number);
+            }
         }
     }
 }
