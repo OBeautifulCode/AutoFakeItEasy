@@ -25,7 +25,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
     public static class RandomNumericSequenceGeneratorTest
     {
         [Fact]
-        public static void Constructor___Should_throw_ArgumentOutOfRangeException___When_parameter_inclusuiveLowerLimit_is_greater_than_or_equal_to_parameter_exclusiveUpperLimit()
+        public static void Constructor___Should_throw_ArgumentOutOfRangeException___When_parameter_inclusiveLowerLimit_is_greater_than_or_equal_to_parameter_exclusiveUpperLimit()
         {
             // Arrange
             var randomInt = ThreadSafeRandom.Next(int.MinValue + 1, int.MaxValue);
@@ -40,7 +40,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         }
 
         [Fact]
-        public static void Constructor___Should_not_throw___When_parameter_inclusuiveLowerLimit_is_less_than_parameter_exclusiveUpperLimit()
+        public static void Constructor___Should_not_throw___When_parameter_inclusiveLowerLimit_is_less_than_parameter_exclusiveUpperLimit()
         {
             // Arrange
             var randomInt = ThreadSafeRandom.Next(int.MinValue, int.MaxValue);

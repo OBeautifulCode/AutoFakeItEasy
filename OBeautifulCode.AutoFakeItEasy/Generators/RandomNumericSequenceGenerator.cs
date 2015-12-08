@@ -59,6 +59,15 @@ namespace OBeautifulCode.AutoFakeItEasy
             return this.CreateRandom(type);
         }
 
+        private static long RandomLong(long inclusiveMin, long exclusiveMax)
+        {
+            byte[] buffer = new byte[8];
+            ThreadSafeRandom.NextBytes(buffer);
+            long longRand = BitConverter.ToInt64(buffer, 0);
+            var result = Math.Abs(longRand % (exclusiveMax - inclusiveMin)) + inclusiveMin;
+            return result;
+        }
+
         private object CreateRandom(Type request)
         {
             switch (Type.GetTypeCode(request))
@@ -96,7 +105,7 @@ namespace OBeautifulCode.AutoFakeItEasy
 
             do
             {
-                randomNumber = this.RandomLong(this.inclusiveLowerLimit, this.exclusiveUpperLimit);
+                randomNumber = RandomLong(this.inclusiveLowerLimit, this.exclusiveUpperLimit);
             }
             while (this.numbersUsed.Contains(randomNumber));
 
@@ -108,15 +117,6 @@ namespace OBeautifulCode.AutoFakeItEasy
             }
 
             return randomNumber;
-        }
-
-        private long RandomLong(long inclusiveMin, long exclusiveMax)
-        {
-            byte[] buffer = new byte[8];
-            ThreadSafeRandom.NextBytes(buffer);
-            long longRand = BitConverter.ToInt64(buffer, 0);
-            var result = Math.Abs(longRand % (exclusiveMax - inclusiveMin)) + inclusiveMin;
-            return result;
         }
     }
 }
