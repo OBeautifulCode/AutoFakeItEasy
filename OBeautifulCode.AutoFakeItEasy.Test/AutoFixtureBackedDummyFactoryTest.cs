@@ -125,7 +125,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         }
 
         [Fact]
-        public static void ADummy_PositiveInteger___Should_returns_every_number_in_range_of_1_to_32768_inclusive_at_least_once___When_creating_many_object_of_type_PositiveInteger()
+        public static void ADummy_PositiveInteger___Should_return_every_number_in_range_of_1_to_32768_inclusive_at_least_once___When_creating_many_object_of_type_PositiveInteger()
         {
             // Arrange, Act
             var actualResult = Enumerable.Range(1, NumberOfCallsToCoverAllShorts).Select(_ => (int)A.Dummy<PositiveInteger>()).ToList();
