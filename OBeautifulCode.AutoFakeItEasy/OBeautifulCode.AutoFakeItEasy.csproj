@@ -63,8 +63,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AutoFixtureBackedDummyFactory.cs" />
+    <Compile Include="CustomTypes\NegativeInteger.cs" />
+    <Compile Include="CustomTypes\PositiveInteger.cs" />
+    <Compile Include="CustomTypes\ZeroOrNegativeInteger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="AutoFakeItEasyBootstrapper.cs" />
+    <Compile Include="CustomTypes\ZeroOrPositiveInteger.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config">

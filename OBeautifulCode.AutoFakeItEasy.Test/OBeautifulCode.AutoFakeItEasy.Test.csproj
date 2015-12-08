@@ -42,6 +42,10 @@
     <CodeAnalysisRuleSet>..\OBeautifulCode.AutoFakeItEasy.Test.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Conditions, Version=2.0.0.2, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Conditions.2.0.0\lib\portable-net45+win+wpa81+wp80+MonoAndroid10+MonoTouch10\Conditions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="FakeItEasy, Version=2.0.0.0, Culture=neutral, PublicKeyToken=eff28e2146d5fd2c, processorArchitecture=MSIL">
       <HintPath>..\packages\FakeItEasy.2.0.0-beta010\lib\net40\FakeItEasy.dll</HintPath>
       <Private>True</Private>
@@ -52,6 +56,10 @@
     </Reference>
     <Reference Include="FluentAssertions.Core, Version=4.1.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
       <HintPath>..\packages\FluentAssertions.4.1.0\lib\net45\FluentAssertions.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="OBeautifulCode.Math, Version=1.0.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\OBeautifulCode.Math.1.0.5\lib\45\OBeautifulCode.Math.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -81,6 +89,10 @@
       <Link>AutoFakeItEasyBootstrapper.cs</Link>
     </Compile>
     <Compile Include="AutoFixtureBackedDummyFactoryTest.cs" />
+    <Compile Include="CustomTypes\NegativeIntegerTest.cs" />
+    <Compile Include="CustomTypes\PositiveIntegerTest.cs" />
+    <Compile Include="CustomTypes\ZeroOrNegativeIntegerTest.cs" />
+    <Compile Include="CustomTypes\ZeroOrPositiveIntegerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Number.cs" />
   </ItemGroup>
@@ -113,6 +125,7 @@
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
