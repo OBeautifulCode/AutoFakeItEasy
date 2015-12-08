@@ -20,7 +20,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
     /// </summary>
     public static class AutoFixtureBackedDummyFactoryTest
     {
-        private const int NumberOfCallsToCoverAllShorts = (short.MaxValue * 2) + 10;
+        private const int NumberOfCallsToCoverAllShortsRegardlessOfFixtureState = short.MaxValue * 3;
 
         // ReSharper disable InconsistentNaming
         [Fact]
@@ -82,7 +82,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         public static void ADummy_int___Should_always_return_integers_greater_than_or_equal_to_negative_32768_and_less_than_or_equal_to_32786____When_creating_many_object_of_type_int()
         {
             // Arrange, Act
-            var actualResult = Enumerable.Range(1, NumberOfCallsToCoverAllShorts).Select(_ => A.Dummy<int>()).ToList();
+            var actualResult = Enumerable.Range(1, NumberOfCallsToCoverAllShortsRegardlessOfFixtureState).Select(_ => A.Dummy<int>()).ToList();
 
             // Assert
             actualResult.ForEach(_ => _.Should().BeGreaterOrEqualTo(-32768).And.BeLessOrEqualTo(32768));
@@ -92,7 +92,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         public static void ADummy_int___Should_returns_every_number_in_range_of_negative_32768_to_32768_inclusive_at_least_once___When_creating_many_object_of_type_int()
         {
             // Arrange, Act
-            var actualResult = Enumerable.Range(1, NumberOfCallsToCoverAllShorts).Select(_ => A.Dummy<int>()).ToList();
+            var actualResult = Enumerable.Range(1, NumberOfCallsToCoverAllShortsRegardlessOfFixtureState).Select(_ => A.Dummy<int>()).ToList();
 
             // Assert
             for (int i = -32768; i <= 32768; i++)
@@ -118,7 +118,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         public static void ADummy_PositiveInteger___Should_always_return_positive_integers_less_than_or_equal_to_32768___When_creating_many_object_of_type_PositiveInteger()
         {
             // Arrange, Act
-            var actualResult = Enumerable.Range(1, NumberOfCallsToCoverAllShorts).Select(_ => (int)A.Dummy<PositiveInteger>()).ToList();
+            var actualResult = Enumerable.Range(1, NumberOfCallsToCoverAllShortsRegardlessOfFixtureState).Select(_ => (int)A.Dummy<PositiveInteger>()).ToList();
 
             // Assert
             actualResult.ForEach(_ => _.Should().BeGreaterThan(0).And.BeLessOrEqualTo(32768));
@@ -128,7 +128,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         public static void ADummy_PositiveInteger___Should_return_every_number_in_range_of_1_to_32768_inclusive_at_least_once___When_creating_many_object_of_type_PositiveInteger()
         {
             // Arrange, Act
-            var actualResult = Enumerable.Range(1, NumberOfCallsToCoverAllShorts).Select(_ => (int)A.Dummy<PositiveInteger>()).ToList();
+            var actualResult = Enumerable.Range(1, NumberOfCallsToCoverAllShortsRegardlessOfFixtureState).Select(_ => (int)A.Dummy<PositiveInteger>()).ToList();
 
             // Assert
             for (int i = 1; i <= 32768; i++)
@@ -141,7 +141,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         public static void ADummy_ZeroOrPositiveInteger___Should_always_return_zero_or_positive_integers_less_than_or_equal_to_32768___When_creating_many_object_of_type_ZeroOrPositiveInteger()
         {
             // Arrange, Act
-            var actualResult = Enumerable.Range(1, NumberOfCallsToCoverAllShorts).Select(_ => (int)A.Dummy<ZeroOrPositiveInteger>()).ToList();
+            var actualResult = Enumerable.Range(1, NumberOfCallsToCoverAllShortsRegardlessOfFixtureState).Select(_ => (int)A.Dummy<ZeroOrPositiveInteger>()).ToList();
 
             // Assert
             actualResult.ForEach(_ => _.Should().BeGreaterOrEqualTo(0).And.BeLessOrEqualTo(32768));
@@ -151,7 +151,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         public static void ADummy_ZeroOrPositiveInteger___Should_returns_every_number_in_range_of_0_to_32768_inclusive_at_least_once___When_creating_many_object_of_type_ZeroOrPositiveInteger()
         {
             // Arrange, Act
-            var actualResult = Enumerable.Range(1, NumberOfCallsToCoverAllShorts).Select(_ => (int)A.Dummy<ZeroOrPositiveInteger>()).ToList();
+            var actualResult = Enumerable.Range(1, NumberOfCallsToCoverAllShortsRegardlessOfFixtureState).Select(_ => (int)A.Dummy<ZeroOrPositiveInteger>()).ToList();
 
             // Assert
             for (int i = 0; i <= 32768; i++)
@@ -164,7 +164,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         public static void ADummy_NegativeInteger___Should_always_return_negative_integers_greater_than_or_equal_to_negative_32768___When_creating_many_object_of_type_NegativeInteger()
         {
             // Arrange, Act
-            var actualResult = Enumerable.Range(1, NumberOfCallsToCoverAllShorts).Select(_ => (int)A.Dummy<NegativeInteger>()).ToList();
+            var actualResult = Enumerable.Range(1, NumberOfCallsToCoverAllShortsRegardlessOfFixtureState).Select(_ => (int)A.Dummy<NegativeInteger>()).ToList();
 
             // Assert
             actualResult.ForEach(_ => _.Should().BeGreaterOrEqualTo(-32768).And.BeLessThan(0));
@@ -174,7 +174,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         public static void ADummy_NegativeInteger___Should_returns_every_number_in_range_of_1_to_32768_inclusive_at_least_once___When_creating_many_object_of_type_NegativeInteger()
         {
             // Arrange, Act
-            var actualResult = Enumerable.Range(1, NumberOfCallsToCoverAllShorts).Select(_ => (int)A.Dummy<NegativeInteger>()).ToList();
+            var actualResult = Enumerable.Range(1, NumberOfCallsToCoverAllShortsRegardlessOfFixtureState).Select(_ => (int)A.Dummy<NegativeInteger>()).ToList();
 
             // Assert
             for (int i = -32768; i <= -1; i++)
@@ -187,7 +187,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         public static void ADummy_ZeroOrNegativeInteger___Should_always_return_zero_or_negative_integers_greater_than_or_equal_to_negative_32768___When_creating_many_object_of_type_ZeroOrNegativeInteger()
         {
             // Arrange, Act
-            var actualResult = Enumerable.Range(1, NumberOfCallsToCoverAllShorts).Select(_ => (int)A.Dummy<ZeroOrNegativeInteger>()).ToList();
+            var actualResult = Enumerable.Range(1, NumberOfCallsToCoverAllShortsRegardlessOfFixtureState).Select(_ => (int)A.Dummy<ZeroOrNegativeInteger>()).ToList();
 
             // Assert
             actualResult.ForEach(_ => _.Should().BeGreaterOrEqualTo(-32768).And.BeLessOrEqualTo(0));
@@ -197,7 +197,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         public static void ADummy_ZeroNegativeInteger___Should_returns_every_number_in_range_of_0_to_32768_inclusive_at_least_once___When_creating_many_object_of_type_ZeroOrNegativeInteger()
         {
             // Arrange, Act
-            var actualResult = Enumerable.Range(1, NumberOfCallsToCoverAllShorts).Select(_ => (int)A.Dummy<ZeroOrNegativeInteger>()).ToList();
+            var actualResult = Enumerable.Range(1, NumberOfCallsToCoverAllShortsRegardlessOfFixtureState).Select(_ => (int)A.Dummy<ZeroOrNegativeInteger>()).ToList();
 
             // Assert
             for (int i = -32768; i <= 0; i++)
