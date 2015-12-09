@@ -30,13 +30,13 @@ namespace OBeautifulCode.AutoFakeItEasy
         public int Value { get; }
 
         /// <summary>
-        /// Performs an explicit conversion from <see cref="ConstrainedInteger"/> to <see cref="int"/>.
+        /// Performs an implicit conversion from <see cref="ConstrainedInteger"/> to <see cref="int"/>.
         /// </summary>
         /// <param name="from">The <see cref="ConstrainedInteger"/> to convert from.</param>
         /// <returns>
         /// The result of the conversion.
         /// </returns>
-        public static explicit operator int(ConstrainedInteger from)
+        public static implicit operator int(ConstrainedInteger from)
         {
             return from.Value;
         }

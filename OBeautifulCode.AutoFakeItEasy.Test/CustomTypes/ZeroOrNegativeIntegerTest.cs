@@ -80,6 +80,20 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         }
 
         [Fact]
+        public static void Implicit_conversion___Should_return_same_int_value_passed_to_constructor___When_converting_to_object_of_type_int()
+        {
+            // Arrange
+            var expectedInt = ThreadSafeRandom.Next(int.MinValue, -1);
+            var systemUnderTest = new ZeroOrNegativeInteger(expectedInt);
+
+            // Act
+            int actualInt = systemUnderTest;
+
+            // Assert
+            actualInt.Should().Be(expectedInt);
+        }
+
+        [Fact]
         public static void ToInt___Should_return_the_same_value_passed_to_constructor___When_called()
         {
             // Arrange
