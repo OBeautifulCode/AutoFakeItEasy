@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>$version$-beta010</version>
+    <title>$title$</title>
+    <authors>$author$</authors>
+    <owners>$author$</owners>
+    <projectUrl>https://github.com/OBeautifulCode/OBeautifulCode.AutoFakeItEasy</projectUrl>
+    <iconUrl>http://blog.obeautifulcode.com/img/autofakeiteasy-nuget-icon.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>$description$</description>
+    <summary>Use AutoFixture to fulfill calls to FakeItEasy's A.Dummy()</summary>
+    <copyright>Copyright 2015 OBeautifulCode</copyright>
+    <tags>AutoFixture FakeItEasy Dummy</tags>
+  </metadata>
+  <files>
+    <file src="AutoFakeItEasyBootstrapper.cs" target="content\net45\AutoFakeItEasyBootstrapper.cs" />
+  </files>
+</package>
