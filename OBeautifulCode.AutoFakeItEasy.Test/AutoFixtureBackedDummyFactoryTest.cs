@@ -20,7 +20,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
     /// </summary>
     public static class AutoFixtureBackedDummyFactoryTest
     {
-        private const int NumberOfCallsToCoverAllShortsRegardlessOfFixtureState = short.MaxValue * 3;
+        private const int NumberOfCallsToCoverAllShortsRegardlessOfFixtureState = short.MaxValue * 4;
 
         // ReSharper disable InconsistentNaming
         [Fact]
@@ -50,7 +50,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         }
 
         [Fact]
-        public static void ADummy_bool___Should_return_enum_values_in_random_order___When_creating_objects_of_type_enum()
+        public static void ADummy_enum___Should_return_enum_values_in_random_order___When_creating_objects_of_type_enum()
         {
             // Arrange
             var enumValuesCount = Enum.GetValues(typeof(Number)).Length;
