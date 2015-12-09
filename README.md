@@ -7,9 +7,9 @@ AutoFakeItEasy
 Overview
 --------
 - This package makes [FakeItEasy] Dummies actually useful by wiring-them-up to real-looking test data.
-- By default, this will explode if the result is ever used: `A.Dummy<int>()`
-- Using AutoFakeItEasy, that same call will return a **usable, random integer**.
-- This makes unit tests more expressive with less lines of code.  Like this:
+- By default, the results of the following call will throw if it is ever used: `A.Dummy<int>()`
+- With AutoFakeItEasy, that same call will return a **usable, random integer**.
+- This makes unit tests more expressive, with less lines of code.  Like this:
 
 ```
 public void BuildShips___Should_return_empty_collection_of_ships___When_number_of_ships_is_zero_or_negative()
@@ -26,12 +26,12 @@ public void BuildShips___Should_return_empty_collection_of_ships___When_number_o
 }
 ```
 
-- It means that, in a wide set of scenarios, you can rely solely on `A.Fake<T>()` and `A.Dummy<T>()` for creating and configuring objects that you need to unit test a system.  This uniform grammar leads to cleaner, more readable unit tests.
-- This likely violates the strict definition of a dummy - something that is required to make a call but is not used.  I don't think that that very narrow definition/behavior is all that useful.  FakeItEasy has tried to simplify the world by unifying stubs and mocks under Fakes.  I would like to further simplifying it, by unifying dummies, test data, and anonymous variables under Dummies.
--  I define a dummy as a real object that contains random but reasonable/real-like data, where there is no need to configure the object's behavior.  The *system under test* can reliably use that object to perform some operation.  *I* can use the object's value to formulate my expectations after the operation has been performed.
--  I use [Autofixture] to create the dummies - its a powerful library for creating test data.
--  So why not just use [Autofixture] independently?  In some cases you should - Autofixture is ridiculously flexible.   However...
-    -  You have to new-up a fixture object in each test.  This is an extra line of code, but what's more problematic is that it doesn't allow you to exercise a wide range of test-data space.  For example, `Enums` will always be created in sequential order.  So unless you are new-ing up lots of Enums in that test (which is probably a smell), you will always test the same `Enum` values.
+- In a broad set of cases, you can rely solely on `A.Fake<T>()` and `A.Dummy<T>()` for creating and configuring the objects you need to test a system.  This uniformity in the grammar leads to cleaner, more readable unit tests.
+- This repurposing likely violates the strict definition of a dummy - something that is required to make a call but is not used.  I believe this narrow definition/behavior has limited utility.  [FakeItEasy] has tried to simplify the world by unifying stubs and mocks under Fakes.  I am further simplifying it, by unifying dummies, test data, and anonymous variables under Dummies.
+-  I define a dummy as a real object that contains random but reasonable/real-like data, where there is no need to configure the object's behavior.  The *system under test* can reliably use a dummy to perform some operation.  *I* can use that same dummy to formulate my expectations (e.g. "Should_return_empty_collection_of_ships") after the operation has been performed.
+-  I use [Autofixture] to create the dummies - it's a powerful library for creating test data.
+-  So why not use [Autofixture] directly?  In some cases you should - Autofixture is ridiculously flexible.   However...
+    -  You have to new-up a fixture object with each test.  This is an extra line of code.  What's more problematic is that it limits you to a small range of test-data space.  For example, `Enums` will always be created in sequential order.  So unless you are new-ing up lots of Enums in a test (which is probably a smell), you will always test the same `Enum` values.
     -  OR you have to maintain an instance-level or static/app-domain-wide Fixture object.  Autofixture is not thread-safe, so you'll have to deal with that.
     -  numeric types such as ints won't include zero or negative numbers unless you cutomize AutoFixture.
     -  It's less readable:
@@ -51,7 +51,7 @@ order.Complete(creditCardGateway, creditCard);
 
 Useful Types
 ------------
-AutoFakeItEasy supplies these useful types.  They can all be casted to an `int`:
+AutoFakeItEasy supplies these useful types.  They implicitly convert to an `int` (or explicitly convert via a cast to `int`):
 
 - `PositiveInteger` - a positive integer
 - `ZeroOrPositiveInteger` - a positive integer or zero
