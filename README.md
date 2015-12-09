@@ -16,13 +16,13 @@ public void BuildShips___Should_return_empty_collection_of_ships___When_number_o
 {
     // Arrange
     var systemUnderTest = new ShipMaker();
-    int numberOfShips = (int)A.Dummy<ZeroOrNegativeInteger>();  // more later on this type...
+    int numberOfShips = A.Dummy<ZeroOrNegativeInteger>();  // more on this type later...
 
     // Act
     var result = systemUnderTest.BuildShips(numberOfShips);
 
     // Assert
-    ex.Should().BeEmpty();
+    result.Should().BeEmpty();
 }
 ```
 
@@ -54,7 +54,7 @@ Useful Types
 AutoFakeItEasy supplies these useful types.  They can all be casted to an `int`:
 
 - `PositiveInteger` - a positive integer
-- `ZeroOrPositiveIntger` - a positive integer or zero
+- `ZeroOrPositiveInteger` - a positive integer or zero
 - `NegativeInteger` - a negative integer
 - `ZeroOrNegativeInteger` - a negative integer or zero
 
