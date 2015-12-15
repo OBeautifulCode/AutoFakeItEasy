@@ -223,6 +223,22 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         }
 
         [Fact]
+        public static void ADummy___Should_use_the_most_recently_added_custom_dummy_creator___When_custom_dummy_creator_is_added_twice_for_same_type()
+        {
+            // Arrange
+            AutoFixtureBackedDummyFactory.AddDummyCreator(() => new CustomDummyUsesMostRecentlyAddedCustomDummyCreatorFunc(int.MinValue));
+            var dummyAfterFirstCustomization = A.Dummy<CustomDummyUsesMostRecentlyAddedCustomDummyCreatorFunc>();
+            AutoFixtureBackedDummyFactory.AddDummyCreator(() => new CustomDummyUsesMostRecentlyAddedCustomDummyCreatorFunc(int.MaxValue));
+
+            // Act
+            var dummyAfterSecondCustomization = A.Dummy<CustomDummyUsesMostRecentlyAddedCustomDummyCreatorFunc>();
+
+            // Assert
+            dummyAfterFirstCustomization.Value.Should().Be(int.MinValue);
+            dummyAfterSecondCustomization.Value.Should().Be(int.MaxValue);
+        }
+
+        [Fact]
         public static void AddDummyCreator___Should_throw_ArgumentException___When_specifying_an_interface_type()
         {
             // Arrange, Act

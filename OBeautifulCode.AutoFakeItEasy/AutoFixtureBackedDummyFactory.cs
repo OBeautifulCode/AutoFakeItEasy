@@ -65,6 +65,10 @@ namespace OBeautifulCode.AutoFakeItEasy
         /// </summary>
         /// <typeparam name="T">The type of the dummy to create.</typeparam>
         /// <param name="dummyCreatorFunc">The function to call to create the dummy.</param>
+        /// <remarks>
+        /// If this method is called multiple times for the same type,
+        /// the most recently added creator will be used.
+        /// </remarks>
         public static void AddDummyCreator<T>(Func<T> dummyCreatorFunc)
         {
             Type type = typeof(T);
