@@ -22,9 +22,9 @@ namespace OBeautifulCode.AutoFakeItEasy
     /// </summary>
     public class AutoFixtureBackedDummyFactory : IDummyFactory
     {
-        private readonly Fixture fixture = new Fixture();
+        private static readonly Fixture Fixture = new Fixture();
 
-        private readonly object fixtureLock = new object();
+        private static readonly object FixtureLock = new object();
 
         private readonly MethodInfo autoFixtureCreateMethod;
 
@@ -37,16 +37,16 @@ namespace OBeautifulCode.AutoFakeItEasy
                 .GetMethods()
                 .Single(_ => (_.Name == "Create") && (_.GetParameters().Length == 1) && (_.GetParameters().Single().ParameterType == typeof(ISpecimenBuilder)));
 
-            // defined in this project:
-            this.fixture.Customizations.Insert(0, new AutoFakeItEasy.RandomNumericSequenceGenerator(short.MinValue, short.MaxValue + 2));
-            this.fixture.Customizations.Insert(0, new RandomBoolSequenceGenerator());
-            this.fixture.Customizations.Insert(0, new RandomEnumSequenceGenerator());
+            // add customizations
+            Fixture.Customizations.Insert(0, new AutoFakeItEasy.RandomNumericSequenceGenerator(short.MinValue, short.MaxValue + 2));
+            Fixture.Customizations.Insert(0, new AutoFakeItEasy.RandomBoolSequenceGenerator());
+            Fixture.Customizations.Insert(0, new AutoFakeItEasy.RandomEnumSequenceGenerator());
 
-            // custom types
-            this.fixture.Register(() => new PositiveInteger(Math.Abs(Try.Running(this.fixture.Create<int>).Until(result => result != 0))));
-            this.fixture.Register(() => new NegativeInteger(-1 * Math.Abs(Try.Running(this.fixture.Create<int>).Until(result => result != 0))));
-            this.fixture.Register(() => new ZeroOrPositiveInteger(Math.Abs(this.fixture.Create<int>())));
-            this.fixture.Register(() => new ZeroOrNegativeInteger(-1 * Math.Abs(this.fixture.Create<int>())));
+            // register custom types
+            Fixture.Register(() => new PositiveInteger(Math.Abs(Try.Running(Fixture.Create<int>).Until(result => result != 0))));
+            Fixture.Register(() => new NegativeInteger(-1 * Math.Abs(Try.Running(Fixture.Create<int>).Until(result => result != 0))));
+            Fixture.Register(() => new ZeroOrPositiveInteger(Math.Abs(Fixture.Create<int>())));
+            Fixture.Register(() => new ZeroOrNegativeInteger(-1 * Math.Abs(Fixture.Create<int>())));
         }
 
         /// <inheritdoc />
@@ -60,16 +60,34 @@ namespace OBeautifulCode.AutoFakeItEasy
         {
         }
 
+        /// <summary>
+        /// Registers a function for creating a dummy of the specified type.
+        /// </summary>
+        /// <typeparam name="T">The type of the dummy to create.</typeparam>
+        /// <param name="dummyCreatorFunc">The function to call to create the dummy.</param>
+        /// <remarks>
+        /// If this method is called multiple times for the same type,
+        /// the most recently added creator will be used.
+        /// </remarks>
+        public static void AddDummyCreator<T>(Func<T> dummyCreatorFunc)
+        {
+            Type type = typeof(T);
+            if (!CanCreateType(type))
+            {
+                throw new ArgumentException("AutoFakeItEasy cannot create dummies of type " + type);
+            }
+
+            lock (FixtureLock)
+            {
+                Fixture.Register(dummyCreatorFunc);
+            }
+        }
+
         /// <inheritdoc />
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "factory caller will ensure this is not null")]
         public bool CanCreate(Type type)
         {
-            if (type.IsInterface)
-            {
-                return false;
-            }
-
-            return true;
+            return CanCreateType(type);
         }
 
         /// <inheritdoc />
@@ -78,11 +96,26 @@ namespace OBeautifulCode.AutoFakeItEasy
             // call the AutoFixture Create() method, lock because AutoFixture is not thread safe.
             MethodInfo autoFixtureGenericCreateMethod = this.autoFixtureCreateMethod.MakeGenericMethod(type);
 
-            lock (this.fixtureLock)
+            lock (FixtureLock)
             {
-                object result = autoFixtureGenericCreateMethod.Invoke(null, new object[] { this.fixture });
+                object result = autoFixtureGenericCreateMethod.Invoke(null, new object[] { Fixture });
                 return result;
             }
+        }
+
+        private static bool CanCreateType(Type type)
+        {
+            if (type.IsInterface)
+            {
+                return false;
+            }
+
+            if (type.IsAbstract)
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }
