@@ -60,10 +60,67 @@ AutoFakeItEasy supplies these useful types.  They implicitly convert to an `int`
 
 This makes it easy to create random but constrained integers.
 
+Custom Dummy Creation
+---------------------
+You can customize how `A.Dummy<T>()` creates specific types as such:
+
+```
+AutoFixtureBackedDummyFactory.AddDummyCreator(() => new MyPoco());
+
+AutoFixtureBackedDummyFactory.AddDummyCreator(() => 
+                              {
+                                  var randomInt = A.Dummy<int>();
+                                  var result = new MyObjectWithConstructor(randomInt);
+                                  return result;
+                              });
+```
+
+`AddDummyCreator<T>` takes one parameter of type `Func<T>`, so you can be as creative as needed for constructing and configuring instances of the type.
+
+To ensure that your customization is used throughout your unit tests, add a [Dummy Factory] as such:
+
+```
+namespace Your.Namespace
+{
+    using System;
+
+    using FakeItEasy;
+
+    using OBeautifulCode.AutoFakeItEasy;
+
+    public class DummyFactory : IDummyFactory
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DummyFactory"/> class.
+        /// </summary>
+        public DummyFactory()
+        {
+            AutoFixtureBackedDummyFactory.AddDummyCreator(() => new MyPoco());
+        }
+
+        /// <inheritdoc />
+        public int Priority => 0;
+
+        /// <inheritdoc />
+        public bool CanCreate(Type type)
+        {
+            return false;
+        }
+
+        /// <inheritdoc />
+        public object Create(Type type)
+        {
+            return null;
+        }
+    }
+}
+```
+
+
 How it Works
 -----
 - Under the covers, AutoFakeItEasy simply implements `IDummyFactory` and then bootstraps it into your app domain.
-- For any call To `A.Dummy<T>` where T is NOT an interface type, AutoFakeItEasy uses [AutoFixture] to create the object.
+- For any call To `A.Dummy<T>` where T is NOT an interface type and NOT an abstract type, AutoFakeItEasy uses [AutoFixture] to create the object.
 - [AutoFixture] has been customized so that:
   - Signed numeric types return positive, zero and negative numbers, instead of the default of positive numbers
   - `Enums` return random values instead of the default of sequential values
@@ -72,3 +129,4 @@ How it Works
 
 [FakeItEasy]: https://fakeiteasy.github.io/
 [AutoFixture]: https://github.com/AutoFixture/AutoFixture
+[Dummy Factory]: https://github.com/FakeItEasy/FakeItEasy/wiki/Custom-Dummy-Creation
