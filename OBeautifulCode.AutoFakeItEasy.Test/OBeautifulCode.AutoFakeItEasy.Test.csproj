@@ -93,6 +93,7 @@
       <Link>AutoFakeItEasyBootstrapper.cs</Link>
     </Compile>
     <Compile Include="AutoFixtureBackedDummyFactoryTest.cs" />
+    <Compile Include="CustomizedDummies.cs" />
     <Compile Include="CustomTypes\NegativeIntegerTest.cs" />
     <Compile Include="CustomTypes\PositiveIntegerTest.cs" />
     <Compile Include="CustomTypes\ZeroOrNegativeIntegerTest.cs" />

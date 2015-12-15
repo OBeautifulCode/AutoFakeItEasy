@@ -7,6 +7,7 @@
 namespace OBeautifulCode.AutoFakeItEasy.Test
 {
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -204,6 +205,66 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             {
                 actualResult.Should().Contain(i);
             }
+        }
+
+        [Fact]
+        public static void ADummy___Should_use_custom_dummy_creator___When_custom_dummy_creator_is_added()
+        {
+            // Arrange
+            var dummyBeforeCustomization = A.Dummy<CustomDummyUsesCustomDummyCreatorFunc>();
+            AutoFixtureBackedDummyFactory.AddDummyCreator(() => new CustomDummyUsesCustomDummyCreatorFunc(int.MinValue));
+
+            // Act
+            var dummyAfterCutomization = A.Dummy<CustomDummyUsesCustomDummyCreatorFunc>();
+
+            // Assert
+            dummyBeforeCustomization.Value.Should().NotBe(int.MinValue);
+            dummyAfterCutomization.Value.Should().Be(int.MinValue);
+        }
+
+        [Fact]
+        public static void AddDummyCreator___Should_throw_ArgumentException___When_specifying_an_interface_type()
+        {
+            // Arrange, Act
+            var ex1 = Record.Exception(() => AutoFixtureBackedDummyFactory.AddDummyCreator<IComparer>(() => null));
+            var ex2 = Record.Exception(() => AutoFixtureBackedDummyFactory.AddDummyCreator<IComparer<int>>(() => null));
+
+            // Assert
+            ex1.Should().BeOfType<ArgumentException>();
+            ex2.Should().BeOfType<ArgumentException>();
+        }
+
+        [Fact]
+        public static void AddDummyCreator___Should_throw_ArgumentException___When_specifying_an_abstract_type()
+        {
+            // Arrange, Act
+            var ex = Record.Exception(() => AutoFixtureBackedDummyFactory.AddDummyCreator<DictionaryBase>(() => null));
+
+            // Assert
+            ex.Should().BeOfType<ArgumentException>();
+        }
+
+        [Fact]
+        public static void AddDummyCreator___Should_not_throw___When_specifying_non_abstract_class()
+        {
+            // Arrange, Act
+            var ex = Record.Exception(() => AutoFixtureBackedDummyFactory.AddDummyCreator(() => new CustomDummyDoesNotThrowWhenCreated(int.MinValue)));
+
+            // Assert
+            ex.Should().BeNull();
+        }
+
+        [Fact]
+        public static void AddDummyCreator___Should_not_throw___When_specifying_creator_func_for_same_type_twice()
+        {
+            // Arrange
+            AutoFixtureBackedDummyFactory.AddDummyCreator(() => new CustomDummyDoesNotThrowWhenRegisteredTwice(int.MaxValue));
+
+            // Act
+            var ex = Record.Exception(() => AutoFixtureBackedDummyFactory.AddDummyCreator(() => new CustomDummyDoesNotThrowWhenRegisteredTwice(int.MinValue)));
+
+            // Assert
+            ex.Should().BeNull();
         }
 
         // ReSharper restore InconsistentNaming
