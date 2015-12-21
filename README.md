@@ -116,6 +116,16 @@ namespace Your.Namespace
 }
 ```
 
+Other Useful Features
+---------------------
+AutoFakeItEasy can't create abstract classes (see below for types that AutoFakeItEasy CAN create).  However, you can instruct AutoFakeItEasy to build a **random, concrete subclass of an abstract type**.  Put this in your dummy factory (see "Custom Dummy Creation" above):
+
+```
+AutoFixtureBackedDummyFactory.UseRandomConcreteSubclassForDummy<Animal>()
+```
+
+When this is configured, calls to `A.Dummy<Animal>()` might return a `Zebra` or `Lion` or `Dog` - all concrete subclasses of `Animal`.
+
 
 How it Works
 -----
