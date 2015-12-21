@@ -92,6 +92,7 @@
     <Compile Include="..\OBeautifulCode.AutoFakeItEasy\AutoFakeItEasyBootstrapper.cs">
       <Link>AutoFakeItEasyBootstrapper.cs</Link>
     </Compile>
+    <Compile Include="ClassHierarchy.cs" />
     <Compile Include="AutoFixtureBackedDummyFactoryTest.cs" />
     <Compile Include="CustomizedDummies.cs" />
     <Compile Include="CustomTypes\NegativeIntegerTest.cs" />

@@ -283,6 +283,59 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             ex.Should().BeNull();
         }
 
+        [Fact]
+        public static void UseRandomConcreteSubclassForDummy___Should_throw_ArgumentException___When_there_are_no_concrete_subclasses_of_specified_type()
+        {
+            // Arrange, Act
+            var ex = Record.Exception(() => AutoFixtureBackedDummyFactory.UseRandomConcreteSubclassForDummy<Dog>());
+
+            // Assert
+            ex.Should().BeOfType<ArgumentException>();
+        }
+
+        [Fact]
+        public static void UseRandomConcreteSubclassForDummy___Should_not_throw___When_there_are_concrete_subclasses_of_specified_type()
+        {
+            // Arrange, Act
+            var ex = Record.Exception(() => AutoFixtureBackedDummyFactory.UseRandomConcreteSubclassForDummy<Animal>());
+
+            // Assert
+            ex.Should().BeNull();
+        }
+
+        [Fact]
+        public static void UseRandomConcreteSubclassForDummy___Should_not_throw___When_called_twice_for_same_type()
+        {
+            // Arrange
+            AutoFixtureBackedDummyFactory.UseRandomConcreteSubclassForDummy<Animal>();
+
+            // Act
+            var ex = Record.Exception(() => AutoFixtureBackedDummyFactory.UseRandomConcreteSubclassForDummy<Animal>());
+
+            // Assert
+            ex.Should().BeNull();
+        }
+
+        [Fact]
+        public static void ADummy___Should_return_random_Dog_or_Lion_or_Zebra___When_UseRandomConcreteSubclassForDummy_is_called_for_type_Animal()
+        {
+            // Arrange
+            AutoFixtureBackedDummyFactory.UseRandomConcreteSubclassForDummy<Animal>();
+            var animals = new List<Animal>();
+
+            // Act
+            for (int i = 0; i < 100; i++)
+            {
+                var animal = A.Dummy<Animal>();
+                animals.Add(animal);
+            }
+
+            // Assert
+            animals.OfType<Dog>().Count().Should().BeGreaterThan(1);
+            animals.OfType<Lion>().Count().Should().BeGreaterThan(1);
+            animals.OfType<Zebra>().Count().Should().BeGreaterThan(1);
+        }
+
         // ReSharper restore InconsistentNaming
     }
 }
