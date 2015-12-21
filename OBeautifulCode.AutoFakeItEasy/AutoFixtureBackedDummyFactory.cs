@@ -7,10 +7,13 @@
 namespace OBeautifulCode.AutoFakeItEasy
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
 
     using FakeItEasy;
+
+    using OBeautifulCode.Math;
 
     using Ploeh.AutoFixture;
     using Ploeh.AutoFixture.Kernel;
@@ -26,7 +29,21 @@ namespace OBeautifulCode.AutoFakeItEasy
 
         private static readonly object FixtureLock = new object();
 
+        private static readonly MethodInfo FakeItEasyDummyMethod;
+
+        private static readonly HashSet<Type> AllowedAbstractTypes = new HashSet<Type>();
+
         private readonly MethodInfo autoFixtureCreateMethod;
+
+        /// <summary>
+        /// Initializes static members of the <see cref="AutoFixtureBackedDummyFactory"/> class.
+        /// </summary>
+        static AutoFixtureBackedDummyFactory()
+        {
+            FakeItEasyDummyMethod = typeof(A)
+                .GetMethods()
+                .Single(_ => _.Name == "Dummy");
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AutoFixtureBackedDummyFactory"/> class.
@@ -38,9 +55,12 @@ namespace OBeautifulCode.AutoFakeItEasy
                 .Single(_ => (_.Name == "Create") && (_.GetParameters().Length == 1) && (_.GetParameters().Single().ParameterType == typeof(ISpecimenBuilder)));
 
             // add customizations
+            // ReSharper disable RedundantNameQualifier
             Fixture.Customizations.Insert(0, new AutoFakeItEasy.RandomNumericSequenceGenerator(short.MinValue, short.MaxValue + 2));
             Fixture.Customizations.Insert(0, new AutoFakeItEasy.RandomBoolSequenceGenerator());
             Fixture.Customizations.Insert(0, new AutoFakeItEasy.RandomEnumSequenceGenerator());
+
+            // ReSharper restore RedundantNameQualifier
 
             // register custom types
             Fixture.Register(() => new PositiveInteger(Math.Abs(Try.Running(Fixture.Create<int>).Until(result => result != 0))));
@@ -83,6 +103,46 @@ namespace OBeautifulCode.AutoFakeItEasy
             }
         }
 
+        /// <summary>
+        /// Instructs the dummy factory to use a random, concrete subclass
+        /// of the specified type when making dummies of that type.
+        /// </summary>
+        /// <typeparam name="T">The reference type.</typeparam>
+        public static void UseRandomConcreteSubclassForDummy<T>()
+        {
+            Type type = typeof(T);
+            var concreteSubclasses = type.Assembly
+                .GetTypes()
+                .Where(_ => _.IsSubclassOf(type))
+                .Where(_ => !_.IsAbstract)
+                .Where(CanCreateType)
+                .ToList();
+
+            if (concreteSubclasses.Count == 0)
+            {
+                throw new ArgumentException("There are no concrete subclasses of " + type.Name);
+            }
+
+            if (type.IsAbstract)
+            {
+                AllowedAbstractTypes.Add(type);
+            }
+
+            Func<T> randomSubclassDummyCreator = () =>
+                {
+                    // get random subclass
+                    var randomIndex = ThreadSafeRandom.Next(0, concreteSubclasses.Count);
+                    var randomSubclass = concreteSubclasses[randomIndex];
+
+                    // call the FakeItEasy A.Dummy method to create that subclass
+                    MethodInfo fakeItEasyGenericDummyMethod = FakeItEasyDummyMethod.MakeGenericMethod(randomSubclass);
+                    object result = fakeItEasyGenericDummyMethod.Invoke(null, null);
+                    return (T)result;
+                };
+
+            AddDummyCreator(randomSubclassDummyCreator);
+        }
+
         /// <inheritdoc />
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "factory caller will ensure this is not null")]
         public bool CanCreate(Type type)
@@ -112,7 +172,10 @@ namespace OBeautifulCode.AutoFakeItEasy
 
             if (type.IsAbstract)
             {
-                return false;
+                if (!AllowedAbstractTypes.Contains(type))
+                {
+                    return false;
+                }
             }
 
             return true;
