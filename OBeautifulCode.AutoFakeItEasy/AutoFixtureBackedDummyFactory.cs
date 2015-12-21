@@ -29,21 +29,11 @@ namespace OBeautifulCode.AutoFakeItEasy
 
         private static readonly object FixtureLock = new object();
 
-        private static readonly MethodInfo FakeItEasyDummyMethod;
+        private static readonly MethodInfo FakeItEasyDummyMethod = typeof(A).GetMethods().Single(_ => _.Name == "Dummy");
 
         private static readonly HashSet<Type> AllowedAbstractTypes = new HashSet<Type>();
 
         private readonly MethodInfo autoFixtureCreateMethod;
-
-        /// <summary>
-        /// Initializes static members of the <see cref="AutoFixtureBackedDummyFactory"/> class.
-        /// </summary>
-        static AutoFixtureBackedDummyFactory()
-        {
-            FakeItEasyDummyMethod = typeof(A)
-                .GetMethods()
-                .Single(_ => _.Name == "Dummy");
-        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AutoFixtureBackedDummyFactory"/> class.
@@ -108,6 +98,7 @@ namespace OBeautifulCode.AutoFakeItEasy
         /// of the specified type when making dummies of that type.
         /// </summary>
         /// <typeparam name="T">The reference type.</typeparam>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter", Justification = "In this case we just need the type, not a parameter of that type.")]
         public static void UseRandomConcreteSubclassForDummy<T>()
         {
             Type type = typeof(T);
