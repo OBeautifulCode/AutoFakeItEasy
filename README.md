@@ -11,7 +11,7 @@ Overview
 - With AutoFakeItEasy, that same call will return a **random integer**.
 - This enables your unit tests to explore more space.  Like this:
 
-```
+```c#
 public void BuildShips___Should_return_empty_collection_of_ships___When_number_of_ships_is_zero_or_negative()
 {
     // Arrange
@@ -33,10 +33,10 @@ public void BuildShips___Should_return_empty_collection_of_ships___When_number_o
 -  So why not use [Autofixture] directly?  In some cases you should - Autofixture is ridiculously flexible.   However...
     -  You have to new-up a fixture object with each test.  This is an extra line of code.  What's more problematic is that it limits you to a small range of test-data space.  For example, `Enums` will always be created in sequential order.  So unless you are new-ing up lots of Enums in a test (which is probably a smell), you will always test the same `Enum` values.
     -  OR you have to maintain an instance-level or static/app-domain-wide Fixture object.  Autofixture is not thread-safe, so you'll have to deal with that.
-    -  numeric types such as ints won't include zero or negative numbers unless you cutomize AutoFixture.
+    -  numeric types such as ints won't include zero or negative numbers unless you customize AutoFixture.
     -  It's less readable:
 
-```
+```c#
 // using FakeItEasy + AutoFixture
 var fixture = new Fixture();
 var creditCardGateway = A.Fake<ICanChargeCreditCards>();
@@ -64,7 +64,7 @@ Custom Dummy Creation
 ---------------------
 You can customize how `A.Dummy<T>()` creates specific types as such:
 
-```
+```c#
 AutoFixtureBackedDummyFactory.AddDummyCreator(() => new MyPoco());
 
 AutoFixtureBackedDummyFactory.AddDummyCreator(() => 
@@ -79,7 +79,7 @@ AutoFixtureBackedDummyFactory.AddDummyCreator(() =>
 
 To ensure that your customization is used throughout your unit tests, add a [Dummy Factory] as such:
 
-```
+```c#
 namespace Your.Namespace
 {
     using System;
@@ -120,7 +120,7 @@ Other Useful Features
 ---------------------
 AutoFakeItEasy can't create abstract classes (see below for types that AutoFakeItEasy CAN create).  However, you can instruct AutoFakeItEasy to build a **random, concrete subclass of an abstract type**.  Put this in your dummy factory (see "Custom Dummy Creation" above):
 
-```
+```c#
 AutoFixtureBackedDummyFactory.UseRandomConcreteSubclassForDummy<Animal>()
 ```
 
