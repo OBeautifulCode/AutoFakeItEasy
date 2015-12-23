@@ -8,7 +8,7 @@ Overview
 --------
 - This package makes [FakeItEasy] Dummies actually useful by wiring-them-up to real-looking test data.
 - By default, the following call will always return 0: `A.Dummy<int>()`
-- With AutoFakeItEasy, that same call will return a **usable, random integer**.
+- With AutoFakeItEasy, that same call will return a **random integer**.
 - This makes unit tests more expressive, with less lines of code.  Like this:
 
 ```
