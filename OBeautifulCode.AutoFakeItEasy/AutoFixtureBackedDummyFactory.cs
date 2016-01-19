@@ -44,19 +44,11 @@ namespace OBeautifulCode.AutoFakeItEasy
                 .GetMethods()
                 .Single(_ => (_.Name == "Create") && (_.GetParameters().Length == 1) && (_.GetParameters().Single().ParameterType == typeof(ISpecimenBuilder)));
 
-            // add customizations
-            // ReSharper disable RedundantNameQualifier
-            Fixture.Customizations.Insert(0, new AutoFakeItEasy.RandomNumericSequenceGenerator(short.MinValue, short.MaxValue + 2));
-            Fixture.Customizations.Insert(0, new AutoFakeItEasy.RandomBoolSequenceGenerator());
-            Fixture.Customizations.Insert(0, new AutoFakeItEasy.RandomEnumSequenceGenerator());
+            ConfigureRecursionBehavior();
 
-            // ReSharper restore RedundantNameQualifier
+            AddCustomizations();
 
-            // register custom types
-            Fixture.Register(() => new PositiveInteger(Math.Abs(Try.Running(Fixture.Create<int>).Until(result => result != 0))));
-            Fixture.Register(() => new NegativeInteger(-1 * Math.Abs(Try.Running(Fixture.Create<int>).Until(result => result != 0))));
-            Fixture.Register(() => new ZeroOrPositiveInteger(Math.Abs(Fixture.Create<int>())));
-            Fixture.Register(() => new ZeroOrNegativeInteger(-1 * Math.Abs(Fixture.Create<int>())));
+            RegisterCustomTypes();
         }
 
         /// <inheritdoc />
@@ -152,6 +144,39 @@ namespace OBeautifulCode.AutoFakeItEasy
                 object result = autoFixtureGenericCreateMethod.Invoke(null, new object[] { Fixture });
                 return result;
             }
+        }
+
+        private static void ConfigureRecursionBehavior()
+        {
+            // It's not AutoFixture's job to detect recursion.  Infinite recursion will cause the process to blow-up;
+            // it's typically a behavior that's easy to observe/detect.  By allowing recursion we enable a swath
+            // of legitimate scenarios (e.g. a tree).
+            var throwingRecursionBehaviors = Fixture.Behaviors.OfType<ThrowingRecursionBehavior>().ToList();
+            foreach (var throwingRecursionBehavior in throwingRecursionBehaviors)
+            {
+                Fixture.Behaviors.Remove(throwingRecursionBehavior);
+            }
+        }
+
+        private static void AddCustomizations()
+        {
+            // fix some of AutoFixture's poor defaults - see README.md
+            // ReSharper disable RedundantNameQualifier
+
+            // this will generate numbers in the range [-32768,32768]
+            Fixture.Customizations.Insert(0, new AutoFakeItEasy.RandomNumericSequenceGenerator(short.MinValue, short.MaxValue + 2));
+            Fixture.Customizations.Insert(0, new AutoFakeItEasy.RandomBoolSequenceGenerator());
+            Fixture.Customizations.Insert(0, new AutoFakeItEasy.RandomEnumSequenceGenerator());
+
+            // ReSharper restore RedundantNameQualifier
+        }
+
+        private static void RegisterCustomTypes()
+        {
+            Fixture.Register(() => new PositiveInteger(Math.Abs(Try.Running(Fixture.Create<int>).Until(result => result != 0))));
+            Fixture.Register(() => new NegativeInteger(-1 * Math.Abs(Try.Running(Fixture.Create<int>).Until(result => result != 0))));
+            Fixture.Register(() => new ZeroOrPositiveInteger(Math.Abs(Fixture.Create<int>())));
+            Fixture.Register(() => new ZeroOrNegativeInteger(-1 * Math.Abs(Fixture.Create<int>())));
         }
 
         private static bool CanCreateType(Type type)
