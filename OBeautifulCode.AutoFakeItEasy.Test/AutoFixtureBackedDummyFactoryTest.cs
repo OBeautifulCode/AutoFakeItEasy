@@ -208,14 +208,14 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         }
 
         [Fact]
-        public static void ADummy___Should_use_custom_dummy_creator___When_custom_dummy_creator_is_added()
+        public static void ADummy___Should_use_custom_dummy_creator___When_custom_dummy_creator_for_concrete_type_is_added()
         {
             // Arrange
-            var dummyBeforeCustomization = A.Dummy<CustomDummyUsesCustomDummyCreatorFunc>();
-            AutoFixtureBackedDummyFactory.AddDummyCreator(() => new CustomDummyUsesCustomDummyCreatorFunc(int.MinValue));
+            var dummyBeforeCustomization = A.Dummy<UseCustomDummyCreatorFuncForConcreteType>();
+            AutoFixtureBackedDummyFactory.AddDummyCreator(() => new UseCustomDummyCreatorFuncForConcreteType(int.MinValue));
 
             // Act
-            var dummyAfterCutomization = A.Dummy<CustomDummyUsesCustomDummyCreatorFunc>();
+            var dummyAfterCutomization = A.Dummy<UseCustomDummyCreatorFuncForConcreteType>();
 
             // Assert
             dummyBeforeCustomization.Value.Should().NotBe(int.MinValue);
@@ -223,41 +223,56 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         }
 
         [Fact]
+        public static void ADummy___Should_use_custom_dummy_creator___When_custom_dummy_creator_for_abstract_type_is_added()
+        {
+            // Arrange
+            // note: this line will generate a Fake<UseCustomDummyCreatorFuncForAbstractType> because our factory will return false
+            // when FakeItEasy calls CanCreate().  FakeItEasy will cache this information.  If we subsequently register a dummy creator
+            // for the type, it won't matter because FakeItEasy won't use our factory for this type.
+            // var dummyBeforeCustomization = A.Dummy<UseCustomDummyCreatorFuncForAbstractType>();
+            AutoFixtureBackedDummyFactory.AddDummyCreator<UseCustomDummyCreatorFuncForAbstractType>(() => new UseCustomDummyCreatorFuncForAbstractTypeReturnedType(int.MinValue, int.MaxValue));
+
+            // Act
+            var dummyAfterCutomization = A.Dummy<UseCustomDummyCreatorFuncForAbstractType>();
+
+            // Assert
+            dummyAfterCutomization.AbstractValue.Should().Be(int.MinValue);
+            dummyAfterCutomization.Should().BeOfType<UseCustomDummyCreatorFuncForAbstractTypeReturnedType>();
+            ((UseCustomDummyCreatorFuncForAbstractTypeReturnedType)dummyAfterCutomization).ConcreteValue.Should().Be(int.MaxValue);
+        }
+
+        [Fact]
+        public static void ADummy___Should_use_custom_dummy_creator___When_custom_dummy_creator_for_interface_type_is_added()
+        {
+            // Arrange
+            // note: this line will generate a Fake<IUseCustomDummyCreatorFuncForInterfaceType> because our factory will return false
+            // when FakeItEasy calls CanCreate().  FakeItEasy will cache this information.  If we subsequently register a dummy creator
+            // for the type, it won't matter because FakeItEasy won't use our factory for this type.
+            // var dummyBeforeCustomization = A.Dummy<IUseCustomDummyCreatorFuncForInterfaceType>();
+            AutoFixtureBackedDummyFactory.AddDummyCreator<IUseCustomDummyCreatorFuncForInterfaceType>(() => new UseCustomDummyCreatorFuncForInterfaceType(int.MaxValue));
+
+            // Act
+            var dummyAfterCutomization = A.Dummy<IUseCustomDummyCreatorFuncForInterfaceType>();
+
+            // Assert
+            dummyAfterCutomization.Value.Should().Be(int.MaxValue);
+            dummyAfterCutomization.Should().BeOfType<UseCustomDummyCreatorFuncForInterfaceType>();
+        }
+
+        [Fact]
         public static void ADummy___Should_use_the_most_recently_added_custom_dummy_creator___When_custom_dummy_creator_is_added_twice_for_same_type()
         {
             // Arrange
-            AutoFixtureBackedDummyFactory.AddDummyCreator(() => new CustomDummyUsesMostRecentlyAddedCustomDummyCreatorFunc(int.MinValue));
-            var dummyAfterFirstCustomization = A.Dummy<CustomDummyUsesMostRecentlyAddedCustomDummyCreatorFunc>();
-            AutoFixtureBackedDummyFactory.AddDummyCreator(() => new CustomDummyUsesMostRecentlyAddedCustomDummyCreatorFunc(int.MaxValue));
+            AutoFixtureBackedDummyFactory.AddDummyCreator(() => new UseMostRecentlyAddedCustomDummyCreatorFunc(int.MinValue));
+            var dummyAfterFirstCustomization = A.Dummy<UseMostRecentlyAddedCustomDummyCreatorFunc>();
+            AutoFixtureBackedDummyFactory.AddDummyCreator(() => new UseMostRecentlyAddedCustomDummyCreatorFunc(int.MaxValue));
 
             // Act
-            var dummyAfterSecondCustomization = A.Dummy<CustomDummyUsesMostRecentlyAddedCustomDummyCreatorFunc>();
+            var dummyAfterSecondCustomization = A.Dummy<UseMostRecentlyAddedCustomDummyCreatorFunc>();
 
             // Assert
             dummyAfterFirstCustomization.Value.Should().Be(int.MinValue);
             dummyAfterSecondCustomization.Value.Should().Be(int.MaxValue);
-        }
-
-        [Fact]
-        public static void AddDummyCreator___Should_throw_ArgumentException___When_specifying_an_interface_type()
-        {
-            // Arrange, Act
-            var ex1 = Record.Exception(() => AutoFixtureBackedDummyFactory.AddDummyCreator<IComparer>(() => null));
-            var ex2 = Record.Exception(() => AutoFixtureBackedDummyFactory.AddDummyCreator<IComparer<int>>(() => null));
-
-            // Assert
-            ex1.Should().BeOfType<ArgumentException>();
-            ex2.Should().BeOfType<ArgumentException>();
-        }
-
-        [Fact]
-        public static void AddDummyCreator___Should_throw_ArgumentException___When_specifying_an_abstract_type()
-        {
-            // Arrange, Act
-            var ex = Record.Exception(() => AutoFixtureBackedDummyFactory.AddDummyCreator<DictionaryBase>(() => null));
-
-            // Assert
-            ex.Should().BeOfType<ArgumentException>();
         }
 
         [Fact]
