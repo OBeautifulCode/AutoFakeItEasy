@@ -31,7 +31,7 @@ namespace OBeautifulCode.AutoFakeItEasy
 
         private static readonly MethodInfo FakeItEasyDummyMethod = typeof(A).GetMethods().Single(_ => _.Name == "Dummy");
 
-        private static readonly HashSet<Type> AllowedAbstractTypes = new HashSet<Type>();
+        private static readonly HashSet<Type> RegisteredTypes = new HashSet<Type>();
 
         private readonly MethodInfo autoFixtureCreateMethod;
 
@@ -73,16 +73,13 @@ namespace OBeautifulCode.AutoFakeItEasy
         /// </remarks>
         public static void AddDummyCreator<T>(Func<T> dummyCreatorFunc)
         {
-            Type type = typeof(T);
-            if (!CanCreateType(type))
-            {
-                throw new ArgumentException("AutoFakeItEasy cannot create dummies of type " + type);
-            }
-
             lock (FixtureLock)
             {
                 Fixture.Register(dummyCreatorFunc);
             }
+
+            Type type = typeof(T);
+            RegisteredTypes.Add(type);
         }
 
         /// <summary>
@@ -104,11 +101,6 @@ namespace OBeautifulCode.AutoFakeItEasy
             if (concreteSubclasses.Count == 0)
             {
                 throw new ArgumentException("There are no concrete subclasses of " + type.Name);
-            }
-
-            if (type.IsAbstract)
-            {
-                AllowedAbstractTypes.Add(type);
             }
 
             Func<T> randomSubclassDummyCreator = () =>
@@ -173,14 +165,19 @@ namespace OBeautifulCode.AutoFakeItEasy
 
         private static void RegisterCustomTypes()
         {
-            Fixture.Register(() => new PositiveInteger(Math.Abs(Try.Running(Fixture.Create<int>).Until(result => result != 0))));
-            Fixture.Register(() => new NegativeInteger(-1 * Math.Abs(Try.Running(Fixture.Create<int>).Until(result => result != 0))));
-            Fixture.Register(() => new ZeroOrPositiveInteger(Math.Abs(Fixture.Create<int>())));
-            Fixture.Register(() => new ZeroOrNegativeInteger(-1 * Math.Abs(Fixture.Create<int>())));
+            AddDummyCreator(() => new PositiveInteger(Math.Abs(Try.Running(Fixture.Create<int>).Until(result => result != 0))));
+            AddDummyCreator(() => new NegativeInteger(-1 * Math.Abs(Try.Running(Fixture.Create<int>).Until(result => result != 0))));
+            AddDummyCreator(() => new ZeroOrPositiveInteger(Math.Abs(Fixture.Create<int>())));
+            AddDummyCreator(() => new ZeroOrNegativeInteger(-1 * Math.Abs(Fixture.Create<int>())));
         }
 
         private static bool CanCreateType(Type type)
         {
+            if (RegisteredTypes.Contains(type))
+            {
+                return true;
+            }
+
             if (type.IsInterface)
             {
                 return false;
@@ -188,10 +185,7 @@ namespace OBeautifulCode.AutoFakeItEasy
 
             if (type.IsAbstract)
             {
-                if (!AllowedAbstractTypes.Contains(type))
-                {
-                    return false;
-                }
+                return false;
             }
 
             return true;
