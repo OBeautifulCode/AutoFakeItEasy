@@ -46,7 +46,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="FakeItEasy, Version=2.0.0.0, Culture=neutral, PublicKeyToken=eff28e2146d5fd2c, processorArchitecture=MSIL">
-      <HintPath>..\packages\FakeItEasy.2.0.0-beta010\lib\net40\FakeItEasy.dll</HintPath>
+      <HintPath>..\packages\FakeItEasy.2.0.0-beta011\lib\net40\FakeItEasy.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="OBeautifulCode.Math, Version=1.0.5.0, Culture=neutral, processorArchitecture=MSIL">
