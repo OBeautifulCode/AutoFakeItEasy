@@ -7,7 +7,6 @@
 namespace OBeautifulCode.AutoFakeItEasy.Test
 {
     using System;
-    using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -17,7 +16,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
     using Xunit;
 
     /// <summary>
-    /// Tests the <see cref="AutoFixtureBackedDummyFactory"/>.
+    /// Tests the <see cref="AutoFixtureBackedDummyFactory"/> class.
     /// </summary>
     public static class AutoFixtureBackedDummyFactoryTest
     {
