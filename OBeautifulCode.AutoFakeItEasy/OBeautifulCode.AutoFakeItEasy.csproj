@@ -77,6 +77,8 @@
     <Compile Include="Generators\RandomBoolSequenceGenerator.cs" />
     <Compile Include="Generators\RandomEnumSequenceGenerator.cs" />
     <Compile Include="CustomTypes\ZeroOrPositiveInteger.cs" />
+    <Compile Include="Some.cs" />
+    <Compile Include="CreateWith.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config">
