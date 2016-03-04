@@ -10,8 +10,6 @@ namespace OBeautifulCode.AutoFakeItEasy
     using System.Collections.Generic;
     using System.Linq;
 
-    using Conditions;
-
     using FakeItEasy;
 
     using OBeautifulCode.Math;
@@ -21,21 +19,34 @@ namespace OBeautifulCode.AutoFakeItEasy
     /// </summary>
     public static class Some
     {
+        /// <summary>
+        /// The minimum number of random elements to create when generating a list of dummies.
+        /// </summary>
+        internal const int MinRandomNumberOfElements = 1;
+
+        /// <summary>
+        /// The maximum number of random elements to create when generating a list of dummies.
+        /// </summary>
+        internal const int MaxRandomNumberOfElements = 10;
+
         private const double ProbabilityOfNull = .25;
 
         /// <summary>
         /// Gets a list of dummies of the specified type.
         /// </summary>
-        /// <param name="numberOfElements">The number of elements in the list to generate.  Must be &gt;= 0.  Default is 3.</param>
+        /// <param name="numberOfElements">The number of elements in the list to generate.  If negative then a random number of elements between 1 and 10 will be generated.</param>
         /// <param name="createWith">Determines if and how to populate the list with nulls.  The default is to create a list with no nulls.</param>
         /// <typeparam name="T">The type of dummies to return.</typeparam>
         /// <returns>A list of dummy objects of the specified type.</returns>
-        public static IList<T> Dummies<T>(int numberOfElements = 3, CreateWith createWith = CreateWith.NoNulls)
+        public static IList<T> Dummies<T>(int numberOfElements = -1, CreateWith createWith = CreateWith.NoNulls)
         {
-            Condition.Requires(numberOfElements, nameof(numberOfElements)).IsGreaterOrEqual(0);
-
             var type = typeof(T);
             bool isNullable = !type.IsValueType || (Nullable.GetUnderlyingType(type) != null);
+            if (numberOfElements < 0)
+            {
+                numberOfElements = ThreadSafeRandom.Next(MinRandomNumberOfElements, MaxRandomNumberOfElements + 1);
+            }
+
             if (createWith == CreateWith.OneOrMoreNulls)
             {
                 if (!isNullable)
