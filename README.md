@@ -116,6 +116,30 @@ namespace Your.Namespace
 }
 ```
 
+Some.Dummies\<T>
+---------------
+A common use-case is the need for an `ICollection` or `IEnumerable` or `IList` of dummies.
+
+- We CAN call `A.Dummy<List<double>>()`, but we have no control over how that's created.  AutoFixture is going to create a `List<double>` with 3 elements, none of which will be null, always.  That's dangerous because its all-too-easy to write unit tests that *implicitly* depend on this default.  The *explicit* reading of that line of code is, "I want a dummy list of doubles."  That's it.  The proper thing for the system to do is return a list with a random number of elements to maintain consistentcy with our definition of a Dummy.
+- We CANNOT call `A.Dummy<IList<double>>()` because AutoFakeItEasy doesn't support interface types (see "How It Works" below.).  That's unfortunate because the interface type (`IList<T>`) is more flexible than a concrete type (`List<T>`).
+
+Enter `Some.Dummies<T>()`
+
+By default, this **returns an** `IList<T>` **with a random number of elements between 1 and 10 inclusive**.
+
+An [IList\<T>] is flexible return type because it's also an `ICollection<T>`, `IEnumerable<T>`, and `IEnumerable`.  It covers a broad set of use cases.
+
+Here's the full method signature for `Some.Dummies<T>()`
+
+    IList<T> Dummies<T>(int numberOfElements = -1, CreateWith createWith = CreateWith.NoNulls)
+
+- We can specify the number of elements in the result using the `numberOfElements` parameter.  A negative number instructs the method to use a random number of elements.  Use 0 to return an empty list.
+- Parameter `createWith` determines if and how to populated the generated `IList<T>` with nulls.  Here are the options:
+    - `NoNulls` - The resulting list should not contain any null elements.
+    - `OneOrMoreNulls` - The resulting list should contain one or more null elements.  This is a way to guarantee a null element.
+    - `ZeroOrMoreNulls` - The resulting list should contain zero or more null elements.  This is a way to get a list that may or may not contain nulls.
+
+
 Other Useful Features
 ---------------------
 AutoFakeItEasy can't create abstract types (unless you use a custom dummy creator - see above).  However, you can instruct AutoFakeItEasy to build a **random, concrete subclass of an abstract type**.  Put this in your dummy factory (see "Custom Dummy Creation" above):
@@ -131,6 +155,8 @@ How it Works
 -----
 - Under the covers, AutoFakeItEasy simply implements `IDummyFactory` and then bootstraps it into your app domain.
 - For any call To `A.Dummy<T>` where T is NOT an interface type and NOT an abstract type, AutoFakeItEasy uses [AutoFixture] to create the object.
+  - Interface and abstract types CAN be created if you add a custom dummy creator (see "Custom Dummy Creation" above).
+  - Otherwise, AutoFakeItEasy has no way of knowning what concrete type to instantiate!
 - [AutoFixture] has been customized so that:
   - Signed numeric types return positive, zero and negative numbers, instead of the default of positive numbers
   - `Enums` return random values instead of the default of sequential values
@@ -140,3 +166,4 @@ How it Works
 [FakeItEasy]: https://fakeiteasy.github.io/
 [AutoFixture]: https://github.com/AutoFixture/AutoFixture
 [Dummy Factory]: https://github.com/FakeItEasy/FakeItEasy/wiki/Custom-Dummy-Creation
+[IList\<T>]: https://msdn.microsoft.com/en-us/library/5y536ey6(v=vs.110).aspx
