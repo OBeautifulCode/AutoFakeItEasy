@@ -52,7 +52,7 @@ namespace OBeautifulCode.AutoFakeItEasy
         }
 
         /// <inheritdoc />
-        public int Priority => int.MinValue;
+        public Priority Priority => FakeItEasy.Priority.Default;
 
         /// <summary>
         /// Loads this factory in the app domain, which makes it
