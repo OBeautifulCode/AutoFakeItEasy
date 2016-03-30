@@ -7,7 +7,7 @@
     <authors>$author$</authors>
     <owners>$author$</owners>
     <projectUrl>https://github.com/OBeautifulCode/OBeautifulCode.AutoFakeItEasy</projectUrl>
-    <iconUrl>http://blog.obeautifulcode.com/img/autofakeiteasy-nuget-icon.png</iconUrl>
+    <iconUrl>https://raw.githubusercontent.com/OBeautifulCode/OBeautifulCode.AutoFakeItEasy/master/OBeautifulCode.AutoFakeItEasy/nuget-icon.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
     <summary>Use AutoFixture to fulfill calls to FakeItEasy's A.Dummy()</summary>
