@@ -99,7 +99,7 @@ namespace Your.Namespace
         }
 
         /// <inheritdoc />
-        public int Priority => 0;
+        public int Priority => FakeItEasy.Priority.Default;
 
         /// <inheritdoc />
         public bool CanCreate(Type type)
@@ -115,6 +115,8 @@ namespace Your.Namespace
     }
 }
 ```
+
+Note that this is a bit of an overkill.  Once created, the dummy factory does nothing useful.  We only care about the code in the constructor.  Putting that code in the constructor of an implementation of `IDummyFactory` guarantees that it will be called before any unit tests are run.  Feel free to use another approach to achieve the same goal.
 
 Some.Dummies\<T>
 ---------------
