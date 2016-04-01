@@ -98,6 +98,8 @@
     <Compile Include="CustomTypes\PositiveIntegerTest.cs" />
     <Compile Include="CustomTypes\ZeroOrNegativeIntegerTest.cs" />
     <Compile Include="CustomTypes\ZeroOrPositiveIntegerTest.cs" />
+    <Compile Include="EqualityDummies.cs" />
+    <Compile Include="ExtensionMethodsTest.cs" />
     <Compile Include="Generators\DummySpecimenContext.cs" />
     <Compile Include="Generators\RandomBoolSequenceGeneratorTest.cs" />
     <Compile Include="Generators\RandomEnumSequenceGeneratorTest.cs" />
