@@ -18,8 +18,6 @@ namespace OBeautifulCode.AutoFakeItEasy
     using Ploeh.AutoFixture;
     using Ploeh.AutoFixture.Kernel;
 
-    using Spritely.Redo;
-
     /// <summary>
     /// A dummy factory backed by AutoFixture.
     /// </summary>
@@ -52,7 +50,9 @@ namespace OBeautifulCode.AutoFakeItEasy
         }
 
         /// <inheritdoc />
+        // ReSharper disable RedundantNameQualifier
         public Priority Priority => FakeItEasy.Priority.Default;
+        // ReSharper restore RedundantNameQualifier
 
         /// <summary>
         /// Loads this factory in the app domain, which makes it
@@ -165,8 +165,8 @@ namespace OBeautifulCode.AutoFakeItEasy
 
         private static void RegisterCustomTypes()
         {
-            AddDummyCreator(() => new PositiveInteger(Math.Abs(Try.Running(Fixture.Create<int>).Until(result => result != 0))));
-            AddDummyCreator(() => new NegativeInteger(-1 * Math.Abs(Try.Running(Fixture.Create<int>).Until(result => result != 0))));
+            AddDummyCreator(() => new PositiveInteger(Math.Abs(A.Dummy<int>().ThatIsNot(0))));
+            AddDummyCreator(() => new NegativeInteger(-1 * Math.Abs(A.Dummy<int>().ThatIsNot(0))));
             AddDummyCreator(() => new ZeroOrPositiveInteger(Math.Abs(Fixture.Create<int>())));
             AddDummyCreator(() => new ZeroOrNegativeInteger(-1 * Math.Abs(Fixture.Create<int>())));
         }

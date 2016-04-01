@@ -57,10 +57,6 @@
       <HintPath>..\packages\AutoFixture.3.43.0\lib\net40\Ploeh.AutoFixture.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Spritely.Redo, Version=0.2.2.9, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Spritely.Redo.0.2.2\lib\net45\Spritely.Redo.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
