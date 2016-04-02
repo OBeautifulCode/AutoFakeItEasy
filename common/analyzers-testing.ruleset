@@ -9,6 +9,7 @@
   <Rules AnalyzerId="StyleCop.Analyzers" RuleNamespace="StyleCop.Analyzers">
     <Rule Id="SA1005" Action="None" />
     <Rule Id="SA1305" Action="Warning" />
+    <Rule Id="SA1515" Action="None" />
     <Rule Id="SA1625" Action="Warning" />
     <Rule Id="SA1627" Action="Warning" />
     <Rule Id="SA1629" Action="Warning" />
