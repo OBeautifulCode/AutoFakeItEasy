@@ -15,7 +15,7 @@ namespace OBeautifulCode.AutoFakeItEasy
     /// Represents a positive integer.
     /// </summary>
     [DebuggerDisplay("{Value}")]
-    public sealed class PositiveInteger : ConstrainedInteger
+    public sealed class PositiveInteger : ConstrainedValue<int>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="PositiveInteger"/> class.

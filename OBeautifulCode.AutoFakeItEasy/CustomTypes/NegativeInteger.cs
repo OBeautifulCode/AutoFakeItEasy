@@ -15,7 +15,7 @@ namespace OBeautifulCode.AutoFakeItEasy
     /// Represents a negative integer.
     /// </summary>
     [DebuggerDisplay("{Value}")]
-    public sealed class NegativeInteger : ConstrainedInteger
+    public sealed class NegativeInteger : ConstrainedValue<int>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="NegativeInteger"/> class.

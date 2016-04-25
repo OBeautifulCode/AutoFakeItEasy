@@ -22,6 +22,10 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
     {
         private const int NumberOfCallsToCoverAllShortsRegardlessOfFixtureState = short.MaxValue * 4;
 
+        private static int NumberOfCallsToCoverAllPercentChangeAsDouble => Convert.ToInt32(((PercentChangeAsDouble.MaxPercentChange - PercentChangeAsDouble.MinPercentChange) * 1000d) + 1d);
+
+        private static int NumberOfCallsToCoverAllPercentChangeAsDecimal => Convert.ToInt32(((PercentChangeAsDecimal.MaxPercentChange - PercentChangeAsDecimal.MinPercentChange) * 1000m) + 1m);
+
         // ReSharper disable InconsistentNaming
         [Fact]
         public static void ADummy_bool___Should_return_bool_values_in_random_order___When_creating_object_of_type_bool()
@@ -204,6 +208,26 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             {
                 actualResult.Should().Contain(i);
             }
+        }
+
+        [Fact]
+        public static void ADummy_PercentChangeAsDouble___Should_always_return_doubles_that_are_greater_than_or_equal_MinPercentChange_and_less_than_or_equal_MaxPercentChange___When_creating_many_object_of_type_PercentChangeAsDouble()
+        {
+            // Arrange, Act
+            var actualResult = Enumerable.Range(1, NumberOfCallsToCoverAllPercentChangeAsDouble).Select(_ => (double)A.Dummy<PercentChangeAsDouble>()).ToList();
+
+            // Assert
+            actualResult.ForEach(_ => _.Should().BeGreaterOrEqualTo(PercentChangeAsDouble.MinPercentChange).And.BeLessOrEqualTo(PercentChangeAsDouble.MaxPercentChange));
+        }
+
+        [Fact]
+        public static void ADummy_PercentChangeAsDecimal___Should_always_return_decimals_that_are_greater_than_or_equal_MinPercentChange_and_less_than_or_equal_MaxPercentChange___When_creating_many_object_of_type_PercentChangeAsDecimal()
+        {
+            // Arrange, Act
+            var actualResult = Enumerable.Range(1, NumberOfCallsToCoverAllPercentChangeAsDecimal).Select(_ => (decimal)A.Dummy<PercentChangeAsDecimal>()).ToList();
+
+            // Assert
+            actualResult.ForEach(_ => _.Should().BeGreaterOrEqualTo(PercentChangeAsDecimal.MinPercentChange).And.BeLessOrEqualTo(PercentChangeAsDecimal.MaxPercentChange));
         }
 
         [Fact]

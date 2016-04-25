@@ -15,7 +15,7 @@ namespace OBeautifulCode.AutoFakeItEasy
     /// Represents a zero or positive integer.
     /// </summary>
     [DebuggerDisplay("{Value}")]
-    public sealed class ZeroOrPositiveInteger : ConstrainedInteger
+    public sealed class ZeroOrPositiveInteger : ConstrainedValue<int>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ZeroOrPositiveInteger"/> class.
