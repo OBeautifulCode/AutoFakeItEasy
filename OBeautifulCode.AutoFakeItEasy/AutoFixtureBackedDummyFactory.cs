@@ -169,6 +169,8 @@ namespace OBeautifulCode.AutoFakeItEasy
             AddDummyCreator(() => new NegativeInteger(-1 * Math.Abs(A.Dummy<int>().ThatIsNot(0))));
             AddDummyCreator(() => new ZeroOrPositiveInteger(Math.Abs(Fixture.Create<int>())));
             AddDummyCreator(() => new ZeroOrNegativeInteger(-1 * Math.Abs(Fixture.Create<int>())));
+            AddDummyCreator(PercentChangeAsDouble.CreateConstrainedValue);
+            AddDummyCreator(PercentChangeAsDecimal.CreateConstrainedValue);
         }
 
         private static bool CanCreateType(Type type)

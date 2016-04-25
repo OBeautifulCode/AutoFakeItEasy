@@ -58,7 +58,13 @@ AutoFakeItEasy supplies these useful types.  They implicitly convert to an `int`
 - `NegativeInteger` - a negative integer
 - `ZeroOrNegativeInteger` - a negative integer or zero
 
-This makes it easy to create random but constrained integers.
+This makes it easy to create random, but constrained integers.
+
+These useful types are also supported, with implicit and explicit conversions available to the underlying type:
+
+- `PercentChangeAsDecimal` - Percentage change between -100.0% and 300.0% expressed as a `decimal`.  Calls to `A.Dummy<PercentChangeAsDecimal>` result in values >= -1m and <= 3m, with a scale of 1 (1 digit to the right of the decimal point).  For example, a result of 1.234m represents 123.4%.
+- `PercentChangeAsDouble` - Same as `PercentChangeAsDecimal` except that the underlying type is a `double`.
+
 
 Custom Dummy Creation
 ---------------------

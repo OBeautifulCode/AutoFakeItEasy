@@ -65,6 +65,8 @@
     <Compile Include="AutoFixtureBackedDummyFactory.cs" />
     <Compile Include="CustomTypes\ConstrainedValue{T}.cs" />
     <Compile Include="CustomTypes\NegativeInteger.cs" />
+    <Compile Include="CustomTypes\PercentChangeAsDecimal.cs" />
+    <Compile Include="CustomTypes\PercentChangeAsDouble.cs" />
     <Compile Include="CustomTypes\PositiveInteger.cs" />
     <Compile Include="CustomTypes\ZeroOrNegativeInteger.cs" />
     <Compile Include="ExtensionMethods.cs" />
