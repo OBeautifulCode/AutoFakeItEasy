@@ -40,12 +40,14 @@ namespace OBeautifulCode.AutoFakeItEasy
         /// <returns>A list of dummy objects of the specified type.</returns>
         public static IList<T> Dummies<T>(int numberOfElements = -1, CreateWith createWith = CreateWith.NoNulls)
         {
-            var type = typeof(T);
-            bool isNullable = !type.IsValueType || (Nullable.GetUnderlyingType(type) != null);
+            var result = new SomeDummiesList<T>(numberOfElements, createWith);
             if (numberOfElements < 0)
             {
                 numberOfElements = ThreadSafeRandom.Next(MinRandomNumberOfElements, MaxRandomNumberOfElements + 1);
             }
+
+            var type = typeof(T);
+            bool isNullable = !type.IsValueType || (Nullable.GetUnderlyingType(type) != null);
 
             if (createWith == CreateWith.OneOrMoreNulls)
             {
@@ -60,7 +62,6 @@ namespace OBeautifulCode.AutoFakeItEasy
                 }
             }
 
-            var result = new List<T>(numberOfElements);
             for (int x = 0; x < numberOfElements; x++)
             {
                 if (createWith == CreateWith.NoNulls)
