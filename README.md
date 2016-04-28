@@ -124,22 +124,6 @@ namespace Your.Namespace
 
 Note that this is a bit of an overkill.  Once created, the dummy factory does nothing useful.  We only care about the code in the constructor.  Putting that code in the constructor of an implementation of `IDummyFactory` guarantees that it will be called before any unit tests are run.  Feel free to use another approach to achieve the same goal.
 
-Constrained Dummies
--------------------
-Sometimes it's useful to constrain dummies.  AutoFakeItEasy implements these extension methods for that purpose: `ThatIs`, `ThatIsNot`, `Whose`
-
-```c#
-var nonZero = A.Dummy<int>().ThatIs(i => i != 0);
-
-var tallPerson = A.Dummy<Person>().Whose(p => p.HeightInCentimeters > 182);
-
-var green = new Green();
-var notGreen = A.Dummy<Color>().ThatIsNot(green);
-```
-
-- `ThatIs`, `Whose`: These methods do the same thing; select one based on readability.  A lambda is used to test dummies against a constraint/condition.  If the condition fails, then another dummy is created and tested ... and so on until the condition is satisifed or a maximum number of attempts has been made.  `maxAttempts` is an optional parameter with default of 100.
-- `ThatIsNot`: This method creates a dummy that is not equal (using `object.Equals(object)`) to some comparison dummy.  It also has an optional `maxAttempts` parameter that works the same way as described above.
-
 Some.Dummies\<T>
 ---------------
 A common use-case is the need for an `ICollection` or `IEnumerable` or `IList` of dummies.  Use this:
@@ -166,6 +150,28 @@ Here's the full method signature for `Some.Dummies<T>()`
     - `NoNulls` - The resulting list should not contain any null elements.
     - `OneOrMoreNulls` - The resulting list should contain one or more null elements.  This is a way to guarantee a null element.
     - `ZeroOrMoreNulls` - The resulting list should contain zero or more null elements.  This is a way to get a list that may or may not contain nulls.
+
+
+Constrained Dummies
+-------------------
+Sometimes it's useful to constrain dummies.  AutoFakeItEasy implements these extension methods for that purpose: `ThatIs`, `ThatIsNot`, `Whose`
+
+```c#
+var nonZero = A.Dummy<int>().ThatIs(i => i != 0);
+
+var tallPerson = A.Dummy<Person>().Whose(p => p.HeightInCentimeters > 182);
+
+var green = new Green();
+var notGreen = A.Dummy<Color>().ThatIsNot(green);
+```
+
+- `ThatIs`, `Whose`: These methods do the same thing; select one based on readability.  A lambda is used to test dummies against a constraint/condition.  If the condition fails, then another dummy is created and tested ... and so on until the condition is satisifed or a maximum number of attempts has been made.  `maxAttempts` is an optional parameter with default of 100.
+- `ThatIsNot`: This method creates a dummy that is not equal (using `object.Equals(object)`) to some comparison dummy.  It also has an optional `maxAttempts` parameter that works the same way as described above.
+
+These constraining methods also work with `Some.Dummies<T>()`  For example, this will make 5 attempts to create an IList of doubles until there are an even number of elements in the list:
+
+`Some.Dummies<double>().Whose(l => l.Count % 2 == 0, 5)`
+
 
 
 Other Useful Features

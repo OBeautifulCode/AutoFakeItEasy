@@ -26,66 +26,105 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         public static void ThatIs___Should_throw_ArgumentNullException___When_parameter_condition_is_null()
         {
             // Arrange, Act
-            var ex = Record.Exception(() => A.Dummy<int>().ThatIs(null));
+            var ex1 = Record.Exception(() => A.Dummy<int>().ThatIs(null));
+            var ex2 = Record.Exception(() => Some.Dummies<int>().ThatIs(null));
 
             // Assert
-            ex.Should().BeOfType<ArgumentNullException>();
+            ex1.Should().BeOfType<ArgumentNullException>();
+            ex2.Should().BeOfType<ArgumentNullException>();
         }
 
         [Fact]
         public static void ThatIs___Should_throw_InvalidOperation___When_maxAttempts_is_1_and_referenceDummy_does_not_meet_the_condition()
         {
             // Arrange, Act
-            var ex = Record.Exception(() => A.Dummy<string>().ThatIs(ConditionThatCannnotBeMet, maxAttempts: 1));
+            var ex1 = Record.Exception(() => A.Dummy<string>().ThatIs(ConditionThatCannnotBeMet, maxAttempts: 1));
+            var ex2 = Record.Exception(() => Some.Dummies<string>().ThatIs(ConditionThatCannnotBeMet, maxAttempts: 1));
 
             // Assert
-            ex.Should().BeOfType<InvalidOperationException>();
+            ex1.Should().BeOfType<InvalidOperationException>();
+            ex2.Should().BeOfType<InvalidOperationException>();
         }
 
         [Fact]
         public static void ThatIs___Should_throw_InvalidOperation___When_condition_cannot_be_met_and_maxAttempts_is_greater_than_one()
         {
             // Arrange, Act
-            var ex1 = Record.Exception(() => A.Dummy<string>().ThatIs(ConditionThatCannnotBeMet));
-            var ex2 = Record.Exception(() => A.Dummy<string>().ThatIs(ConditionThatCannnotBeMet, maxAttempts: 101));
+            var ex1a = Record.Exception(() => A.Dummy<string>().ThatIs(ConditionThatCannnotBeMet));
+            var ex1b = Record.Exception(() => A.Dummy<string>().ThatIs(ConditionThatCannnotBeMet, maxAttempts: 101));
+
+            var ex2a = Record.Exception(() => Some.Dummies<string>().ThatIs(ConditionThatCannnotBeMet));
+            var ex2b = Record.Exception(() => Some.Dummies<string>().ThatIs(ConditionThatCannnotBeMet, maxAttempts: 101));
 
             // Assert
-            ex1.Should().BeOfType<InvalidOperationException>();
-            ex2.Should().BeOfType<InvalidOperationException>();
+            ex1a.Should().BeOfType<InvalidOperationException>();
+            ex1b.Should().BeOfType<InvalidOperationException>();
+
+            ex2a.Should().BeOfType<InvalidOperationException>();
+            ex2b.Should().BeOfType<InvalidOperationException>();
         }
 
         [Fact]
         public static void ThatIs___Should_try_maxAttempts_number_of_times_to_meet_condition_before_throwing___When_condition_cannot_be_met_and_maxAttempts_is_positive()
         {
             // Arrange
-            var referenceDummy = A.Dummy<string>();
-            var dummies1 = new HashSet<string>();
-            Func<string, bool> condition1 = _ =>
+            var referenceDummy1a = A.Dummy<string>();
+            var dummies1a = new List<string>();
+            Func<string, bool> condition1a = _ =>
             {
-                dummies1.Add(_);
+                dummies1a.Add(_);
                 return false;
             };
 
-            var dummies2 = new HashSet<string>();
-            Func<string, bool> condition2 = _ =>
+            var referenceDummy1b = A.Dummy<string>();
+            var dummies1b = new List<string>();
+            Func<string, bool> condition1b = _ =>
             {
-                dummies2.Add(_);
+                dummies1b.Add(_);
+                return false;
+            };
+
+            var referenceDummy2a = Some.Dummies<string>();
+            var dummies2a = new List<IList<string>>();
+            Func<IList<string>, bool> condition2a = _ =>
+            {
+                dummies2a.Add(_);
+                return false;
+            };
+
+            var refereceDummy2b = Some.Dummies<string>();
+            var dummies2b = new List<IList<string>>();
+            Func<IList<string>, bool> condition2b = _ =>
+            {
+                dummies2b.Add(_);
                 return false;
             };
 
             // Act
-            var ex1 = Record.Exception(() => referenceDummy.ThatIs(condition1, maxAttempts: 1));
-            var ex2 = Record.Exception(() => referenceDummy.ThatIs(condition2, maxAttempts: 101));
+            var ex1a = Record.Exception(() => referenceDummy1a.ThatIs(condition1a, maxAttempts: 1));
+            var ex1b = Record.Exception(() => referenceDummy1b.ThatIs(condition1b, maxAttempts: 101));
+
+            var ex2a = Record.Exception(() => referenceDummy2a.ThatIs(condition2a, maxAttempts: 1));
+            var ex2b = Record.Exception(() => refereceDummy2b.ThatIs(condition2b, maxAttempts: 101));
 
             // Assert
-            ex1.Should().BeOfType<InvalidOperationException>();
-            ex2.Should().BeOfType<InvalidOperationException>();
+            ex1a.Should().BeOfType<InvalidOperationException>();
+            ex1b.Should().BeOfType<InvalidOperationException>();
 
-            dummies1.Should().HaveCount(1);
-            dummies2.Should().HaveCount(101);
+            ex2a.Should().BeOfType<InvalidOperationException>();
+            ex2b.Should().BeOfType<InvalidOperationException>();
 
-            dummies1.Should().Contain(referenceDummy);
-            dummies2.Should().Contain(referenceDummy);
+            dummies1a.Should().HaveCount(1);
+            dummies1b.Should().HaveCount(101);
+
+            dummies2a.Should().HaveCount(1);
+            dummies2b.Should().HaveCount(101);
+
+            dummies1a.Should().StartWith(referenceDummy1a);
+            dummies1b.Should().StartWith(referenceDummy1b);
+
+            dummies2a.Should().StartWith(referenceDummy2a);
+            dummies2b.Should().StartWith(refereceDummy2b);
         }
 
         [Fact]
@@ -94,12 +133,14 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             // Arrange
             const int NegativeMaxAttempts = -1000;
             const int InfiniteAttemptsMax = 1000;
-            var attempts1 = 0;
-            var attempts2 = 0;
-            Func<string, bool> condition1 = _ =>
+            var attempts1a = 0;
+            var attempts1b = 0;
+            var attempts2a = 0;
+            var attempts2b = 0;
+            Func<string, bool> condition1a = _ =>
                 {
-                    attempts1++;
-                    if (attempts1 >= InfiniteAttemptsMax)
+                    attempts1a++;
+                    if (attempts1a >= InfiniteAttemptsMax)
                     {
                         throw new OverflowException();
                     }
@@ -107,10 +148,32 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
                     return false;
                 };
 
-            Func<string, bool> condition2 = _ =>
+            Func<string, bool> condition1b = _ =>
             {
-                attempts2++;
-                if (attempts2 >= InfiniteAttemptsMax)
+                attempts1b++;
+                if (attempts1b >= InfiniteAttemptsMax)
+                {
+                    throw new OverflowException();
+                }
+
+                return false;
+            };
+
+            Func<IList<string>, bool> condition2a = _ =>
+            {
+                attempts2a++;
+                if (attempts2a >= InfiniteAttemptsMax)
+                {
+                    throw new OverflowException();
+                }
+
+                return false;
+            };
+
+            Func<IList<string>, bool> condition2b = _ =>
+            {
+                attempts2b++;
+                if (attempts2b >= InfiniteAttemptsMax)
                 {
                     throw new OverflowException();
                 }
@@ -119,37 +182,59 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             };
 
             // Act
-            var ex1 = Record.Exception(() => A.Dummy<string>().ThatIs(condition1, maxAttempts: 0));
-            var ex2 = Record.Exception(() => A.Dummy<string>().ThatIs(condition2, NegativeMaxAttempts));
+            var ex1a = Record.Exception(() => A.Dummy<string>().ThatIs(condition1a, maxAttempts: 0));
+            var ex1b = Record.Exception(() => A.Dummy<string>().ThatIs(condition1b, NegativeMaxAttempts));
+            var ex2a = Record.Exception(() => Some.Dummies<string>().ThatIs(condition2a, maxAttempts: 0));
+            var ex2b = Record.Exception(() => Some.Dummies<string>().ThatIs(condition2b, NegativeMaxAttempts));
 
             // Assert
-            ex1.Should().BeOfType<OverflowException>();
-            ex2.Should().BeOfType<OverflowException>();
-            attempts1.Should().Be(InfiniteAttemptsMax);
-            attempts2.Should().Be(InfiniteAttemptsMax);
+            ex1a.Should().BeOfType<OverflowException>();
+            ex1b.Should().BeOfType<OverflowException>();
+
+            ex2a.Should().BeOfType<OverflowException>();
+            ex2b.Should().BeOfType<OverflowException>();
+
+            attempts1a.Should().Be(InfiniteAttemptsMax);
+            attempts1b.Should().Be(InfiniteAttemptsMax);
+
+            attempts2a.Should().Be(InfiniteAttemptsMax);
+            attempts2b.Should().Be(InfiniteAttemptsMax);
         }
 
         [Fact]
         public static void ThatIs___Should_return_referenceDummy___When_referenceDummy_meets_condition_regardless_of_maxAttempts()
         {
             // Arrange
-            var referenceDummy = A.Dummy<string>();
+            var referenceDummy1 = A.Dummy<string>();
+            var referenceDummy2 = Some.Dummies<string>();
 
             // Act
             // ReSharper disable RedundantArgumentName
-            var result1 = referenceDummy.ThatIs(ConditionThatsAlwaysMet);
-            var result2 = referenceDummy.ThatIs(ConditionThatsAlwaysMet, maxAttempts: 101);
-            var result3 = referenceDummy.ThatIs(ConditionThatsAlwaysMet, maxAttempts: 0);
-            var result4 = referenceDummy.ThatIs(ConditionThatsAlwaysMet, maxAttempts: -1);
-            var result5 = referenceDummy.ThatIs(ConditionThatsAlwaysMet, maxAttempts: -1000);
+            var result1a = referenceDummy1.ThatIs(ConditionThatsAlwaysMet);
+            var result1b = referenceDummy1.ThatIs(ConditionThatsAlwaysMet, maxAttempts: 101);
+            var result1c = referenceDummy1.ThatIs(ConditionThatsAlwaysMet, maxAttempts: 0);
+            var result1d = referenceDummy1.ThatIs(ConditionThatsAlwaysMet, maxAttempts: -1);
+            var result1e = referenceDummy1.ThatIs(ConditionThatsAlwaysMet, maxAttempts: -1000);
+
+            var result2a = referenceDummy2.ThatIs(ConditionThatsAlwaysMet);
+            var result2b = referenceDummy2.ThatIs(ConditionThatsAlwaysMet, maxAttempts: 101);
+            var result2c = referenceDummy2.ThatIs(ConditionThatsAlwaysMet, maxAttempts: 0);
+            var result2d = referenceDummy2.ThatIs(ConditionThatsAlwaysMet, maxAttempts: -1);
+            var result2e = referenceDummy2.ThatIs(ConditionThatsAlwaysMet, maxAttempts: -1000);
             // ReSharper restore RedundantArgumentName
 
             // Assert
-            result1.Should().Be(referenceDummy);
-            result2.Should().Be(referenceDummy);
-            result3.Should().Be(referenceDummy);
-            result4.Should().Be(referenceDummy);
-            result5.Should().Be(referenceDummy);
+            result1a.Should().Be(referenceDummy1);
+            result1b.Should().Be(referenceDummy1);
+            result1c.Should().Be(referenceDummy1);
+            result1d.Should().Be(referenceDummy1);
+            result1e.Should().Be(referenceDummy1);
+
+            result2a.Should().Equal(referenceDummy2);
+            result2b.Should().Equal(referenceDummy2);
+            result2c.Should().Equal(referenceDummy2);
+            result2d.Should().Equal(referenceDummy2);
+            result2e.Should().Equal(referenceDummy2);
         }
 
         [Fact]
@@ -180,7 +265,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         }
 
         [Fact]
-        public static void ThatIs___Should_return_dummy_that_meets_condition___When_referenceDummy_does_not_meet_condition_but_condition_can_be_satisfied_after_one_or_more_attempts()
+        public static void ThatIs___Should_return_dummy_that_meets_condition___When_referenceDummy_is_generated_via_ADummy_and_does_not_meet_condition_but_condition_can_be_satisfied_after_one_or_more_attempts()
         {
             // Arrange
             const string ExpectedCharacter = "a";
@@ -211,69 +296,134 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         }
 
         [Fact]
+        public static void ThatIs___Should_return_dummy_that_meets_condition___When_referenceDummy_is_generated_via_SomeDummies_and_does_not_meet_condition_but_condition_can_be_satisfied_after_one_or_more_attempts()
+        {
+            // Arrange
+            const int MinCount = 5;
+            var referenceDummy = Some.Dummies<string>();
+            referenceDummy.Clear();
+            Func<IList<string>, bool> condition = _ => _.Count >= MinCount;
+
+            // Act
+            // ReSharper disable RedundantArgumentName
+            var result1 = referenceDummy.ThatIs(condition);
+            var result2 = referenceDummy.ThatIs(condition, maxAttempts: 101);
+            var result3 = referenceDummy.ThatIs(condition, maxAttempts: 0);
+            var result4 = referenceDummy.ThatIs(condition, maxAttempts: -1);
+            var result5 = referenceDummy.ThatIs(condition, maxAttempts: -1000);
+            // ReSharper restore RedundantArgumentName
+
+            // Assert
+            result1.Count.Should().BeGreaterOrEqualTo(MinCount);
+            result2.Count.Should().BeGreaterOrEqualTo(MinCount);
+            result3.Count.Should().BeGreaterOrEqualTo(MinCount);
+            result4.Count.Should().BeGreaterOrEqualTo(MinCount);
+            result5.Count.Should().BeGreaterOrEqualTo(MinCount);
+        }
+
+        [Fact]
         public static void Whose___Should_throw_ArgumentNullException___When_parameter_condition_is_null()
         {
             // Arrange, Act
-            var ex = Record.Exception(() => A.Dummy<int>().Whose(null));
+            var ex1 = Record.Exception(() => A.Dummy<int>().Whose(null));
+            var ex2 = Record.Exception(() => Some.Dummies<int>().Whose(null));
 
             // Assert
-            ex.Should().BeOfType<ArgumentNullException>();
+            ex1.Should().BeOfType<ArgumentNullException>();
+            ex2.Should().BeOfType<ArgumentNullException>();
         }
 
         [Fact]
         public static void Whose___Should_throw_InvalidOperation___When_maxAttempts_is_1_and_referenceDummy_does_not_meet_the_condition()
         {
             // Arrange, Act
-            var ex = Record.Exception(() => A.Dummy<string>().Whose(ConditionThatCannnotBeMet, maxAttempts: 1));
+            var ex1 = Record.Exception(() => A.Dummy<string>().Whose(ConditionThatCannnotBeMet, maxAttempts: 1));
+            var ex2 = Record.Exception(() => Some.Dummies<string>().Whose(ConditionThatCannnotBeMet, maxAttempts: 1));
 
             // Assert
-            ex.Should().BeOfType<InvalidOperationException>();
+            ex1.Should().BeOfType<InvalidOperationException>();
+            ex2.Should().BeOfType<InvalidOperationException>();
         }
 
         [Fact]
         public static void Whose___Should_throw_InvalidOperation___When_condition_cannot_be_met_and_maxAttempts_is_greater_than_one()
         {
             // Arrange, Act
-            var ex1 = Record.Exception(() => A.Dummy<string>().Whose(ConditionThatCannnotBeMet));
-            var ex2 = Record.Exception(() => A.Dummy<string>().Whose(ConditionThatCannnotBeMet, maxAttempts: 101));
+            var ex1a = Record.Exception(() => A.Dummy<string>().Whose(ConditionThatCannnotBeMet));
+            var ex1b = Record.Exception(() => A.Dummy<string>().Whose(ConditionThatCannnotBeMet, maxAttempts: 101));
+
+            var ex2a = Record.Exception(() => Some.Dummies<string>().Whose(ConditionThatCannnotBeMet));
+            var ex2b = Record.Exception(() => Some.Dummies<string>().Whose(ConditionThatCannnotBeMet, maxAttempts: 101));
 
             // Assert
-            ex1.Should().BeOfType<InvalidOperationException>();
-            ex2.Should().BeOfType<InvalidOperationException>();
+            ex1a.Should().BeOfType<InvalidOperationException>();
+            ex1b.Should().BeOfType<InvalidOperationException>();
+
+            ex2a.Should().BeOfType<InvalidOperationException>();
+            ex2b.Should().BeOfType<InvalidOperationException>();
         }
 
         [Fact]
         public static void Whose___Should_try_maxAttempts_number_of_times_to_meet_condition_before_throwing___When_condition_cannot_be_met_and_maxAttempts_is_positive()
         {
             // Arrange
-            var referenceDummy = A.Dummy<string>();
-            var dummies1 = new HashSet<string>();
-            Func<string, bool> condition1 = _ =>
+            var referenceDummy1a = A.Dummy<string>();
+            var dummies1a = new List<string>();
+            Func<string, bool> condition1a = _ =>
             {
-                dummies1.Add(_);
+                dummies1a.Add(_);
                 return false;
             };
 
-            var dummies2 = new HashSet<string>();
-            Func<string, bool> condition2 = _ =>
+            var referenceDummy1b = A.Dummy<string>();
+            var dummies1b = new List<string>();
+            Func<string, bool> condition1b = _ =>
             {
-                dummies2.Add(_);
+                dummies1b.Add(_);
+                return false;
+            };
+
+            var referenceDummy2a = Some.Dummies<string>();
+            var dummies2a = new List<IList<string>>();
+            Func<IList<string>, bool> condition2a = _ =>
+            {
+                dummies2a.Add(_);
+                return false;
+            };
+
+            var refereceDummy2b = Some.Dummies<string>();
+            var dummies2b = new List<IList<string>>();
+            Func<IList<string>, bool> condition2b = _ =>
+            {
+                dummies2b.Add(_);
                 return false;
             };
 
             // Act
-            var ex1 = Record.Exception(() => referenceDummy.Whose(condition1, maxAttempts: 1));
-            var ex2 = Record.Exception(() => referenceDummy.Whose(condition2, maxAttempts: 101));
+            var ex1a = Record.Exception(() => referenceDummy1a.Whose(condition1a, maxAttempts: 1));
+            var ex1b = Record.Exception(() => referenceDummy1b.Whose(condition1b, maxAttempts: 101));
+
+            var ex2a = Record.Exception(() => referenceDummy2a.Whose(condition2a, maxAttempts: 1));
+            var ex2b = Record.Exception(() => refereceDummy2b.Whose(condition2b, maxAttempts: 101));
 
             // Assert
-            ex1.Should().BeOfType<InvalidOperationException>();
-            ex2.Should().BeOfType<InvalidOperationException>();
+            ex1a.Should().BeOfType<InvalidOperationException>();
+            ex1b.Should().BeOfType<InvalidOperationException>();
 
-            dummies1.Should().HaveCount(1);
-            dummies2.Should().HaveCount(101);
+            ex2a.Should().BeOfType<InvalidOperationException>();
+            ex2b.Should().BeOfType<InvalidOperationException>();
 
-            dummies1.Should().Contain(referenceDummy);
-            dummies2.Should().Contain(referenceDummy);
+            dummies1a.Should().HaveCount(1);
+            dummies1b.Should().HaveCount(101);
+
+            dummies2a.Should().HaveCount(1);
+            dummies2b.Should().HaveCount(101);
+
+            dummies1a.Should().StartWith(referenceDummy1a);
+            dummies1b.Should().StartWith(referenceDummy1b);
+
+            dummies2a.Should().StartWith(referenceDummy2a);
+            dummies2b.Should().StartWith(refereceDummy2b);
         }
 
         [Fact]
@@ -282,12 +432,14 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             // Arrange
             const int NegativeMaxAttempts = -1000;
             const int InfiniteAttemptsMax = 1000;
-            var attempts1 = 0;
-            var attempts2 = 0;
-            Func<string, bool> condition1 = _ =>
+            var attempts1a = 0;
+            var attempts1b = 0;
+            var attempts2a = 0;
+            var attempts2b = 0;
+            Func<string, bool> condition1a = _ =>
             {
-                attempts1++;
-                if (attempts1 >= InfiniteAttemptsMax)
+                attempts1a++;
+                if (attempts1a >= InfiniteAttemptsMax)
                 {
                     throw new OverflowException();
                 }
@@ -295,10 +447,32 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
                 return false;
             };
 
-            Func<string, bool> condition2 = _ =>
+            Func<string, bool> condition1b = _ =>
             {
-                attempts2++;
-                if (attempts2 >= InfiniteAttemptsMax)
+                attempts1b++;
+                if (attempts1b >= InfiniteAttemptsMax)
+                {
+                    throw new OverflowException();
+                }
+
+                return false;
+            };
+
+            Func<IList<string>, bool> condition2a = _ =>
+            {
+                attempts2a++;
+                if (attempts2a >= InfiniteAttemptsMax)
+                {
+                    throw new OverflowException();
+                }
+
+                return false;
+            };
+
+            Func<IList<string>, bool> condition2b = _ =>
+            {
+                attempts2b++;
+                if (attempts2b >= InfiniteAttemptsMax)
                 {
                     throw new OverflowException();
                 }
@@ -307,37 +481,59 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             };
 
             // Act
-            var ex1 = Record.Exception(() => A.Dummy<string>().Whose(condition1, maxAttempts: 0));
-            var ex2 = Record.Exception(() => A.Dummy<string>().Whose(condition2, NegativeMaxAttempts));
+            var ex1a = Record.Exception(() => A.Dummy<string>().Whose(condition1a, maxAttempts: 0));
+            var ex1b = Record.Exception(() => A.Dummy<string>().Whose(condition1b, NegativeMaxAttempts));
+            var ex2a = Record.Exception(() => Some.Dummies<string>().Whose(condition2a, maxAttempts: 0));
+            var ex2b = Record.Exception(() => Some.Dummies<string>().Whose(condition2b, NegativeMaxAttempts));
 
             // Assert
-            ex1.Should().BeOfType<OverflowException>();
-            ex2.Should().BeOfType<OverflowException>();
-            attempts1.Should().Be(InfiniteAttemptsMax);
-            attempts2.Should().Be(InfiniteAttemptsMax);
+            ex1a.Should().BeOfType<OverflowException>();
+            ex1b.Should().BeOfType<OverflowException>();
+
+            ex2a.Should().BeOfType<OverflowException>();
+            ex2b.Should().BeOfType<OverflowException>();
+
+            attempts1a.Should().Be(InfiniteAttemptsMax);
+            attempts1b.Should().Be(InfiniteAttemptsMax);
+
+            attempts2a.Should().Be(InfiniteAttemptsMax);
+            attempts2b.Should().Be(InfiniteAttemptsMax);
         }
 
         [Fact]
         public static void Whose___Should_return_referenceDummy___When_referenceDummy_meets_condition_regardless_of_maxAttempts()
         {
             // Arrange
-            var referenceDummy = A.Dummy<string>();
+            var referenceDummy1 = A.Dummy<string>();
+            var referenceDummy2 = Some.Dummies<string>();
 
             // Act
             // ReSharper disable RedundantArgumentName
-            var result1 = referenceDummy.Whose(ConditionThatsAlwaysMet);
-            var result2 = referenceDummy.Whose(ConditionThatsAlwaysMet, maxAttempts: 101);
-            var result3 = referenceDummy.Whose(ConditionThatsAlwaysMet, maxAttempts: 0);
-            var result4 = referenceDummy.Whose(ConditionThatsAlwaysMet, maxAttempts: -1);
-            var result5 = referenceDummy.Whose(ConditionThatsAlwaysMet, maxAttempts: -1000);
+            var result1a = referenceDummy1.Whose(ConditionThatsAlwaysMet);
+            var result1b = referenceDummy1.Whose(ConditionThatsAlwaysMet, maxAttempts: 101);
+            var result1c = referenceDummy1.Whose(ConditionThatsAlwaysMet, maxAttempts: 0);
+            var result1d = referenceDummy1.Whose(ConditionThatsAlwaysMet, maxAttempts: -1);
+            var result1e = referenceDummy1.Whose(ConditionThatsAlwaysMet, maxAttempts: -1000);
+
+            var result2a = referenceDummy2.Whose(ConditionThatsAlwaysMet);
+            var result2b = referenceDummy2.Whose(ConditionThatsAlwaysMet, maxAttempts: 101);
+            var result2c = referenceDummy2.Whose(ConditionThatsAlwaysMet, maxAttempts: 0);
+            var result2d = referenceDummy2.Whose(ConditionThatsAlwaysMet, maxAttempts: -1);
+            var result2e = referenceDummy2.Whose(ConditionThatsAlwaysMet, maxAttempts: -1000);
             // ReSharper restore RedundantArgumentName
 
             // Assert
-            result1.Should().Be(referenceDummy);
-            result2.Should().Be(referenceDummy);
-            result3.Should().Be(referenceDummy);
-            result4.Should().Be(referenceDummy);
-            result5.Should().Be(referenceDummy);
+            result1a.Should().Be(referenceDummy1);
+            result1b.Should().Be(referenceDummy1);
+            result1c.Should().Be(referenceDummy1);
+            result1d.Should().Be(referenceDummy1);
+            result1e.Should().Be(referenceDummy1);
+
+            result2a.Should().Equal(referenceDummy2);
+            result2b.Should().Equal(referenceDummy2);
+            result2c.Should().Equal(referenceDummy2);
+            result2d.Should().Equal(referenceDummy2);
+            result2e.Should().Equal(referenceDummy2);
         }
 
         [Fact]
@@ -368,7 +564,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         }
 
         [Fact]
-        public static void Whose___Should_return_dummy_that_meets_condition___When_referenceDummy_does_not_meet_condition_but_condition_can_be_satisfied_after_one_or_more_attempts()
+        public static void Whose___Should_return_dummy_that_meets_condition___When_referenceDummy_is_generated_via_ADummy_and_does_not_meet_condition_but_condition_can_be_satisfied_after_one_or_more_attempts()
         {
             // Arrange
             const string ExpectedCharacter = "a";
@@ -399,16 +595,45 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         }
 
         [Fact]
+        public static void Whose___Should_return_dummy_that_meets_condition___When_referenceDummy_is_generated_via_SomeDummies_and_does_not_meet_condition_but_condition_can_be_satisfied_after_one_or_more_attempts()
+        {
+            // Arrange
+            const int MinCount = 5;
+            var referenceDummy = Some.Dummies<string>();
+            referenceDummy.Clear();
+            Func<IList<string>, bool> condition = _ => _.Count >= MinCount;
+
+            // Act
+            // ReSharper disable RedundantArgumentName
+            var result1 = referenceDummy.Whose(condition);
+            var result2 = referenceDummy.Whose(condition, maxAttempts: 101);
+            var result3 = referenceDummy.Whose(condition, maxAttempts: 0);
+            var result4 = referenceDummy.Whose(condition, maxAttempts: -1);
+            var result5 = referenceDummy.Whose(condition, maxAttempts: -1000);
+            // ReSharper restore RedundantArgumentName
+
+            // Assert
+            result1.Count.Should().BeGreaterOrEqualTo(MinCount);
+            result2.Count.Should().BeGreaterOrEqualTo(MinCount);
+            result3.Count.Should().BeGreaterOrEqualTo(MinCount);
+            result4.Count.Should().BeGreaterOrEqualTo(MinCount);
+            result5.Count.Should().BeGreaterOrEqualTo(MinCount);
+        }
+
+        [Fact]
         public static void ThatIsNot___Should_throw_InvalidOperation___When_maxAttempts_is_1_and_referenceDummy_equals_comparisonDummy()
         {
             // Arrange
-            var referenceDummy = A.Dummy<string>();
+            var referenceDummy1 = A.Dummy<string>();
+            var referenceDummy2 = Some.Dummies<string>();
 
             // Act
-            var ex = Record.Exception(() => referenceDummy.ThatIsNot(referenceDummy, maxAttempts: 1));
+            var ex1 = Record.Exception(() => referenceDummy1.ThatIsNot(referenceDummy1, maxAttempts: 1));
+            var ex2 = Record.Exception(() => referenceDummy2.ThatIsNot(referenceDummy2, maxAttempts: 1));
 
             // Assert
-            ex.Should().BeOfType<InvalidOperationException>();
+            ex1.Should().BeOfType<InvalidOperationException>();
+            ex2.Should().BeOfType<InvalidOperationException>();
         }
 
         [Fact]
@@ -430,47 +655,75 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         public static void ThatIsNot___Should_return_referenceDummy___When_referenceDummy_is_not_equal_to_comparisonDummy_regardless_of_maxAttempts()
         {
             // Arrange
-            var referenceDummy = A.Dummy<NoInstancesAreEqual>();
-            var comparisonDummy = A.Dummy<NoInstancesAreEqual>();
+            var referenceDummy1 = A.Dummy<NoInstancesAreEqual>();
+            var comparisonDummy1 = A.Dummy<NoInstancesAreEqual>();
+
+            var referenceDummy2 = Some.Dummies<double>();
+            var comparisonDummy2 = Some.Dummies<double>();
 
             // Act
             // ReSharper disable RedundantArgumentName
-            var result1 = referenceDummy.ThatIsNot(comparisonDummy);
-            var result2 = referenceDummy.ThatIsNot(comparisonDummy, maxAttempts: 101);
-            var result3 = referenceDummy.ThatIsNot(comparisonDummy, maxAttempts: 0);
-            var result4 = referenceDummy.ThatIsNot(comparisonDummy, maxAttempts: -1);
-            var result5 = referenceDummy.ThatIsNot(comparisonDummy, maxAttempts: -1000);
+            var result1a = referenceDummy1.ThatIsNot(comparisonDummy1);
+            var result1b = referenceDummy1.ThatIsNot(comparisonDummy1, maxAttempts: 101);
+            var result1c = referenceDummy1.ThatIsNot(comparisonDummy1, maxAttempts: 0);
+            var result1d = referenceDummy1.ThatIsNot(comparisonDummy1, maxAttempts: -1);
+            var result1e = referenceDummy1.ThatIsNot(comparisonDummy1, maxAttempts: -1000);
+
+            var result2a = referenceDummy2.ThatIsNot(comparisonDummy2);
+            var result2b = referenceDummy2.ThatIsNot(comparisonDummy2, maxAttempts: 101);
+            var result2c = referenceDummy2.ThatIsNot(comparisonDummy2, maxAttempts: 0);
+            var result2d = referenceDummy2.ThatIsNot(comparisonDummy2, maxAttempts: -1);
+            var result2e = referenceDummy2.ThatIsNot(comparisonDummy2, maxAttempts: -1000);
             // ReSharper restore RedundantArgumentName
 
             // Assert
-            result1.Should().BeSameAs(referenceDummy);
-            result2.Should().BeSameAs(referenceDummy);
-            result3.Should().BeSameAs(referenceDummy);
-            result4.Should().BeSameAs(referenceDummy);
-            result5.Should().BeSameAs(referenceDummy);
+            result1a.Should().BeSameAs(referenceDummy1);
+            result1b.Should().BeSameAs(referenceDummy1);
+            result1c.Should().BeSameAs(referenceDummy1);
+            result1d.Should().BeSameAs(referenceDummy1);
+            result1e.Should().BeSameAs(referenceDummy1);
+
+            result2a.Should().BeSameAs(referenceDummy2);
+            result2b.Should().BeSameAs(referenceDummy2);
+            result2c.Should().BeSameAs(referenceDummy2);
+            result2d.Should().BeSameAs(referenceDummy2);
+            result2e.Should().BeSameAs(referenceDummy2);
         }
 
         [Fact]
         public static void ThatIsNot___Should_return_new_dummy___When_referenceDummy_reference_equals_comparisonDummy_regardless_of_maxAttempts()
         {
             // Arrange
-            var referenceDummy = A.Dummy<NoInstancesAreEqual>();
+            var referenceDummy1 = A.Dummy<NoInstancesAreEqual>();
+            var referenceDummy2 = Some.Dummies<double>();
 
             // Act
             // ReSharper disable RedundantArgumentName
-            var result1 = referenceDummy.ThatIsNot(referenceDummy);
-            var result2 = referenceDummy.ThatIsNot(referenceDummy, maxAttempts: 101);
-            var result3 = referenceDummy.ThatIsNot(referenceDummy, maxAttempts: 0);
-            var result4 = referenceDummy.ThatIsNot(referenceDummy, maxAttempts: -1);
-            var result5 = referenceDummy.ThatIsNot(referenceDummy, maxAttempts: -1000);
+            var result1a = referenceDummy1.ThatIsNot(referenceDummy1);
+            var result1b = referenceDummy1.ThatIsNot(referenceDummy1, maxAttempts: 101);
+            var result1c = referenceDummy1.ThatIsNot(referenceDummy1, maxAttempts: 0);
+            var result1d = referenceDummy1.ThatIsNot(referenceDummy1, maxAttempts: -1);
+            var result1e = referenceDummy1.ThatIsNot(referenceDummy1, maxAttempts: -1000);
+
+            var result2a = referenceDummy2.ThatIsNot(referenceDummy2);
+            var result2b = referenceDummy2.ThatIsNot(referenceDummy2, maxAttempts: 101);
+            var result2c = referenceDummy2.ThatIsNot(referenceDummy2, maxAttempts: 0);
+            var result2d = referenceDummy2.ThatIsNot(referenceDummy2, maxAttempts: -1);
+            var result2e = referenceDummy2.ThatIsNot(referenceDummy2, maxAttempts: -1000);
             // ReSharper restore RedundantArgumentName
 
             // Assert
-            result1.Should().NotBeNull().And.NotBeSameAs(referenceDummy);
-            result2.Should().NotBeNull().And.NotBeSameAs(referenceDummy);
-            result3.Should().NotBeNull().And.NotBeSameAs(referenceDummy);
-            result4.Should().NotBeNull().And.NotBeSameAs(referenceDummy);
-            result5.Should().NotBeNull().And.NotBeSameAs(referenceDummy);
+            result1a.Should().NotBeNull().And.NotBeSameAs(referenceDummy1);
+            result1b.Should().NotBeNull().And.NotBeSameAs(referenceDummy1);
+            result1c.Should().NotBeNull().And.NotBeSameAs(referenceDummy1);
+            result1d.Should().NotBeNull().And.NotBeSameAs(referenceDummy1);
+            result1e.Should().NotBeNull().And.NotBeSameAs(referenceDummy1);
+
+            result2a.Should().NotBeNull().And.NotBeSameAs(referenceDummy2);
+            result2b.Should().NotBeNull().And.NotBeSameAs(referenceDummy2);
+            result2c.Should().NotBeNull().And.NotBeSameAs(referenceDummy2);
+            result2d.Should().NotBeNull().And.NotBeSameAs(referenceDummy2);
+            result2e.Should().NotBeNull().And.NotBeSameAs(referenceDummy2);
         }
 
         [Fact]
@@ -503,25 +756,38 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         public static void ThatIsNot___Should_return_referenceDummy___When_referenceDummy_is_not_null_and_comparisonDummy_is_null_regardless_of_maxAttempts()
         {
             // Arrange
-            var referenceDummy = A.Dummy<NoInstancesAreEqual>();
+            var referenceDummy1 = A.Dummy<NoInstancesAreEqual>();
+            var referenceDummy2 = Some.Dummies<double>();
 
             // Act
             // ReSharper disable RedundantArgumentName
             // ReSharper disable ExpressionIsAlwaysNull
-            var result1 = referenceDummy.ThatIsNot(null);
-            var result2 = referenceDummy.ThatIsNot(null, maxAttempts: 101);
-            var result3 = referenceDummy.ThatIsNot(null, maxAttempts: 0);
-            var result4 = referenceDummy.ThatIsNot(null, maxAttempts: -1);
-            var result5 = referenceDummy.ThatIsNot(null, maxAttempts: -1000);
+            var result1a = referenceDummy1.ThatIsNot(null);
+            var result1b = referenceDummy1.ThatIsNot(null, maxAttempts: 101);
+            var result1c = referenceDummy1.ThatIsNot(null, maxAttempts: 0);
+            var result1d = referenceDummy1.ThatIsNot(null, maxAttempts: -1);
+            var result1e = referenceDummy1.ThatIsNot(null, maxAttempts: -1000);
+
+            var result2a = referenceDummy2.ThatIsNot(null);
+            var result2b = referenceDummy2.ThatIsNot(null, maxAttempts: 101);
+            var result2c = referenceDummy2.ThatIsNot(null, maxAttempts: 0);
+            var result2d = referenceDummy2.ThatIsNot(null, maxAttempts: -1);
+            var result2e = referenceDummy2.ThatIsNot(null, maxAttempts: -1000);
             // ReSharper restore ExpressionIsAlwaysNull
             // ReSharper restore RedundantArgumentName
 
             // Assert
-            result1.Should().BeSameAs(referenceDummy);
-            result2.Should().BeSameAs(referenceDummy);
-            result3.Should().BeSameAs(referenceDummy);
-            result4.Should().BeSameAs(referenceDummy);
-            result5.Should().BeSameAs(referenceDummy);
+            result1a.Should().BeSameAs(referenceDummy1);
+            result1b.Should().BeSameAs(referenceDummy1);
+            result1c.Should().BeSameAs(referenceDummy1);
+            result1d.Should().BeSameAs(referenceDummy1);
+            result1e.Should().BeSameAs(referenceDummy1);
+
+            result2a.Should().BeSameAs(referenceDummy2);
+            result2b.Should().BeSameAs(referenceDummy2);
+            result2c.Should().BeSameAs(referenceDummy2);
+            result2d.Should().BeSameAs(referenceDummy2);
+            result2e.Should().BeSameAs(referenceDummy2);
         }
 
         [Fact]
@@ -555,7 +821,17 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             return false;
         }
 
+        private static bool ConditionThatCannnotBeMet(IList<string> input)
+        {
+            return false;
+        }
+
         private static bool ConditionThatsAlwaysMet(string input)
+        {
+            return true;
+        }
+
+        private static bool ConditionThatsAlwaysMet(IList<string> input)
         {
             return true;
         }

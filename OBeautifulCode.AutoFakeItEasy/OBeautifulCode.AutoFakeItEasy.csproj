@@ -79,6 +79,7 @@
     <Compile Include="CustomTypes\ZeroOrPositiveInteger.cs" />
     <Compile Include="Some.cs" />
     <Compile Include="CreateWith.cs" />
+    <Compile Include="SomeDummiesList.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config">

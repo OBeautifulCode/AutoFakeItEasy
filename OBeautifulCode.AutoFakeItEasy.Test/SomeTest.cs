@@ -13,6 +13,8 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
 
     using FluentAssertions;
 
+    using OBeautifulCode.Math;
+
     using Xunit;
 
     /// <summary>
@@ -98,6 +100,41 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             ex11.Should().BeNull();
             ex12.Should().BeNull();
             ex13.Should().BeNull();
+        }
+
+        [Fact]
+        public static void Dummies___Should_return_object_of_type_SomeDummiesList_with_parameters_numberOfElements_and_createWith_stored_in_the_object_under_properties_of_the_same_name___When_called()
+        {
+            // Arrange
+            // note: can't test numberOfElements = 0 with random createWith, because some combinations are not permitted (like creating a list with one or more nulls)
+            var numberOfElements1 = ThreadSafeRandom.Next(-100000, -1);
+            var numberOfElements2 = ThreadSafeRandom.Next(1, 100000);
+            var createWith = (CreateWith)ThreadSafeRandom.Next(0, Enum.GetNames(typeof(CreateWith)).Length);
+
+            // Act
+            var result1 = Some.Dummies<object>(numberOfElements1, createWith);
+            var result2 = Some.Dummies<object>(numberOfElements2, createWith);
+            var result3 = Some.Dummies<object>(0, CreateWith.ZeroOrMoreNulls);
+
+            // Assert
+            var result1AsSomeDummiesList = result1 as SomeDummiesList<object>;
+            var result2AsSomeDummiesList = result2 as SomeDummiesList<object>;
+            var result3AsSomeDummiesList = result3 as SomeDummiesList<object>;
+
+            result1AsSomeDummiesList.Should().NotBeNull();
+            result2AsSomeDummiesList.Should().NotBeNull();
+            result3AsSomeDummiesList.Should().NotBeNull();
+
+            // ReSharper disable PossibleNullReferenceException
+            result1AsSomeDummiesList.NumberOfElementsSpecifiedInCallToSomeDummies.Should().Be(numberOfElements1);
+            result1AsSomeDummiesList.CreateWithSpecifiedInCallToSomeDummies.Should().Be(createWith);
+
+            result2AsSomeDummiesList.NumberOfElementsSpecifiedInCallToSomeDummies.Should().Be(numberOfElements2);
+            result2AsSomeDummiesList.CreateWithSpecifiedInCallToSomeDummies.Should().Be(createWith);
+
+            result3AsSomeDummiesList.NumberOfElementsSpecifiedInCallToSomeDummies.Should().Be(0);
+            result3AsSomeDummiesList.CreateWithSpecifiedInCallToSomeDummies.Should().Be(CreateWith.ZeroOrMoreNulls);
+            // ReSharper restore PossibleNullReferenceException
         }
 
         [Fact]
