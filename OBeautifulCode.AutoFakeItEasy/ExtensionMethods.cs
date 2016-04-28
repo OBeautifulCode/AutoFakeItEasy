@@ -7,6 +7,8 @@
 namespace OBeautifulCode.AutoFakeItEasy
 {
     using System;
+    using System.Linq;
+    using System.Reflection;
 
     using Conditions;
 
@@ -35,6 +37,13 @@ namespace OBeautifulCode.AutoFakeItEasy
         public static T ThatIs<T>(this T referenceDummy, Func<T, bool> condition, int maxAttempts = 100)
         {
             Condition.Requires(condition, nameof(condition)).IsNotNull();
+
+            var referenceDummyType = referenceDummy?.GetType();
+            var wasCreatedWithCallToSomeDummies =
+                (referenceDummyType != null) &&
+                referenceDummyType.IsGenericType &&
+                (referenceDummyType.GetGenericTypeDefinition() == typeof(SomeDummiesList<>));
+
             int attempts = 1;
             while (!condition(referenceDummy))
             {
@@ -43,7 +52,20 @@ namespace OBeautifulCode.AutoFakeItEasy
                     throw new InvalidOperationException("Unable to create a dummy that satisfies the specified condition.");
                 }
 
-                referenceDummy = A.Dummy<T>();
+                if (wasCreatedWithCallToSomeDummies)
+                {
+                    var someDummiesMethod = typeof(Some).GetMethods().Single(_ => _.Name == "Dummies");
+                    var typeOfElementsInList = referenceDummyType.GetGenericArguments().Single();
+                    var someDummiesGenericMethod = someDummiesMethod.MakeGenericMethod(typeOfElementsInList);
+                    var numberOfElements = referenceDummyType.GetProperty("NumberOfElementsSpecifiedInCallToSomeDummies", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(referenceDummy);
+                    var createWith = referenceDummyType.GetProperty("CreateWithSpecifiedInCallToSomeDummies", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(referenceDummy);
+                    referenceDummy = (T)someDummiesGenericMethod.Invoke(null, new[] { numberOfElements, createWith });
+                }
+                else
+                {
+                    referenceDummy = A.Dummy<T>();
+                }
+
                 attempts++;
             }
 
