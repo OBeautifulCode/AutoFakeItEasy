@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SomeDummiesListTest.cs" company="OBeautifulCode">
+// <copyright file="SomeReadOnlyDummiesListTest.cs" company="OBeautifulCode">
 //   Copyright (c) OBeautifulCode. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
@@ -7,7 +7,8 @@
 namespace OBeautifulCode.AutoFakeItEasy.Test
 {
     using System;
-    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.Linq;
 
     using FluentAssertions;
 
@@ -18,24 +19,25 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
     /// <summary>
     /// Tests the <see cref="Some"/> class.
     /// </summary>
-    public static class SomeDummiesListTest
+    public static class SomeReadOnlyDummiesListTest
     {
         // ReSharper disable InconsistentNaming
         [Fact]
-        public static void Constructor___Should_return_type_derived_from_List_that_is_empty___When_called()
+        public static void Constructor___Should_return_type_derived_from_ReadOnlyCollection_that_is_initialized_with_the_specified_list___When_called()
         {
             // Arrange
             var numberOfElements = ThreadSafeRandom.Next(int.MinValue, int.MaxValue);
             var createWith = (CreateWith)ThreadSafeRandom.Next(0, Enum.GetNames(typeof(CreateWith)).Length);
+            var underlyingList = Enumerable.Range(1, ThreadSafeRandom.Next(2, 15)).Select(_ => ThreadSafeRandom.NextDouble()).ToList();
 
             // Act
             // ReSharper disable CollectionNeverUpdated.Local
-            var systemUnderTest = new SomeDummiesList<double>(numberOfElements, createWith);
+            var systemUnderTest = new SomeReadOnlyDummiesList<double>(underlyingList, numberOfElements, createWith);
             // ReSharper restore CollectionNeverUpdated.Local
 
             // Assert
-            systemUnderTest.Should().BeAssignableTo<List<double>>();
-            systemUnderTest.Should().BeEmpty();
+            systemUnderTest.Should().BeAssignableTo<ReadOnlyCollection<double>>();
+            systemUnderTest.SequenceEqual(underlyingList).Should().BeTrue();
         }
 
         [Fact]
@@ -44,7 +46,8 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             // Arrange
             var expectedNumberOfElements = ThreadSafeRandom.Next(int.MinValue, int.MaxValue);
             var createWith = (CreateWith)ThreadSafeRandom.Next(0, Enum.GetNames(typeof(CreateWith)).Length);
-            var systemUnderTest = new SomeDummiesList<double>(expectedNumberOfElements, createWith);
+            var underlyingList = Enumerable.Range(1, ThreadSafeRandom.Next(2, 15)).Select(_ => ThreadSafeRandom.NextDouble()).ToList();
+            var systemUnderTest = new SomeReadOnlyDummiesList<double>(underlyingList, expectedNumberOfElements, createWith);
 
             // Act
             var actualNumberOfElements = systemUnderTest.NumberOfElementsSpecifiedInCallToSomeDummies;
@@ -59,7 +62,8 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             // Arrange
             var numberOfElements = ThreadSafeRandom.Next(int.MinValue, int.MaxValue);
             var expectedCreateWith = (CreateWith)ThreadSafeRandom.Next(0, Enum.GetNames(typeof(CreateWith)).Length);
-            var systemUnderTest = new SomeDummiesList<double>(numberOfElements, expectedCreateWith);
+            var underlyingList = Enumerable.Range(1, ThreadSafeRandom.Next(2, 15)).Select(_ => ThreadSafeRandom.NextDouble()).ToList();
+            var systemUnderTest = new SomeReadOnlyDummiesList<double>(underlyingList, numberOfElements, expectedCreateWith);
 
             // Act
             var actualCreateWith = systemUnderTest.CreateWithSpecifiedInCallToSomeDummies;
