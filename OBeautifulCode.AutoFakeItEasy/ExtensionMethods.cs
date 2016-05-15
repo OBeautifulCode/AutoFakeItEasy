@@ -39,10 +39,19 @@ namespace OBeautifulCode.AutoFakeItEasy
             Condition.Requires(condition, nameof(condition)).IsNotNull();
 
             var referenceDummyType = referenceDummy?.GetType();
-            var wasCreatedWithCallToSomeDummies =
-                (referenceDummyType != null) &&
-                referenceDummyType.IsGenericType &&
-                (referenceDummyType.GetGenericTypeDefinition() == typeof(SomeDummiesList<>));
+            string someDummiesCallName = null;
+            if ((referenceDummyType != null) && referenceDummyType.IsGenericType)
+            {
+                var genericTypeDefinition = referenceDummyType.GetGenericTypeDefinition();
+                if (genericTypeDefinition == typeof(SomeDummiesList<>))
+                {
+                    someDummiesCallName = nameof(Some.Dummies);
+                }
+                else if (genericTypeDefinition == typeof(SomeReadOnlyDummiesList<>))
+                {
+                    someDummiesCallName = nameof(Some.ReadOnlyDummies);
+                }
+            }
 
             int attempts = 1;
             while (!condition(referenceDummy))
@@ -52,13 +61,13 @@ namespace OBeautifulCode.AutoFakeItEasy
                     throw new InvalidOperationException("Unable to create a dummy that satisfies the specified condition.");
                 }
 
-                if (wasCreatedWithCallToSomeDummies)
+                if (someDummiesCallName != null)
                 {
-                    var someDummiesMethod = typeof(Some).GetMethods().Single(_ => _.Name == nameof(Some.Dummies));
+                    var someDummiesMethod = typeof(Some).GetMethods().Single(_ => _.Name == someDummiesCallName);
                     var typeOfElementsInList = referenceDummyType.GetGenericArguments().Single();
                     var someDummiesGenericMethod = someDummiesMethod.MakeGenericMethod(typeOfElementsInList);
-                    var numberOfElements = referenceDummyType.GetProperty(nameof(SomeDummiesList<T>.NumberOfElementsSpecifiedInCallToSomeDummies), BindingFlags.Instance | BindingFlags.NonPublic).GetValue(referenceDummy);
-                    var createWith = referenceDummyType.GetProperty(nameof(SomeDummiesList<T>.CreateWithSpecifiedInCallToSomeDummies), BindingFlags.Instance | BindingFlags.NonPublic).GetValue(referenceDummy);
+                    var numberOfElements = referenceDummyType.GetProperty(nameof(ISomeDummies.NumberOfElementsSpecifiedInCallToSomeDummies)).GetValue(referenceDummy);
+                    var createWith = referenceDummyType.GetProperty(nameof(ISomeDummies.CreateWithSpecifiedInCallToSomeDummies)).GetValue(referenceDummy);
                     referenceDummy = (T)someDummiesGenericMethod.Invoke(null, new[] { numberOfElements, createWith });
                 }
                 else
