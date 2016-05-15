@@ -90,5 +90,19 @@ namespace OBeautifulCode.AutoFakeItEasy
 
             return result;
         }
+
+        /// <summary>
+        /// Gets a list of read-only dummies of the specified type.
+        /// </summary>
+        /// <param name="numberOfElements">The number of elements in the read-only list to generate.  If negative then a random number of elements between 1 and 10 will be generated.</param>
+        /// <param name="createWith">Determines if and how to populate the read-only list with nulls.  The default is to create a list with no nulls.</param>
+        /// <typeparam name="T">The type of dummies to return.</typeparam>
+        /// <returns>A list of read-only dummy objects of the specified type.</returns>
+        public static IReadOnlyList<T> ReadOnlyDummies<T>(int numberOfElements = -1, CreateWith createWith = CreateWith.NoNulls)
+        {
+            var dummies = Dummies<T>(numberOfElements, createWith);
+            var result = new SomeReadOnlyDummiesList<T>(dummies, numberOfElements, createWith);
+            return result;
+        }
     }
 }

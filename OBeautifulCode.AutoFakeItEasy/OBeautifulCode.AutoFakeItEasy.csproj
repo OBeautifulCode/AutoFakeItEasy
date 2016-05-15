@@ -49,12 +49,12 @@
       <HintPath>..\packages\FakeItEasy.2.0.0-rc1\lib\net40\FakeItEasy.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="OBeautifulCode.Math, Version=1.0.26.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OBeautifulCode.Math.1.0.26.0\lib\net45\OBeautifulCode.Math.dll</HintPath>
+    <Reference Include="OBeautifulCode.Math, Version=1.0.28.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\OBeautifulCode.Math.1.0.28\lib\net45\OBeautifulCode.Math.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Ploeh.AutoFixture, Version=3.43.0.0, Culture=neutral, PublicKeyToken=b24654c590009d4f, processorArchitecture=MSIL">
-      <HintPath>..\packages\AutoFixture.3.43.0\lib\net40\Ploeh.AutoFixture.dll</HintPath>
+    <Reference Include="Ploeh.AutoFixture, Version=3.45.3.0, Culture=neutral, PublicKeyToken=b24654c590009d4f, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoFixture.3.45.3\lib\net40\Ploeh.AutoFixture.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -72,6 +72,7 @@
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="Generators\RandomNumericSequenceGenerator.cs" />
     <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="ISomeDummies.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="AutoFakeItEasyBootstrapper.cs" />
     <Compile Include="Generators\RandomBoolSequenceGenerator.cs" />
@@ -80,6 +81,7 @@
     <Compile Include="Some.cs" />
     <Compile Include="CreateWith.cs" />
     <Compile Include="SomeDummiesList.cs" />
+    <Compile Include="SomeReadOnlyDummiesList.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config">
