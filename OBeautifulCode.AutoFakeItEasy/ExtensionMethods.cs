@@ -54,11 +54,11 @@ namespace OBeautifulCode.AutoFakeItEasy
 
                 if (wasCreatedWithCallToSomeDummies)
                 {
-                    var someDummiesMethod = typeof(Some).GetMethods().Single(_ => _.Name == "Dummies");
+                    var someDummiesMethod = typeof(Some).GetMethods().Single(_ => _.Name == nameof(Some.Dummies));
                     var typeOfElementsInList = referenceDummyType.GetGenericArguments().Single();
                     var someDummiesGenericMethod = someDummiesMethod.MakeGenericMethod(typeOfElementsInList);
-                    var numberOfElements = referenceDummyType.GetProperty("NumberOfElementsSpecifiedInCallToSomeDummies", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(referenceDummy);
-                    var createWith = referenceDummyType.GetProperty("CreateWithSpecifiedInCallToSomeDummies", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(referenceDummy);
+                    var numberOfElements = referenceDummyType.GetProperty(nameof(SomeDummiesList<T>.NumberOfElementsSpecifiedInCallToSomeDummies), BindingFlags.Instance | BindingFlags.NonPublic).GetValue(referenceDummy);
+                    var createWith = referenceDummyType.GetProperty(nameof(SomeDummiesList<T>.CreateWithSpecifiedInCallToSomeDummies), BindingFlags.Instance | BindingFlags.NonPublic).GetValue(referenceDummy);
                     referenceDummy = (T)someDummiesGenericMethod.Invoke(null, new[] { numberOfElements, createWith });
                 }
                 else

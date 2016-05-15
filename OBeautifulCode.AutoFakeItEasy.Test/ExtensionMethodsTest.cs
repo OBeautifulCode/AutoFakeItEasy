@@ -9,10 +9,13 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
     using System;
     using System.Collections.Generic;
     using System.Globalization;
+    using System.Linq;
 
     using FakeItEasy;
 
     using FluentAssertions;
+
+    using OBeautifulCode.Math;
 
     using Xunit;
 
@@ -322,6 +325,34 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         }
 
         [Fact]
+        public static void ThatIs___Should_return_dummy_with_specified_numberOfElements_and_specified_createWith___When_referenceDummy_is_generated_via_SomeDummies_and_does_not_meet_condition_but_condition_can_be_satisfied_after_one_or_more_attempts()
+        {
+            // Arrange
+            var expectedSize1 = ThreadSafeRandom.Next(1, 10);
+            var referenceDummy1 = Some.Dummies<string>(expectedSize1, CreateWith.OneOrMoreNulls);
+            referenceDummy1.Clear();
+            Func<IList<string>, bool> trueOnFirstRetryCondition = _ => _.Count != 0;
+
+            var expectedSize2 = ThreadSafeRandom.Next(2, 10);
+            var referenceDummy2 = Some.Dummies<string>(expectedSize2, CreateWith.OneOrMoreNulls);
+            referenceDummy2.Clear();
+            Func<IList<string>, bool> trueAfterSeveralRetriesCondition = _ => _.Count(s => s == null) > 1;
+
+            // Act
+            // ReSharper disable RedundantArgumentName
+            var result1 = referenceDummy1.ThatIs(trueOnFirstRetryCondition, maxAttempts: 2);
+            var result2 = referenceDummy2.ThatIs(trueAfterSeveralRetriesCondition, maxAttempts: 0);
+            // ReSharper restore RedundantArgumentName
+
+            // Assert
+            result1.Should().HaveCount(expectedSize1);
+            result1.Should().Contain((string)null);
+
+            result2.Should().HaveCount(expectedSize2);
+            result2.Count(_ => _ == null).Should().BeGreaterThan(1);
+        }
+
+        [Fact]
         public static void Whose___Should_throw_ArgumentNullException___When_parameter_condition_is_null()
         {
             // Arrange, Act
@@ -621,6 +652,34 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         }
 
         [Fact]
+        public static void Whose___Should_return_dummy_with_specified_numberOfElements_and_specified_createWith___When_referenceDummy_is_generated_via_SomeDummies_and_does_not_meet_condition_but_condition_can_be_satisfied_after_one_or_more_attempts()
+        {
+            // Arrange
+            var expectedSize1 = ThreadSafeRandom.Next(1, 10);
+            var referenceDummy1 = Some.Dummies<string>(expectedSize1, CreateWith.OneOrMoreNulls);
+            referenceDummy1.Clear();
+            Func<IList<string>, bool> trueOnFirstRetryCondition = _ => _.Count != 0;
+
+            var expectedSize2 = ThreadSafeRandom.Next(2, 10);
+            var referenceDummy2 = Some.Dummies<string>(expectedSize2, CreateWith.OneOrMoreNulls);
+            referenceDummy2.Clear();
+            Func<IList<string>, bool> trueAfterSeveralRetriesCondition = _ => _.Count(s => s == null) > 1;
+
+            // Act
+            // ReSharper disable RedundantArgumentName
+            var result1 = referenceDummy1.Whose(trueOnFirstRetryCondition, maxAttempts: 2);
+            var result2 = referenceDummy2.Whose(trueAfterSeveralRetriesCondition, maxAttempts: 0);
+            // ReSharper restore RedundantArgumentName
+
+            // Assert
+            result1.Should().HaveCount(expectedSize1);
+            result1.Should().Contain((string)null);
+
+            result2.Should().HaveCount(expectedSize2);
+            result2.Count(_ => _ == null).Should().BeGreaterThan(1);
+        }
+
+        [Fact]
         public static void ThatIsNot___Should_throw_InvalidOperation___When_maxAttempts_is_1_and_referenceDummy_equals_comparisonDummy()
         {
             // Arrange
@@ -814,6 +873,24 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             result3.Should().BeNull();
             result4.Should().BeNull();
             result5.Should().BeNull();
+        }
+
+        [Fact]
+        public static void ThatIsNot___Should_return_new_dummy_with_specified_numberOfElements_and_specified_createWith___When_referenceDummy_reference_equals_comparisonDummy()
+        {
+            // Arrange
+            var expectedSize = ThreadSafeRandom.Next(1, 10);
+            var referenceDummy = Some.Dummies<string>(expectedSize, CreateWith.OneOrMoreNulls);
+
+            // Act
+            // ReSharper disable RedundantArgumentName
+            var result = referenceDummy.ThatIsNot(referenceDummy, maxAttempts: 2);
+            // ReSharper restore RedundantArgumentName
+
+            // Assert
+            result.Should().NotBeNull().And.NotBeSameAs(referenceDummy);
+            result.Should().HaveCount(expectedSize);
+            result.Should().Contain((string)null);
         }
 
         private static bool ConditionThatCannnotBeMet(string input)
