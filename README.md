@@ -152,6 +152,10 @@ Here's the full method signature for `Some.Dummies<T>()`
     - `ZeroOrMoreNulls` - The resulting list should contain zero or more null elements.  This is a way to get a list that may or may not contain nulls.
 
 
+Some.ReadOnlyDummies\<T>
+------------------------
+Returns an `IReadOnlyList<T>`; otherwise behaves exactly like `Some.Dummies<T>` documented above.
+
 Constrained Dummies
 -------------------
 Sometimes it's useful to constrain dummies.  AutoFakeItEasy implements these extension methods for that purpose: `ThatIs`, `ThatIsNot`, `Whose`
