@@ -100,12 +100,13 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var systemUnderTest = new RandomEnumSequenceGenerator();
             var request = typeof(Number);
             var enumValuesCount = Enum.GetValues(typeof(Number)).Length;
+            var enumValuesInOrder = Enum.GetValues(typeof(Number)).Cast<Number>();
 
             // Act
             var actualResult = Enumerable.Range(1, enumValuesCount).Select(_ => systemUnderTest.Create(request, dummyContainer)).Cast<Number>().ToList();
 
             // Assert
-            actualResult.Should().NotBeAscendingInOrder();
+            actualResult.Should().NotEqual(enumValuesInOrder);
         }
 
         [Fact]
