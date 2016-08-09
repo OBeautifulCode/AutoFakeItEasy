@@ -211,6 +211,98 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         }
 
         [Fact]
+        public static void ADummy_PositiveDouble___Should_always_return_positive_doubles_less_than_or_equal_to_32768___When_creating_many_object_of_type_PositiveDouble()
+        {
+            // Arrange, Act
+            var actualResult = Enumerable.Range(1, NumberOfCallsToCoverAllShortsRegardlessOfFixtureState).Select(_ => (double)A.Dummy<PositiveDouble>()).ToList();
+
+            // Assert
+            actualResult.ForEach(_ => _.Should().BeGreaterThan(0d).And.BeLessOrEqualTo(32768d));
+        }
+
+        [Fact]
+        public static void ADummy_PositiveDouble___Should_return_every_number_in_range_of_1_to_32768_inclusive_at_least_once___When_creating_many_object_of_type_PositiveDouble()
+        {
+            // Arrange, Act
+            var actualResult = Enumerable.Range(1, NumberOfCallsToCoverAllShortsRegardlessOfFixtureState).Select(_ => (double)A.Dummy<PositiveDouble>()).ToList();
+
+            // Assert
+            for (double i = 1; i <= 32768; i++)
+            {
+                actualResult.Should().Contain(i);
+            }
+        }
+
+        [Fact]
+        public static void ADummy_ZeroOrPositiveDouble___Should_always_return_zero_or_positive_doubles_less_than_or_equal_to_32768___When_creating_many_object_of_type_ZeroOrPositiveDouble()
+        {
+            // Arrange, Act
+            var actualResult = Enumerable.Range(1, NumberOfCallsToCoverAllShortsRegardlessOfFixtureState).Select(_ => (double)A.Dummy<ZeroOrPositiveDouble>()).ToList();
+
+            // Assert
+            actualResult.ForEach(_ => _.Should().BeGreaterOrEqualTo(0d).And.BeLessOrEqualTo(32768d));
+        }
+
+        [Fact]
+        public static void ADummy_ZeroOrPositiveDouble___Should_returns_every_number_in_range_of_0_to_32768_inclusive_at_least_once___When_creating_many_object_of_type_ZeroOrPositiveDouble()
+        {
+            // Arrange, Act
+            var actualResult = Enumerable.Range(1, NumberOfCallsToCoverAllShortsRegardlessOfFixtureState).Select(_ => (double)A.Dummy<ZeroOrPositiveDouble>()).ToList();
+
+            // Assert
+            for (double i = 0d; i <= 32768d; i++)
+            {
+                actualResult.Should().Contain(i);
+            }
+        }
+
+        [Fact]
+        public static void ADummy_NegativeDouble___Should_always_return_negative_doubles_greater_than_or_equal_to_negative_32768___When_creating_many_object_of_type_NegativeDouble()
+        {
+            // Arrange, Act
+            var actualResult = Enumerable.Range(1, NumberOfCallsToCoverAllShortsRegardlessOfFixtureState).Select(_ => (double)A.Dummy<NegativeDouble>()).ToList();
+
+            // Assert
+            actualResult.ForEach(_ => _.Should().BeGreaterOrEqualTo(-32768d).And.BeLessThan(0d));
+        }
+
+        [Fact]
+        public static void ADummy_NegativeDouble___Should_returns_every_number_in_range_of_1_to_32768_inclusive_at_least_once___When_creating_many_object_of_type_NegativeDouble()
+        {
+            // Arrange, Act
+            var actualResult = Enumerable.Range(1, NumberOfCallsToCoverAllShortsRegardlessOfFixtureState).Select(_ => (double)A.Dummy<NegativeDouble>()).ToList();
+
+            // Assert
+            for (double i = -32768d; i <= -1; i++)
+            {
+                actualResult.Should().Contain(i);
+            }
+        }
+
+        [Fact]
+        public static void ADummy_ZeroOrNegativeDouble___Should_always_return_zero_or_negative_doubles_greater_than_or_equal_to_negative_32768___When_creating_many_object_of_type_ZeroOrNegativeDouble()
+        {
+            // Arrange, Act
+            var actualResult = Enumerable.Range(1, NumberOfCallsToCoverAllShortsRegardlessOfFixtureState).Select(_ => (double)A.Dummy<ZeroOrNegativeDouble>()).ToList();
+
+            // Assert
+            actualResult.ForEach(_ => _.Should().BeGreaterOrEqualTo(-32768d).And.BeLessOrEqualTo(0d));
+        }
+
+        [Fact]
+        public static void ADummy_ZeroNegativeDouble___Should_returns_every_number_in_range_of_0_to_32768_inclusive_at_least_once___When_creating_many_object_of_type_ZeroOrNegativeDouble()
+        {
+            // Arrange, Act
+            var actualResult = Enumerable.Range(1, NumberOfCallsToCoverAllShortsRegardlessOfFixtureState).Select(_ => (double)A.Dummy<ZeroOrNegativeDouble>()).ToList();
+
+            // Assert
+            for (double i = -32768d; i <= 0d; i++)
+            {
+                actualResult.Should().Contain(i);
+            }
+        }
+
+        [Fact]
         public static void ADummy_PercentChangeAsDouble___Should_always_return_doubles_that_are_greater_than_or_equal_MinPercentChange_and_less_than_or_equal_MaxPercentChange___When_creating_many_object_of_type_PercentChangeAsDouble()
         {
             // Arrange, Act
