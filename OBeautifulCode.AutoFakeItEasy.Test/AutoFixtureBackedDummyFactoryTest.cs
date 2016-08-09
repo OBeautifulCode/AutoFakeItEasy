@@ -58,12 +58,13 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         {
             // Arrange
             var enumValuesCount = Enum.GetValues(typeof(Number)).Length;
+            var enumValuesInOrder = Enum.GetValues(typeof(Number)).Cast<Number>();
 
             // Act
             var randomEnumValues = Enumerable.Range(1, enumValuesCount).Select(_ => A.Dummy<Number>()).ToList();
 
             // Assert
-            randomEnumValues.Should().NotBeAscendingInOrder();
+            randomEnumValues.Should().NotEqual(enumValuesInOrder);
         }
 
         [Fact]
