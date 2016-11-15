@@ -15,6 +15,6 @@
     <tags>AutoFixture FakeItEasy Dummy</tags>
   </metadata>
   <files>
-    <file src="AutoFakeItEasyBootstrapper.cs" target="content\net45\AutoFakeItEasyBootstrapper.cs" />
+    <file src="AutoFakeItEasyBootstrapper.cs" target="content\net45\.OBeautifulCode.Recipes\AutoFakeItEasyBootstrapper.cs" />
   </files>
 </package>

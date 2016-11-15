@@ -89,7 +89,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\OBeautifulCode.AutoFakeItEasy\AutoFakeItEasyBootstrapper.cs">
-      <Link>AutoFakeItEasyBootstrapper.cs</Link>
+      <Link>.OBeautifulCode.Recipes\AutoFakeItEasyBootstrapper.cs</Link>
     </Compile>
     <Compile Include="ClassHierarchy.cs" />
     <Compile Include="AutoFixtureBackedDummyFactoryTest.cs" />
