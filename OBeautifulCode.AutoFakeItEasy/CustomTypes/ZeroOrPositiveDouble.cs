@@ -24,7 +24,7 @@ namespace OBeautifulCode.AutoFakeItEasy
         public ZeroOrPositiveDouble(double value)
             : base(value)
         {
-            Condition.Requires(value, nameof(value)).IsGreaterOrEqual(0);
+            value.Requires(nameof(value)).IsGreaterOrEqual(0);
         }
     }
 }

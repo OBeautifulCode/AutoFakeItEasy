@@ -37,7 +37,7 @@ namespace OBeautifulCode.AutoFakeItEasy
         public PercentChangeAsDouble(double value)
             : base(value)
         {
-            Condition.Requires(value, nameof(value)).IsGreaterOrEqual(MinPercentChange).IsLessOrEqual(MaxPercentChange);
+            value.Requires(nameof(value)).IsGreaterOrEqual(MinPercentChange).IsLessOrEqual(MaxPercentChange);
         }
 
         /// <summary>

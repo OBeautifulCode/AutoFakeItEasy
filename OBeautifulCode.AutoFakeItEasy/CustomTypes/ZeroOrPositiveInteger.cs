@@ -24,7 +24,7 @@ namespace OBeautifulCode.AutoFakeItEasy
         public ZeroOrPositiveInteger(int value)
             : base(value)
         {
-            Condition.Requires(value, nameof(value)).IsGreaterOrEqual(0);
+            value.Requires(nameof(value)).IsGreaterOrEqual(0);
         }
     }
 }

@@ -24,7 +24,7 @@ namespace OBeautifulCode.AutoFakeItEasy
         public PositiveDouble(double value)
             : base(value)
         {
-            Condition.Requires(value, nameof(value)).IsGreaterThan(0);
+            value.Requires(nameof(value)).IsGreaterThan(0);
         }
     }
 }

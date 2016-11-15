@@ -34,7 +34,7 @@ namespace OBeautifulCode.AutoFakeItEasy
         /// <param name="exclusiveUpperLimit">The upper limit.</param>
         public RandomNumericSequenceGenerator(long inclusiveLowerLimit, long exclusiveUpperLimit)
         {
-            Condition.Requires(inclusiveLowerLimit, nameof(inclusiveLowerLimit)).IsLessThan(exclusiveUpperLimit);
+            inclusiveLowerLimit.Requires(nameof(inclusiveLowerLimit)).IsLessThan(exclusiveUpperLimit);
             this.inclusiveLowerLimit = inclusiveLowerLimit;
             this.exclusiveUpperLimit = exclusiveUpperLimit;
         }
