@@ -17,7 +17,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("OBeautifulCode")]
 [assembly: AssemblyProduct("OBeautifulCode.AutoFakeItEasy")]
-[assembly: AssemblyCopyright("Copyright © 2015 OBeautifulCode")]
+[assembly: AssemblyCopyright("Copyright © 2016 OBeautifulCode")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
