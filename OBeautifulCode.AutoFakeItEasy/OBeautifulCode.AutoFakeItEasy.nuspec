@@ -9,6 +9,7 @@
     <projectUrl>https://github.com/OBeautifulCode/OBeautifulCode.AutoFakeItEasy</projectUrl>
     <iconUrl>https://raw.githubusercontent.com/OBeautifulCode/OBeautifulCode.AutoFakeItEasy/master/OBeautifulCode.AutoFakeItEasy/nuget-icon.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <licenseUrl>https://opensource.org/licenses/MIT</licenseUrl>
     <description>$description$</description>
     <summary>Use AutoFixture to fulfill calls to FakeItEasy's A.Dummy()</summary>
     <copyright>Copyright 2016 OBeautifulCode</copyright>
