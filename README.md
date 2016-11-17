@@ -6,7 +6,7 @@ AutoFakeItEasy
 
 Overview
 --------
-- This package makes [FakeItEasy] Dummies actually useful by wiring-them-up to real-looking test data.
+- This package makes [FakeItEasy] Dummies actually useful by wiring-them-up to real-looking, random test data.
 - By default, the following call will always return 0: `A.Dummy<int>()`
 - With AutoFakeItEasy, that same call will return a **random integer**.
 - This enables your unit tests to explore more space.  Like this:
@@ -176,7 +176,7 @@ var green = new Green();
 var notGreen = A.Dummy<Color>().ThatIsNot(green);
 ```
 
-- `ThatIs`, `Whose`: These methods do the same thing; select one based on readability.  A lambda is used to test dummies against a constraint/condition.  If the condition fails, then another dummy is created and tested ... and so on until the condition is satisifed or a maximum number of attempts has been made.  `maxAttempts` is an optional parameter with default of 100.
+- `ThatIs`, `Whose`: These methods do the same thing; select one based on readability.  A lambda is used to test dummies against a constraint/condition.  If the condition fails, then another dummy is created and tested ... and so on until the condition is satisifed or a maximum number of attempts has been made.  `maxAttempts` is an optional parameter with default of -1, which is unlimited attempts.
 - `ThatIsNot`: This method creates a dummy that is not equal (using `object.Equals(object)`) to some comparison dummy.  It also has an optional `maxAttempts` parameter that works the same way as described above.
 
 These constraining methods also work with `Some.Dummies<T>()`  For example, this will make 5 attempts to create an IList of doubles until there are an even number of elements in the list:
