@@ -1,7 +1,7 @@
 AutoFakeItEasy
 ==============
 [![Build status](https://ci.appveyor.com/api/projects/status/c92mt9ckaewlyl6m?svg=true)](https://ci.appveyor.com/project/SurajGupta/obeautifulcode-autofakeiteasy)
-[![Nuget status](https://img.shields.io/nuget/vpre/OBeautifulCode.AutoFakeItEasy.svg)](https://www.nuget.org/packages/OBeautifulCode.AutoFakeItEasy/1.0.11-beta010)
+[![Nuget status](https://img.shields.io/nuget/v/OBeautifulCode.AutoFakeItEasy.svg)](https://www.nuget.org/packages/OBeautifulCode.AutoFakeItEasy)
 
 
 Overview
