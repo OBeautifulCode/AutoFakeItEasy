@@ -11,8 +11,6 @@ namespace OBeautifulCode.AutoFakeItEasy
     using System.Collections.Generic;
     using System.Linq;
 
-    using Conditions;
-
     using OBeautifulCode.Math;
 
     using Ploeh.AutoFixture.Kernel;
@@ -34,7 +32,11 @@ namespace OBeautifulCode.AutoFakeItEasy
         /// <param name="exclusiveUpperLimit">The upper limit.</param>
         public RandomNumericSequenceGenerator(long inclusiveLowerLimit, long exclusiveUpperLimit)
         {
-            Condition.Requires(inclusiveLowerLimit, nameof(inclusiveLowerLimit)).IsLessThan(exclusiveUpperLimit);
+            if (inclusiveLowerLimit >= exclusiveUpperLimit)
+            {
+                throw new ArgumentOutOfRangeException(nameof(inclusiveLowerLimit), "inclusive lower limit is greater than or equal to exclusive upper limit");
+            }
+
             this.inclusiveLowerLimit = inclusiveLowerLimit;
             this.exclusiveUpperLimit = exclusiveUpperLimit;
         }

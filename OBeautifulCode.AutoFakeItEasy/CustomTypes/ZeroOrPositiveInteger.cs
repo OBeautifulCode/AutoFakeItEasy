@@ -7,9 +7,8 @@
 // ReSharper disable CheckNamespace
 namespace OBeautifulCode.AutoFakeItEasy
 {
+    using System;
     using System.Diagnostics;
-
-    using Conditions;
 
     /// <summary>
     /// Represents a zero or positive integer.
@@ -24,7 +23,10 @@ namespace OBeautifulCode.AutoFakeItEasy
         public ZeroOrPositiveInteger(int value)
             : base(value)
         {
-            Condition.Requires(value, nameof(value)).IsGreaterOrEqual(0);
+            if (value < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(value), "value is less than 0");
+            }
         }
     }
 }

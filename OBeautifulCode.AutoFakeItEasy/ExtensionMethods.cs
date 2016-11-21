@@ -8,9 +8,6 @@ namespace OBeautifulCode.AutoFakeItEasy
 {
     using System;
     using System.Linq;
-    using System.Reflection;
-
-    using Conditions;
 
     using FakeItEasy;
 
@@ -29,14 +26,17 @@ namespace OBeautifulCode.AutoFakeItEasy
         /// The maximum number of times to attempt to create a dummy that meets the condition, before throwing.
         /// The reference dummy is itself considered the first attempt.  If this method creates a new dummy
         /// because the condition fails on the reference dummy, that is considered the second attempt.
-        /// If max attempts is zero or negative then the method tries an infinite number of times to meet the condition (DANGER!!!).
-        /// Default is 100.
+        /// If max attempts is zero or negative then the method tries an infinite number of times to meet the condition,
+        /// which is the default.
         /// </param>
         /// <typeparam name="T">The type of dummy.</typeparam>
         /// <returns>Returns the reference dummy if it meets the specified condition.  Otherwise, returns a new dummy that meets the condition.</returns>
-        public static T ThatIs<T>(this T referenceDummy, Func<T, bool> condition, int maxAttempts = 100)
+        public static T ThatIs<T>(this T referenceDummy, Func<T, bool> condition, int maxAttempts = -1)
         {
-            Condition.Requires(condition, nameof(condition)).IsNotNull();
+            if (condition == null)
+            {
+                throw new ArgumentNullException(nameof(condition));
+            }
 
             var referenceDummyType = referenceDummy?.GetType();
             string someDummiesCallName = null;
@@ -92,12 +92,12 @@ namespace OBeautifulCode.AutoFakeItEasy
         /// The maximum number of times to attempt to create a dummy that meets the condition, before throwing.
         /// The reference dummy is itself considered the first attempt.  If this method creates a new dummy
         /// because the condition fails on the reference dummy, that is considered the second attempt.
-        /// If max attempts is zero or negative then the method tries an infinite number of times to meet the condition (DANGER!!!).
-        /// Default is 100.
+        /// If max attempts is zero or negative then the method tries an infinite number of times to meet the condition,
+        /// which is the default.
         /// </param>
         /// <typeparam name="T">The type of dummy.</typeparam>
         /// <returns>Returns the reference dummy if it meets the specified condition.  Otherwise, returns a new dummy that meets the condition.</returns>
-        public static T Whose<T>(this T referenceDummy, Func<T, bool> condition, int maxAttempts = 100)
+        public static T Whose<T>(this T referenceDummy, Func<T, bool> condition, int maxAttempts = -1)
             => ThatIs(referenceDummy, condition, maxAttempts);
 
         /// <summary>
@@ -112,15 +112,14 @@ namespace OBeautifulCode.AutoFakeItEasy
         /// The reference dummy is itself considered the first attempt.  If this method creates a new dummy because
         /// the comparision dummy is equal to the reference dummy, that is considered the second attempt.
         /// If max attempts is zero or negative then the method tries an infinite number of times to create a dummy
-        /// that is not equal to the comparison dummy (DANGER!!!).
-        /// Default is 100.
+        /// that is not equal to the comparison dummy, which is the default.
         /// </param>
         /// <typeparam name="T">The type of dummy.</typeparam>
         /// <returns>
         /// Returns the reference dummy if is not equal to the comparison dummy.
         /// Otherwise, returns a new dummy that that is not equal to the comparison dummy.
         /// </returns>
-        public static T ThatIsNot<T>(this T referenceDummy, T comparisonDummy, int maxAttempts = 100)
+        public static T ThatIsNot<T>(this T referenceDummy, T comparisonDummy, int maxAttempts = -1)
         {
             Func<T, bool> condition = t => !Equals(t, comparisonDummy);
             var result = ThatIs(referenceDummy, condition, maxAttempts);
