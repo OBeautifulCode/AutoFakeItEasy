@@ -41,10 +41,6 @@
     <CodeAnalysisRuleSet>..\common\analyzers-testing.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Conditions, Version=2.1.0.24, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Conditions.2.1.0\lib\portable-net45+win+wpa81+wp80+MonoAndroid10+MonoTouch10\Conditions.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="FakeItEasy, Version=2.3.1.0, Culture=neutral, PublicKeyToken=eff28e2146d5fd2c, processorArchitecture=MSIL">
       <HintPath>..\packages\FakeItEasy.2.3.1\lib\net40\FakeItEasy.dll</HintPath>
       <Private>True</Private>

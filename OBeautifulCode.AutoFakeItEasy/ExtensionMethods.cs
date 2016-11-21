@@ -9,8 +9,6 @@ namespace OBeautifulCode.AutoFakeItEasy
     using System;
     using System.Linq;
 
-    using Conditions;
-
     using FakeItEasy;
 
     /// <summary>
@@ -35,7 +33,10 @@ namespace OBeautifulCode.AutoFakeItEasy
         /// <returns>Returns the reference dummy if it meets the specified condition.  Otherwise, returns a new dummy that meets the condition.</returns>
         public static T ThatIs<T>(this T referenceDummy, Func<T, bool> condition, int maxAttempts = -1)
         {
-            condition.Requires(nameof(condition)).IsNotNull();
+            if (condition == null)
+            {
+                throw new ArgumentNullException(nameof(condition));
+            }
 
             var referenceDummyType = referenceDummy?.GetType();
             string someDummiesCallName = null;

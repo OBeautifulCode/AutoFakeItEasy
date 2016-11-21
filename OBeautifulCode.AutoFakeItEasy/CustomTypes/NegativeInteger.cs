@@ -7,9 +7,8 @@
 // ReSharper disable CheckNamespace
 namespace OBeautifulCode.AutoFakeItEasy
 {
+    using System;
     using System.Diagnostics;
-
-    using Conditions;
 
     /// <summary>
     /// Represents a negative integer.
@@ -24,7 +23,10 @@ namespace OBeautifulCode.AutoFakeItEasy
         public NegativeInteger(int value)
             : base(value)
         {
-            value.Requires(nameof(value)).IsLessThan(0);
+            if (value >= 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(value), "value is greater than or equal to 0");
+            }
         }
     }
 }

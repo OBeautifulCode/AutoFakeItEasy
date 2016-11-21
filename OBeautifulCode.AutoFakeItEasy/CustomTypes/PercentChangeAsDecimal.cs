@@ -10,8 +10,6 @@ namespace OBeautifulCode.AutoFakeItEasy
     using System;
     using System.Diagnostics;
 
-    using Conditions;
-
     using OBeautifulCode.Math;
 
     /// <summary>
@@ -37,7 +35,15 @@ namespace OBeautifulCode.AutoFakeItEasy
         public PercentChangeAsDecimal(decimal value)
             : base(value)
         {
-            value.Requires(nameof(value)).IsGreaterOrEqual(MinPercentChange).IsLessOrEqual(MaxPercentChange);
+            if (value < MinPercentChange)
+            {
+                throw new ArgumentOutOfRangeException(nameof(value), "value is less than the minimum possible percent change");
+            }
+
+            if (value > MaxPercentChange)
+            {
+                throw new ArgumentOutOfRangeException(nameof(value), "value is greater than the maximum possible percent change");
+            }
         }
 
         /// <summary>

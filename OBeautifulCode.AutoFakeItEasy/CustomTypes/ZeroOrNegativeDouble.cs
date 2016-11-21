@@ -7,9 +7,8 @@
 // ReSharper disable CheckNamespace
 namespace OBeautifulCode.AutoFakeItEasy
 {
+    using System;
     using System.Diagnostics;
-
-    using Conditions;
 
     /// <summary>
     /// Represents a zero or negative double.
@@ -24,7 +23,10 @@ namespace OBeautifulCode.AutoFakeItEasy
         public ZeroOrNegativeDouble(double value)
             : base(value)
         {
-            value.Requires(nameof(value)).IsLessOrEqual(0);
+            if (value > 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(value), "value is greater than 0");
+            }
         }
     }
 }
