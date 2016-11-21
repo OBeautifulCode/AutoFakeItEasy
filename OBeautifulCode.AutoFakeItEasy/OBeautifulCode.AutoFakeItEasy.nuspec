@@ -9,7 +9,7 @@
     <iconUrl>https://raw.githubusercontent.com/OBeautifulCode/OBeautifulCode.AutoFakeItEasy/master/OBeautifulCode.AutoFakeItEasy/nuget-icon.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <licenseUrl>https://opensource.org/licenses/MIT</licenseUrl>
-    <summary>Makes FakeItEasy Dummies actually useable by wiring-them-up to real-looking, random test data.</summary>
+    <summary>Makes FakeItEasy Dummies useful by wiring-them-up to real-looking, random test data.</summary>
     <description>$description$</description>
     <copyright>$copyright$</copyright>
     <tags>AutoFixture FakeItEasy Dummy testing data</tags>
