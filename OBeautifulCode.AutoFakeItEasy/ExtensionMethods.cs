@@ -7,6 +7,7 @@
 namespace OBeautifulCode.AutoFakeItEasy
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
 
     using FakeItEasy;
@@ -122,6 +123,132 @@ namespace OBeautifulCode.AutoFakeItEasy
         public static T ThatIsNot<T>(this T referenceDummy, T comparisonDummy, int maxAttempts = -1)
         {
             Func<T, bool> condition = t => !Equals(t, comparisonDummy);
+            var result = ThatIs(referenceDummy, condition, maxAttempts);
+            return result;
+        }
+
+        /// <summary>
+        /// Returns a reference dummy if it is not in a set of comparison dummies or
+        /// creates new dummies of the same type until a dummy is created that is not in the set of comparison dummies.
+        /// Uses the comparison dummy's implementation of <see cref="object.Equals(object)"/>
+        /// </summary>
+        /// <param name="referenceDummy">The reference dummy.</param>
+        /// <param name="comparisonDummies">The set of comparison dummies.</param>
+        /// <param name="maxAttempts">
+        /// The maximum number of times to attempt to create a dummy that is not in the set of comparison dummy, before throwing.
+        /// The reference dummy is itself considered the first attempt.  If this method creates a new dummy because
+        /// the comparision dummies contain the reference dummy, that is considered the second attempt.
+        /// If max attempts is zero or negative then the method tries an infinite number of times to create a dummy
+        /// that is not in the set of comparison dummies, which is the default.
+        /// </param>
+        /// <typeparam name="T">The type of dummy.</typeparam>
+        /// <returns>
+        /// Returns the reference dummy if is not in the set of comparison dummies.
+        /// Otherwise, returns a new dummy that that is not in the set of comparison dummies.
+        /// </returns>
+        public static T ThatIsNotIn<T>(this T referenceDummy, IEnumerable<T> comparisonDummies, int maxAttempts = -1)
+        {
+            if (comparisonDummies == null)
+            {
+                throw new ArgumentNullException(nameof(comparisonDummies));
+            }
+
+            Func<T, bool> condition = t => !comparisonDummies.Contains(t);
+            var result = ThatIs(referenceDummy, condition, maxAttempts);
+            return result;
+        }
+
+        /// <summary>
+        /// Returns a reference dummy if it is not in a set of comparison dummies or
+        /// creates new dummies of the same type until a dummy is created that is not in the set of comparison dummies.
+        /// Uses the comparison dummy's implementation of <see cref="object.Equals(object)"/>
+        /// </summary>
+        /// <param name="referenceDummy">The reference dummy.</param>
+        /// <param name="comparisonDummies">The set of comparison dummies.</param>
+        /// <param name="comparer">An equality comparer to use when comparing the reference dummy against the comparison dummies.</param>
+        /// <param name="maxAttempts">
+        /// The maximum number of times to attempt to create a dummy that is not in the set of comparison dummy, before throwing.
+        /// The reference dummy is itself considered the first attempt.  If this method creates a new dummy because
+        /// the comparision dummies contain the reference dummy, that is considered the second attempt.
+        /// If max attempts is zero or negative then the method tries an infinite number of times to create a dummy
+        /// that is not in the set of comparison dummies, which is the default.
+        /// </param>
+        /// <typeparam name="T">The type of dummy.</typeparam>
+        /// <returns>
+        /// Returns the reference dummy if is not in the set of comparison dummies.
+        /// Otherwise, returns a new dummy that that is not in the set of comparison dummies.
+        /// </returns>
+        public static T ThatIsNotIn<T>(this T referenceDummy, IEnumerable<T> comparisonDummies, IEqualityComparer<T> comparer, int maxAttempts = -1)
+        {
+            if (comparisonDummies == null)
+            {
+                throw new ArgumentNullException(nameof(comparisonDummies));
+            }
+
+            Func<T, bool> condition = t => !comparisonDummies.Contains(t, comparer);
+            var result = ThatIs(referenceDummy, condition, maxAttempts);
+            return result;
+        }
+
+        /// <summary>
+        /// Returns a reference dummy if it is in a set of comparison dummies or
+        /// creates new dummies of the same type until a dummy is created that is in the set of comparison dummies.
+        /// Uses the comparison dummy's implementation of <see cref="object.Equals(object)"/>
+        /// </summary>
+        /// <param name="referenceDummy">The reference dummy.</param>
+        /// <param name="comparisonDummies">The set of comparison dummies.</param>
+        /// <param name="maxAttempts">
+        /// The maximum number of times to attempt to create a dummy that is in the set of comparison dummy, before throwing.
+        /// The reference dummy is itself considered the first attempt.  If this method creates a new dummy because
+        /// the comparision dummies contain the reference dummy, that is considered the second attempt.
+        /// If max attempts is zero or negative then the method tries an infinite number of times to create a dummy
+        /// that is in the set of comparison dummies, which is the default.
+        /// </param>
+        /// <typeparam name="T">The type of dummy.</typeparam>
+        /// <returns>
+        /// Returns the reference dummy if is in the set of comparison dummies.
+        /// Otherwise, returns a new dummy that that is in the set of comparison dummies.
+        /// </returns>
+        public static T ThatIsIn<T>(this T referenceDummy, IEnumerable<T> comparisonDummies, int maxAttempts = -1)
+        {
+            if (comparisonDummies == null)
+            {
+                throw new ArgumentNullException(nameof(comparisonDummies));
+            }
+
+            Func<T, bool> condition = comparisonDummies.Contains;
+            var result = ThatIs(referenceDummy, condition, maxAttempts);
+            return result;
+        }
+
+        /// <summary>
+        /// Returns a reference dummy if it is in a set of comparison dummies or
+        /// creates new dummies of the same type until a dummy is created that is in the set of comparison dummies.
+        /// Uses the comparison dummy's implementation of <see cref="object.Equals(object)"/>
+        /// </summary>
+        /// <param name="referenceDummy">The reference dummy.</param>
+        /// <param name="comparisonDummies">The set of comparison dummies.</param>
+        /// <param name="comparer">An equality comparer to use when comparing the reference dummy against the comparison dummies.</param>
+        /// <param name="maxAttempts">
+        /// The maximum number of times to attempt to create a dummy that is in the set of comparison dummy, before throwing.
+        /// The reference dummy is itself considered the first attempt.  If this method creates a new dummy because
+        /// the comparision dummies contain the reference dummy, that is considered the second attempt.
+        /// If max attempts is zero or negative then the method tries an infinite number of times to create a dummy
+        /// that is in the set of comparison dummies, which is the default.
+        /// </param>
+        /// <typeparam name="T">The type of dummy.</typeparam>
+        /// <returns>
+        /// Returns the reference dummy if is in the set of comparison dummies.
+        /// Otherwise, returns a new dummy that that is in the set of comparison dummies.
+        /// </returns>
+        public static T ThatIsIn<T>(this T referenceDummy, IEnumerable<T> comparisonDummies, IEqualityComparer<T> comparer, int maxAttempts = -1)
+        {
+            if (comparisonDummies == null)
+            {
+                throw new ArgumentNullException(nameof(comparisonDummies));
+            }
+
+            Func<T, bool> condition = t => comparisonDummies.Contains(t, comparer);
             var result = ThatIs(referenceDummy, condition, maxAttempts);
             return result;
         }
