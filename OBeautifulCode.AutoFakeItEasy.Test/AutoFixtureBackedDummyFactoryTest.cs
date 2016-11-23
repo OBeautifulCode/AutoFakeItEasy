@@ -467,6 +467,96 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             animals.OfType<Zebra>().Count().Should().BeGreaterThan(1);
         }
 
+        [Fact]
+        public static void ConstrainDummyToBeOneOf_without_IEqualityComparer___Should_use_most_recently_registered_constraint___When_called_multiple_times_for_same_type()
+        {
+            // Arrange
+            AutoFixtureBackedDummyFactory.ConstrainDummyToBeOneOf(MostlyBadStuffWithoutComparerReestablished.JunkFood);
+            AutoFixtureBackedDummyFactory.ConstrainDummyToBeOneOf(MostlyBadStuffWithoutComparerReestablished.Chores, MostlyBadStuffWithoutComparerReestablished.Hurricane);
+            AutoFixtureBackedDummyFactory.ConstrainDummyToBeOneOf(MostlyBadStuffWithoutComparerReestablished.MeanPeople, MostlyBadStuffWithoutComparerReestablished.Tulips);
+            var allStuff = new List<MostlyBadStuffWithoutComparerReestablished>();
+
+            // Act
+            for (int i = 0; i < 100; i++)
+            {
+                var mostlyBadStuff = A.Dummy<MostlyBadStuffWithoutComparerReestablished>();
+                allStuff.Add(mostlyBadStuff);
+            }
+
+            // Assert
+            allStuff = allStuff.Distinct().ToList();
+            allStuff.Should().HaveCount(2);
+            allStuff.Should().Contain(MostlyBadStuffWithoutComparerReestablished.MeanPeople);
+            allStuff.Should().Contain(MostlyBadStuffWithoutComparerReestablished.Tulips);
+        }
+
+        [Fact]
+        public static void ConstrainDummyToBeOneOf_without_IEqualityComparer___Should_return_only_values_within_set_of_possibleDummies___When_called_for_type_MostlyBadStuffWithoutComparer()
+        {
+            // Arrange
+            AutoFixtureBackedDummyFactory.ConstrainDummyToBeOneOf(MostlyBadStuffWithoutComparer.Treasure, MostlyBadStuffWithoutComparer.Tulips, MostlyBadStuffWithoutComparer.WalkInThePark);
+            var goodStuff = new List<MostlyBadStuffWithoutComparer>();
+
+            // Act
+            for (int i = 0; i < 100; i++)
+            {
+                var mostlyBadStuff = A.Dummy<MostlyBadStuffWithoutComparer>();
+                goodStuff.Add(mostlyBadStuff);
+            }
+
+            // Assert
+            goodStuff = goodStuff.Distinct().ToList();
+            goodStuff.Should().HaveCount(3);
+            goodStuff.Should().Contain(MostlyBadStuffWithoutComparer.Treasure);
+            goodStuff.Should().Contain(MostlyBadStuffWithoutComparer.Tulips);
+            goodStuff.Should().Contain(MostlyBadStuffWithoutComparer.WalkInThePark);
+        }
+
+        [Fact]
+        public static void ConstrainDummyToBeOneOf_with_IEqualityComparer___Should_use_most_recently_registered_constraint___When_called_multiple_times_for_same_type()
+        {
+            // Arrange
+            AutoFixtureBackedDummyFactory.ConstrainDummyToBeOneOf(new[] { MostlyBadStuffWithComparerReestablished.Hurricane }, EqualityComparer<MostlyBadStuffWithComparerReestablished>.Default);
+            AutoFixtureBackedDummyFactory.ConstrainDummyToBeOneOf(new[] { MostlyBadStuffWithComparerReestablished.Chores, MostlyBadStuffWithComparerReestablished.Tulips }, EqualityComparer<MostlyBadStuffWithComparerReestablished>.Default);
+            AutoFixtureBackedDummyFactory.ConstrainDummyToBeOneOf(new[] { MostlyBadStuffWithComparerReestablished.JunkFood, MostlyBadStuffWithComparerReestablished.WalkInThePark }, EqualityComparer<MostlyBadStuffWithComparerReestablished>.Default);
+            var allStuff = new List<MostlyBadStuffWithComparerReestablished>();
+
+            // Act
+            for (int i = 0; i < 100; i++)
+            {
+                var mostlyBadStuff = A.Dummy<MostlyBadStuffWithComparerReestablished>();
+                allStuff.Add(mostlyBadStuff);
+            }
+
+            // Assert
+            allStuff = allStuff.Distinct().ToList();
+            allStuff.Should().HaveCount(2);
+            allStuff.Should().Contain(MostlyBadStuffWithComparerReestablished.JunkFood);
+            allStuff.Should().Contain(MostlyBadStuffWithComparerReestablished.WalkInThePark);
+        }
+
+        [Fact]
+        public static void ConstrainDummyToBeOneOf_with_IEqualityComparer___Should_return_only_values_within_set_of_possibleDummies___When_called_for_type_MostlyBadStuffWithComparer()
+        {
+            // Arrange
+            AutoFixtureBackedDummyFactory.ConstrainDummyToBeOneOf(new[] { MostlyBadStuffWithComparer.Chores, MostlyBadStuffWithComparer.MeanPeople, MostlyBadStuffWithComparer.Hurricane }, EqualityComparer<MostlyBadStuffWithComparer>.Default);
+            var goodStuff = new List<MostlyBadStuffWithComparer>();
+
+            // Act
+            for (int i = 0; i < 100; i++)
+            {
+                var mostlyBadStuff = A.Dummy<MostlyBadStuffWithComparer>();
+                goodStuff.Add(mostlyBadStuff);
+            }
+
+            // Assert
+            goodStuff = goodStuff.Distinct().ToList();
+            goodStuff.Should().HaveCount(3);
+            goodStuff.Should().Contain(MostlyBadStuffWithComparer.Chores);
+            goodStuff.Should().Contain(MostlyBadStuffWithComparer.MeanPeople);
+            goodStuff.Should().Contain(MostlyBadStuffWithComparer.Hurricane);
+        }
+
         // ReSharper restore InconsistentNaming
     }
 }
