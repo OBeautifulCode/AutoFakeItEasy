@@ -81,10 +81,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\OBeautifulCode.AutoFakeItEasy\AutoFakeItEasyBootstrapper.cs">
-      <Link>.OBeautifulCode.Recipes\AutoFakeItEasyBootstrapper.cs</Link>
+      <Link>.OBeautifulCode.Recipes\OBeautifulCode.AutoFakeItEasy\AutoFakeItEasyBootstrapper.cs</Link>
     </Compile>
     <Compile Include="ClassHierarchy.cs" />
     <Compile Include="AutoFixtureBackedDummyFactoryTest.cs" />
+    <Compile Include="ConstrainedDummies.cs" />
     <Compile Include="CustomizedDummies.cs" />
     <Compile Include="CustomTypes\NegativeDoubleTest.cs" />
     <Compile Include="CustomTypes\NegativeIntegerTest.cs" />
@@ -104,6 +105,7 @@
     <Compile Include="Generators\RandomNumericSequenceGeneratorTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Number.cs" />
+    <Compile Include="SetComparisonDummies.cs" />
     <Compile Include="SomeDummiesListTest.cs" />
     <Compile Include="SomeReadOnlyDummiesListTest.cs" />
     <Compile Include="SomeTest.cs" />

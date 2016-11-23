@@ -7,7 +7,9 @@
 namespace OBeautifulCode.AutoFakeItEasy.Test
 {
     using System;
-    using System.Diagnostics.CodeAnalysis;
+    using System.Collections.Generic;
+
+    using Math;
 
 #pragma warning disable SA1649 // File name must match first type name
 #pragma warning disable SA1402 // File may only contain a single class
@@ -37,6 +39,13 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         public override int GetHashCode() => 0;
     }
 
+    public class AllInstancesEqualEqualityComparer : IEqualityComparer<AllInstancesEqual>
+    {
+        public bool Equals(AllInstancesEqual x, AllInstancesEqual y) => x == y;
+
+        public int GetHashCode(AllInstancesEqual obj) => obj.GetHashCode();
+    }
+
     public class NoInstancesAreEqual : IEquatable<NoInstancesAreEqual>
     {
         public static bool operator ==(NoInstancesAreEqual left, NoInstancesAreEqual right)
@@ -60,9 +69,16 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
 
         public override bool Equals(object obj) => this == (obj as NoInstancesAreEqual);
 
-        public override int GetHashCode() => 0;
+        public override int GetHashCode() => ThreadSafeRandom.Next();
+    }
+
+    public class NoInstancesAreEqualEqualityComparer : IEqualityComparer<NoInstancesAreEqual>
+    {
+        public bool Equals(NoInstancesAreEqual x, NoInstancesAreEqual y) => x == y;
+
+        public int GetHashCode(NoInstancesAreEqual obj) => obj.GetHashCode();
     }
 
 #pragma warning restore SA1402 // File may only contain a single class
 #pragma warning restore SA1649 // File name must match first type name
-    }
+}

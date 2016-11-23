@@ -131,6 +131,39 @@ namespace Your.Namespace
 
 Note that this is a bit of an overkill.  Once created, the dummy factory does nothing useful.  We only care about the code in the constructor.  Putting that code in the constructor of an implementation of `IDummyFactory` guarantees that it will be called before any unit tests are run.  Feel free to use another approach to achieve the same goal.
 
+
+Custom Dummy Creation - Constraints
+-----------------------------------
+`AddDummyCreator<T>` is a flexible way customize dummies because it's it takes a `Func<T>`.  
+
+However, you can't call `A.Dummy<T>` within `AddDummyCreator<T>`, for the same `T`.
+
+When would you want to do that?
+
+Let's say you always want to constrain an enum to a set of curated values.
+
+```c#
+ // more on ThatIsIn in the "Constrained Dummies" section later
+AutoFixtureBackedDummyFactory.AddDummyCreator(() => 
+                              {
+                                  var month = A.Dummy<Month>().ThatIsIn(new[] { Month.December, Month.January, Month.February });
+                                  return month;
+                              });
+```
+
+This will unfortunately throw an `OverflowException` because of infinite recursion.  `A.Dummy<Month>` will call the lambda, which will call `A.Dummy<Month>`, and so on.
+
+Try this...
+
+```c#
+AutoFixtureBackedDummyFactory.ConstrainDummyToBeOneOf(Month.December, Month.January, Month.February)
+AutoFixtureBackedDummyFactory.ConstrainDummyToExclude(Fruit.Strawberry, Fruit.Blueberry, Fruit.Raspberry)
+```
+
+- If you ALWAYS want a type to be contained within, or not contained within some set of values, use `ConstrainDummyToBeOneOf()` or `ConstrainDummyToExclude`
+- If you want a single call to `A.Dummy<T>` to return a value that is contained within, or not contained within some set of values, see *Constrained Dummys* below.  
+
+
 Some.Dummies\<T>
 ---------------
 A common use-case is the need for an `ICollection` or `IEnumerable` or `IList` of dummies.  Use this:
@@ -163,9 +196,10 @@ Some.ReadOnlyDummies\<T>
 ------------------------
 Returns an `IReadOnlyList<T>`; otherwise behaves exactly like `Some.Dummies<T>` documented above.
 
+
 Constrained Dummies
 -------------------
-Sometimes it's useful to constrain dummies.  AutoFakeItEasy implements these extension methods for that purpose: `ThatIs`, `ThatIsNot`, `Whose`
+Sometimes it's useful to constrain dummies.  AutoFakeItEasy implements these extension methods for that purpose: `ThatIs`, `ThatIsNot`, `Whose`, `ThatIsIn`, `ThatIsNotIn`
 
 ```c#
 var nonZero = A.Dummy<int>().ThatIs(i => i != 0);
@@ -174,15 +208,20 @@ var tallPerson = A.Dummy<Person>().Whose(p => p.HeightInCentimeters > 182);
 
 var green = new Green();
 var notGreen = A.Dummy<Color>().ThatIsNot(green);
+
+var winterMonthsInNorthAmerica = A.Dummy<Month>().ThatIsIn(new[] { Month.December, Month.January, Month.February })
+
+var springThruFallInNorthAmerica = A.Dummy<Month>().ThatIsNotIn(new[] { Month.December, Month.January, Month.February })
 ```
 
 - `ThatIs`, `Whose`: These methods do the same thing; select one based on readability.  A lambda is used to test dummies against a constraint/condition.  If the condition fails, then another dummy is created and tested ... and so on until the condition is satisifed or a maximum number of attempts has been made.  `maxAttempts` is an optional parameter with default of -1, which is unlimited attempts.
 - `ThatIsNot`: This method creates a dummy that is not equal (using `object.Equals(object)`) to some comparison dummy.  It also has an optional `maxAttempts` parameter that works the same way as described above.
+- `ThatIsIn`: This method creates a dummy that is contained within a set (`IEnumerable`) of comparison dummies.  There are two overloads.  One uses `object.Equals(object)` for comparison.  The other takes an `IEqualityComparer<T>` to use when comparing.  It also has an optional `maxAttempts` parameter that works the same way as described above.
+- `ThatIsNotIn`: This method creates a dummy that is NOT contained within a set (`IEnumerable`) of comparison dummies.  There are two overloads.  One uses `object.Equals(object)` for comparison.  The other takes an `IEqualityComparer<T>` to use when comparing.  It also has an optional `maxAttempts` parameter that works the same way as described above.
 
 These constraining methods also work with `Some.Dummies<T>()`  For example, this will make 5 attempts to create an IList of doubles until there are an even number of elements in the list:
 
 `Some.Dummies<double>().Whose(l => l.Count % 2 == 0, 5)`
-
 
 
 Other Useful Features

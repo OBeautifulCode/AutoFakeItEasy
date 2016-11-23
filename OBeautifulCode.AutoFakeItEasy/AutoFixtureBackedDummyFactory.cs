@@ -7,9 +7,11 @@
 namespace OBeautifulCode.AutoFakeItEasy
 {
     using System;
+    using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
+    using System.Threading;
 
     using FakeItEasy;
 
@@ -29,19 +31,22 @@ namespace OBeautifulCode.AutoFakeItEasy
 
         private static readonly MethodInfo FakeItEasyDummyMethod = typeof(A).GetMethods().Single(_ => _.Name == "Dummy");
 
-        private static readonly HashSet<Type> RegisteredTypes = new HashSet<Type>();
+        private static readonly ConcurrentDictionary<Type, object> RegisteredTypes = new ConcurrentDictionary<Type, object>();
 
-        private readonly MethodInfo autoFixtureCreateMethod;
+        private static readonly ConcurrentDictionary<Type, Func<object>> ConstrainedDummyCreatorFuncsByType = new ConcurrentDictionary<Type, Func<object>>();
+
+        private static readonly ThreadLocal<HashSet<Type>> ConstrainedDummyCreatorFuncsInUse = new ThreadLocal<HashSet<Type>>(() => new HashSet<Type>());
+
+        private static readonly MethodInfo AutoFixtureCreateMethod =
+            typeof(SpecimenFactory)
+            .GetMethods()
+            .Single(_ => (_.Name == "Create") && (_.GetParameters().Length == 1) && (_.GetParameters().Single().ParameterType == typeof(ISpecimenBuilder)));
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AutoFixtureBackedDummyFactory"/> class.
         /// </summary>
         public AutoFixtureBackedDummyFactory()
         {
-            this.autoFixtureCreateMethod = typeof(SpecimenFactory)
-                .GetMethods()
-                .Single(_ => (_.Name == "Create") && (_.GetParameters().Length == 1) && (_.GetParameters().Single().ParameterType == typeof(ISpecimenBuilder)));
-
             ConfigureRecursionBehavior();
 
             AddCustomizations();
@@ -79,7 +84,81 @@ namespace OBeautifulCode.AutoFakeItEasy
             }
 
             Type type = typeof(T);
-            RegisteredTypes.Add(type);
+            RegisteredTypes.TryAdd(type, new object());
+        }
+
+        /// <summary>
+        /// Constrain dummies of the specified type to always be in a specified set of dummies.
+        /// </summary>
+        /// <typeparam name="T">The type of the dummy to create.</typeparam>
+        /// <param name="possibleDummies">The dummies that can be returned.</param>
+        public static void ConstrainDummyToBeOneOf<T>(params T[] possibleDummies)
+        {
+            ConstrainDummyToBeOneOf<T>(possibleDummies, null);
+        }
+
+        /// <summary>
+        /// Constrain dummies of the specified type to always be in a specified set of dummies.
+        /// </summary>
+        /// <typeparam name="T">The type of the dummy to create.</typeparam>
+        /// <param name="possibleDummies">The dummies that can be returned.</param>
+        /// <param name="comparer">An equality comparer to use when comparing constructed dummies against the dummies that can be returned.</param>
+        public static void ConstrainDummyToBeOneOf<T>(IEnumerable<T> possibleDummies, IEqualityComparer<T> comparer = null)
+        {
+            Type type = typeof(T);
+            Func<object> creatorFunc = () =>
+            {
+                try
+                {
+                    T result = comparer == null
+                        ? A.Dummy<T>().ThatIsIn(possibleDummies)
+                        : A.Dummy<T>().ThatIsIn(possibleDummies, comparer);
+                    return result;
+                }
+                finally
+                {
+                    ConstrainedDummyCreatorFuncsInUse.Value.Remove(type);
+                }
+            };
+
+            ConstrainedDummyCreatorFuncsByType.AddOrUpdate(type, creatorFunc, (t, c) => creatorFunc);
+        }
+
+        /// <summary>
+        /// Constrain dummies of the specified type to never be in a specified set of dummies.
+        /// </summary>
+        /// <typeparam name="T">The type of the dummy to create.</typeparam>
+        /// <param name="possibleDummies">The dummies that cannot be returned.</param>
+        public static void ConstrainDummyToExclude<T>(params T[] possibleDummies)
+        {
+            ConstrainDummyToExclude<T>(possibleDummies, null);
+        }
+
+        /// <summary>
+        /// Constrain dummies of the specified type to never be in a specified set of dummies.
+        /// </summary>
+        /// <typeparam name="T">The type of the dummy to create.</typeparam>
+        /// <param name="possibleDummies">The dummies that cannot be returned.</param>
+        /// <param name="comparer">An equality comparer to use when comparing constructed dummies against the dummies to exclude.</param>
+        public static void ConstrainDummyToExclude<T>(IEnumerable<T> possibleDummies, IEqualityComparer<T> comparer = null)
+        {
+            Type type = typeof(T);
+            Func<object> creatorFunc = () =>
+            {
+                try
+                {
+                    T result = comparer == null
+                        ? A.Dummy<T>().ThatIsNotIn(possibleDummies)
+                        : A.Dummy<T>().ThatIsNotIn(possibleDummies, comparer);
+                    return result;
+                }
+                finally
+                {
+                    ConstrainedDummyCreatorFuncsInUse.Value.Remove(type);
+                }
+            };
+
+            ConstrainedDummyCreatorFuncsByType.AddOrUpdate(type, creatorFunc, (t, c) => creatorFunc);
         }
 
         /// <summary>
@@ -128,14 +207,8 @@ namespace OBeautifulCode.AutoFakeItEasy
         /// <inheritdoc />
         public object Create(Type type)
         {
-            // call the AutoFixture Create() method, lock because AutoFixture is not thread safe.
-            MethodInfo autoFixtureGenericCreateMethod = this.autoFixtureCreateMethod.MakeGenericMethod(type);
-
-            lock (FixtureLock)
-            {
-                object result = autoFixtureGenericCreateMethod.Invoke(null, new object[] { Fixture });
-                return result;
-            }
+            var result = CreateType(type);
+            return result;
         }
 
         private static void ConfigureRecursionBehavior()
@@ -181,7 +254,7 @@ namespace OBeautifulCode.AutoFakeItEasy
 
         private static bool CanCreateType(Type type)
         {
-            if (RegisteredTypes.Contains(type))
+            if (RegisteredTypes.ContainsKey(type))
             {
                 return true;
             }
@@ -197,6 +270,35 @@ namespace OBeautifulCode.AutoFakeItEasy
             }
 
             return true;
+        }
+
+        private static object CreateType(Type type)
+        {
+            // trying to create a constrained dummy?  these dummies are NOT registered with AutoFixture
+            // otherwise it would result in infinite recursion and an OverflowException
+            if (ConstrainedDummyCreatorFuncsByType.ContainsKey(type))
+            {
+                // has the creator func already called on this thread?
+                // if so we don't want to call it again, rather we want to just drop down
+                // to AutoFixture and build an unconstrained dummy.  we can let the currently
+                // running creator func handle the retries needed to satisfy the constraint
+                if (!ConstrainedDummyCreatorFuncsInUse.Value.Contains(type))
+                {
+                    ConstrainedDummyCreatorFuncsInUse.Value.Add(type);
+                    var creatorFunc = ConstrainedDummyCreatorFuncsByType[type];
+                    var result = creatorFunc();
+                    return result;
+                }
+            }
+
+            // call the AutoFixture Create() method, lock because AutoFixture is not thread safe.
+            MethodInfo autoFixtureGenericCreateMethod = AutoFixtureCreateMethod.MakeGenericMethod(type);
+
+            lock (FixtureLock)
+            {
+                object result = autoFixtureGenericCreateMethod.Invoke(null, new object[] { Fixture });
+                return result;
+            }
         }
     }
 }
