@@ -83,10 +83,10 @@
     <Compile Include="..\OBeautifulCode.AutoFakeItEasy\AutoFakeItEasyBootstrapper.cs">
       <Link>.OBeautifulCode.Recipes\OBeautifulCode.AutoFakeItEasy\AutoFakeItEasyBootstrapper.cs</Link>
     </Compile>
-    <Compile Include="ClassHierarchy.cs" />
+    <Compile Include="TypesForTesting\ClassHierarchy.cs" />
     <Compile Include="AutoFixtureBackedDummyFactoryTest.cs" />
-    <Compile Include="ConstrainedDummies.cs" />
-    <Compile Include="CustomizedDummies.cs" />
+    <Compile Include="TypesForTesting\ConstrainedDummies.cs" />
+    <Compile Include="TypesForTesting\CustomizedDummies.cs" />
     <Compile Include="CustomTypes\NegativeDoubleTest.cs" />
     <Compile Include="CustomTypes\NegativeIntegerTest.cs" />
     <Compile Include="CustomTypes\PercentChangeAsDecimalTest.cs" />
@@ -97,15 +97,15 @@
     <Compile Include="CustomTypes\ZeroOrNegativeIntegerTest.cs" />
     <Compile Include="CustomTypes\ZeroOrPositiveDoubleTest.cs" />
     <Compile Include="CustomTypes\ZeroOrPositiveIntegerTest.cs" />
-    <Compile Include="EqualityDummies.cs" />
+    <Compile Include="TypesForTesting\EqualityDummies.cs" />
     <Compile Include="ExtensionMethodsTest.cs" />
     <Compile Include="Generators\DummySpecimenContext.cs" />
     <Compile Include="Generators\RandomBoolSequenceGeneratorTest.cs" />
     <Compile Include="Generators\RandomEnumSequenceGeneratorTest.cs" />
     <Compile Include="Generators\RandomNumericSequenceGeneratorTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Number.cs" />
-    <Compile Include="SetComparisonDummies.cs" />
+    <Compile Include="TypesForTesting\Number.cs" />
+    <Compile Include="TypesForTesting\SetComparisonDummies.cs" />
     <Compile Include="SomeDummiesListTest.cs" />
     <Compile Include="SomeReadOnlyDummiesListTest.cs" />
     <Compile Include="SomeTest.cs" />
