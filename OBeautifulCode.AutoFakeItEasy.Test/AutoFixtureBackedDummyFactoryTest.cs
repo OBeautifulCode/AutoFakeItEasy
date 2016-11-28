@@ -557,6 +557,87 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             goodStuff.Should().Contain(MostlyBadStuffWithComparer.Hurricane);
         }
 
+        [Fact]
+        public static void UseRandomInterfaceImplementationForDummy___Should_throw_ArgumentException___When_there_are_no_implementations_of_the_specified_type()
+        {
+            // Arrange, Act
+            var ex1 = Record.Exception(() => AutoFixtureBackedDummyFactory.UseRandomInterfaceImplementationForDummy<IAmAnInterfaceWithOnlyInterfaceImplementations>());
+            var ex2 = Record.Exception(() => AutoFixtureBackedDummyFactory.UseRandomInterfaceImplementationForDummy<IAmAnInterfaceWithNoImplementations>(includeOtherInterfaces: true));
+
+            // Assert
+            ex1.Should().BeOfType<ArgumentException>();
+            ex2.Should().BeOfType<ArgumentException>();
+        }
+
+        [Fact]
+        public static void UseRandomInterfaceImplementationForDummy___Should_not_throw___When_there_are_interface_implementations_of_specified_type()
+        {
+            // Arrange, Act
+            var ex1 = Record.Exception(() => AutoFixtureBackedDummyFactory.UseRandomInterfaceImplementationForDummy<IAmAnInterfaceWithSomeClassImplementations>());
+            var ex2 = Record.Exception(() => AutoFixtureBackedDummyFactory.UseRandomInterfaceImplementationForDummy<IAmAnInterfaceWithSomeInterfaceImplementations>(includeOtherInterfaces: true));
+
+            // Assert
+            ex1.Should().BeNull();
+            ex2.Should().BeNull();
+        }
+
+        [Fact]
+        public static void UseRandomInterfaceImplementationForDummy___Should_not_throw___When_called_twice_for_same_type()
+        {
+            // Arrange
+            AutoFixtureBackedDummyFactory.UseRandomInterfaceImplementationForDummy<IAmAnInterfaceWithSomeClassImplementations>();
+            AutoFixtureBackedDummyFactory.UseRandomInterfaceImplementationForDummy<IAmAnInterfaceWithSomeInterfaceImplementations>(includeOtherInterfaces: true);
+
+            // Act
+            var ex1 = Record.Exception(() => AutoFixtureBackedDummyFactory.UseRandomInterfaceImplementationForDummy<IAmAnInterfaceWithSomeClassImplementations>());
+            var ex2 = Record.Exception(() => AutoFixtureBackedDummyFactory.UseRandomInterfaceImplementationForDummy<IAmAnInterfaceWithSomeInterfaceImplementations>(includeOtherInterfaces: true));
+
+            // Assert
+            ex1.Should().BeNull();
+            ex2.Should().BeNull();
+        }
+
+        [Fact]
+        public static void ADummy___Should_return_random_interface_implementation___When_UseRandomInterfaceImplementationForDummy_is_called_for_type_IAmAnInterfaceWithSomeClassImplementations_and_includeOtherInterfaces_is_false()
+        {
+            // Arrange
+            AutoFixtureBackedDummyFactory.UseRandomInterfaceImplementationForDummy<IAmAnInterfaceWithSomeClassImplementations>();
+            var dummies = new List<IAmAnInterfaceWithSomeClassImplementations>();
+
+            // Act
+            for (int i = 0; i < 100; i++)
+            {
+                var dummy = A.Dummy<IAmAnInterfaceWithSomeClassImplementations>();
+                dummies.Add(dummy);
+            }
+
+            // Assert
+            dummies.OfType<ClassInterfaceImplementation1>().Count().Should().BeGreaterThan(1);
+            dummies.OfType<ClassInterfaceImplementation2>().Count().Should().BeGreaterThan(1);
+            dummies.OfType<ClassInterfaceImplementation3>().Count().Should().BeGreaterThan(1);
+        }
+
+        [Fact]
+        public static void ADummy___Should_return_random_interface_implementation___When_UseRandomInterfaceImplementationForDummy_is_called_for_type_IAmAnInterfaceWithSomeClassImplementations_and_includeOtherInterfaces_is_true()
+        {
+            // Arrange
+            AutoFixtureBackedDummyFactory.UseRandomInterfaceImplementationForDummy<IAmAnInterfaceWithSomeInterfaceImplementations2>(includeOtherInterfaces: true);
+            AutoFixtureBackedDummyFactory.UseRandomInterfaceImplementationForDummy<IAmAnInterfaceWithSomeClassImplementations2>(includeOtherInterfaces: true);
+            var dummies = new List<IAmAnInterfaceWithSomeInterfaceImplementations2>();
+
+            // Act
+            for (int i = 0; i < 100; i++)
+            {
+                var dummy = A.Dummy<IAmAnInterfaceWithSomeInterfaceImplementations2>();
+                dummies.Add(dummy);
+            }
+
+            // Assert
+            dummies.OfType<ClassInterfaceImplementation4>().Count().Should().BeGreaterThan(1);
+            dummies.OfType<ClassInterfaceImplementation5>().Count().Should().BeGreaterThan(1);
+            dummies.OfType<ClassInterfaceImplementation6>().Count().Should().BeGreaterThan(1);
+        }
+
         // ReSharper restore InconsistentNaming
     }
 }

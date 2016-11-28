@@ -197,6 +197,47 @@ namespace OBeautifulCode.AutoFakeItEasy
             AddDummyCreator(randomSubclassDummyCreator);
         }
 
+        /// <summary>
+        /// Instructs the dummy factory to use a random implementation
+        /// of the specified interface when making dummies of that interface type.
+        /// </summary>
+        /// <param name="includeOtherInterfaces">
+        /// Determines whether to include interfaces that implement <typeparamref name="T"/>
+        /// when selecting a random implementation of <typeparamref name="T"/>.
+        /// Default is false; interfaces that implement <typeparamref name="T"/> will be excluded.
+        /// </param>
+        /// <typeparam name="T">The interface type.</typeparam>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter", Justification = "In this case we just need the type, not a parameter of that type.")]
+        public static void UseRandomInterfaceImplementationForDummy<T>(bool includeOtherInterfaces = false)
+        {
+            Type type = typeof(T);
+            var interfaceImplementations = type.Assembly
+                .GetTypes()
+                .Where(t => type != t)
+                .Where(t => type.IsAssignableFrom(t))
+                .Where(t => includeOtherInterfaces || !t.IsInterface)
+                .ToList();
+
+            if (interfaceImplementations.Count == 0)
+            {
+                throw new ArgumentException("There are no implementations of the interface " + type.Name);
+            }
+
+            Func<T> randomInterfaceImplementationDummyGenerator = () =>
+            {
+                // get random implementation
+                var randomIndex = ThreadSafeRandom.Next(0, interfaceImplementations.Count);
+                var randomImplementation = interfaceImplementations[randomIndex];
+
+                // call the FakeItEasy A.Dummy method to create that implementation
+                MethodInfo fakeItEasyGenericDummyMethod = FakeItEasyDummyMethod.MakeGenericMethod(randomImplementation);
+                object result = fakeItEasyGenericDummyMethod.Invoke(null, null);
+                return (T)result;
+            };
+
+            AddDummyCreator(randomInterfaceImplementationDummyGenerator);
+        }
+
         /// <inheritdoc />
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "factory caller will ensure this is not null")]
         public bool CanCreate(Type type)
