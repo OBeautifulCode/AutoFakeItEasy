@@ -1,18 +1,17 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SetComparisonDummies.cs" company="OBeautifulCode">
+// <copyright file="Number.cs" company="OBeautifulCode">
 //   Copyright (c) OBeautifulCode. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+// ReSharper disable CheckNamespace
 namespace OBeautifulCode.AutoFakeItEasy.Test
 {
-#pragma warning disable SA1649 // File name must match first type name
-#pragma warning disable SA1402 // File may only contain a single class
-
-    public enum ThatIsInOrNotInSet
+    /// <summary>
+    /// An enum for testing purposes.
+    /// </summary>
+    public enum Number
     {
-        None,
-
         One,
 
         Two,
@@ -23,7 +22,6 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
 
         Five
     }
-
-#pragma warning restore SA1402 // File may only contain a single class
-#pragma warning restore SA1649 // File name must match first type name
 }
+
+// ReSharper restore CheckNamespace

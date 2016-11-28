@@ -4,6 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+// ReSharper disable CheckNamespace
 namespace OBeautifulCode.AutoFakeItEasy.Test
 {
     using System;
@@ -52,3 +53,5 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
 #pragma warning restore SA1402 // File may only contain a single class
 #pragma warning restore SA1649 // File name must match first type name
 }
+
+// ReSharper restore CheckNamespace
