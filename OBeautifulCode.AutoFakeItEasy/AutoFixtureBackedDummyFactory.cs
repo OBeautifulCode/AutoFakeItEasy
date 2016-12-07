@@ -29,8 +29,6 @@ namespace OBeautifulCode.AutoFakeItEasy
 
         private static readonly object FixtureLock = new object();
 
-        private static readonly MethodInfo FakeItEasyDummyMethod = typeof(A).GetMethods().Single(_ => _.Name == "Dummy");
-
         private static readonly ConcurrentDictionary<Type, object> RegisteredTypes = new ConcurrentDictionary<Type, object>();
 
         private static readonly ConcurrentDictionary<Type, Func<object>> ConstrainedDummyCreatorFuncsByType = new ConcurrentDictionary<Type, Func<object>>();
@@ -188,9 +186,8 @@ namespace OBeautifulCode.AutoFakeItEasy
                     var randomIndex = ThreadSafeRandom.Next(0, concreteSubclasses.Count);
                     var randomSubclass = concreteSubclasses[randomIndex];
 
-                    // call the FakeItEasy A.Dummy method to create that subclass
-                    MethodInfo fakeItEasyGenericDummyMethod = FakeItEasyDummyMethod.MakeGenericMethod(randomSubclass);
-                    object result = fakeItEasyGenericDummyMethod.Invoke(null, null);
+                    // create the subclass
+                    object result = AD.ummy(randomSubclass);
                     return (T)result;
                 };
 
@@ -230,8 +227,7 @@ namespace OBeautifulCode.AutoFakeItEasy
                 var randomImplementation = interfaceImplementations[randomIndex];
 
                 // call the FakeItEasy A.Dummy method to create that implementation
-                MethodInfo fakeItEasyGenericDummyMethod = FakeItEasyDummyMethod.MakeGenericMethod(randomImplementation);
-                object result = fakeItEasyGenericDummyMethod.Invoke(null, null);
+                object result = AD.ummy(randomImplementation);
                 return (T)result;
             };
 

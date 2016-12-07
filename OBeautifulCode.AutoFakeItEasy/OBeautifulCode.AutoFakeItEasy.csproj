@@ -59,6 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include=".OBeautifulCode.Recipes\OBeautifulCode.Math\ThreadSafeRandom.cs" />
+    <Compile Include="AD.cs" />
     <Compile Include="AutoFixtureBackedDummyFactory.cs" />
     <Compile Include="CustomTypes\ConstrainedValue{T}.cs" />
     <Compile Include="CustomTypes\NegativeDouble.cs" />
