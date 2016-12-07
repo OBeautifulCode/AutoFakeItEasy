@@ -31,8 +31,8 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         public static void ADummy_bool___Should_return_bool_values_in_random_order___When_creating_object_of_type_bool()
         {
             // Arrange
-            var sequentialBools1 = new List<bool> { true, false, true, false, true, false, true, false };
-            var sequentialBools2 = new List<bool> { false, true, false, true, false, true, false, true };
+            var sequentialBools1 = new List<bool> { true, false, true, false, true, false, true, false, true, false, true, false, true, false, true, false };
+            var sequentialBools2 = new List<bool> { false, true, false, true, false, true, false, true, false, true, false, true, false, true, false, true };
 
             // Act
             var actualResult = Enumerable.Range(1, sequentialBools1.Count).Select(_ => A.Dummy<bool>()).ToList();
