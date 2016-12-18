@@ -9,6 +9,7 @@ namespace OBeautifulCode.AutoFakeItEasy
     using System;
     using System.Collections.Concurrent;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Linq;
     using System.Reflection;
     using System.Threading;
@@ -164,20 +165,56 @@ namespace OBeautifulCode.AutoFakeItEasy
         /// of the specified type when making dummies of that type.
         /// </summary>
         /// <typeparam name="T">The reference type.</typeparam>
+        /// <param name="typesToExclude">The subclass types to exclude; include all other concrete subclasses.</param>
+        /// <param name="typesToInclude">The subclass types include; only choose between these concrete subclasses.</param>
+        /// <exception cref="ArgumentException">Only one of <paramref name="typesToExclude"/> and <paramref name="typesToInclude"/> can be specified.  Both are not null.</exception>
+        /// <exception cref="ArgumentException"><paramref name="typesToExclude"/> is not null, but empty.</exception>
+        /// <exception cref="ArgumentException"><paramref name="typesToInclude"/> is not null, but empty.</exception>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter", Justification = "In this case we just need the type, not a parameter of that type.")]
-        public static void UseRandomConcreteSubclassForDummy<T>()
+        public static void UseRandomConcreteSubclassForDummy<T>(IEnumerable<Type> typesToExclude = null, IEnumerable<Type> typesToInclude = null)
         {
+            if ((typesToExclude != null) && (typesToInclude != null))
+            {
+                throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, "Only one of {0} and {1} can be specified.  Both are not null.", nameof(typesToExclude), nameof(typesToInclude)));
+            }
+
+            // ReSharper disable PossibleMultipleEnumeration
+            if ((typesToExclude != null) && !typesToExclude.Any())
+            {
+                throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, "{0} is not null, but empty.", nameof(typesToExclude)));
+            }
+
+            if ((typesToInclude != null) && !typesToInclude.Any())
+            {
+                throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, "{0} is not null, but empty.", nameof(typesToInclude)));
+            }
+
             Type type = typeof(T);
             var concreteSubclasses = type.Assembly
                 .GetTypes()
                 .Where(_ => _.IsSubclassOf(type))
                 .Where(_ => !_.IsAbstract)
                 .Where(CanCreateType)
+                .Where(_ =>
+                {
+                    if (typesToExclude != null)
+                    {
+                        return !typesToExclude.Contains(_);
+                    }
+
+                    if (typesToInclude != null)
+                    {
+                        return typesToInclude.Contains(_);
+                    }
+
+                    return true;
+                })
                 .ToList();
 
+            // ReSharper restore PossibleMultipleEnumeration
             if (concreteSubclasses.Count == 0)
             {
-                throw new ArgumentException("There are no concrete subclasses of " + type.Name);
+                throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, "There are no concrete subclasses of {0} (after inclusions and exclusions are applied)", type.Name));
             }
 
             Func<T> randomSubclassDummyCreator = () =>

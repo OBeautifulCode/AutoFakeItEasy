@@ -18,6 +18,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
     /// <summary>
     /// Tests the <see cref="AutoFixtureBackedDummyFactory"/> class.
     /// </summary>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Justification = "Testing the dummy factory requires using many types.")]
     public static class AutoFixtureBackedDummyFactoryTest
     {
         private const int NumberOfCallsToCoverAllShortsRegardlessOfFixtureState = short.MaxValue * 4;
@@ -415,10 +416,64 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         }
 
         [Fact]
+        public static void UseRandomConcreteSubclassForDummy___Should_throw_ArgumentException___When_both_parameter_typesToInclude_and_typesToExclude_are_not_null()
+        {
+            // Arrange, Act
+            var ex1 = Record.Exception(() => AutoFixtureBackedDummyFactory.UseRandomConcreteSubclassForDummy<Cake>(typesToExclude: new[] { typeof(StrawberryShortcake) }, typesToInclude: new Type[] { }));
+            var ex2 = Record.Exception(() => AutoFixtureBackedDummyFactory.UseRandomConcreteSubclassForDummy<Cake>(typesToExclude: new[] { typeof(StrawberryShortcake) }, typesToInclude: new[] { typeof(ChocolateCake) }));
+            var ex3 = Record.Exception(() => AutoFixtureBackedDummyFactory.UseRandomConcreteSubclassForDummy<Cake>(typesToExclude: new Type[] { }, typesToInclude: new[] { typeof(ChocolateCake) }));
+
+            // Assert
+            ex1.Should().BeOfType<ArgumentException>();
+            ex2.Should().BeOfType<ArgumentException>();
+            ex3.Should().BeOfType<ArgumentException>();
+        }
+
+        [Fact]
+        public static void UseRandomConcreteSubclassForDummy___Should_throw_ArgumentException___When_parameter_typesToExclude_is_not_null_but_empty()
+        {
+            // Arrange, Act
+            var ex = Record.Exception(() => AutoFixtureBackedDummyFactory.UseRandomConcreteSubclassForDummy<Cake>(typesToExclude: new Type[] { }));
+
+            // Assert
+            ex.Should().BeOfType<ArgumentException>();
+        }
+
+        [Fact]
+        public static void UseRandomConcreteSubclassForDummy___Should_throw_ArgumentException___When_parameter_typesToInclude_is_not_null_but_empty()
+        {
+            // Arrange, Act
+            var ex = Record.Exception(() => AutoFixtureBackedDummyFactory.UseRandomConcreteSubclassForDummy<Cake>(typesToInclude: new Type[] { }));
+
+            // Assert
+            ex.Should().BeOfType<ArgumentException>();
+        }
+
+        [Fact]
         public static void UseRandomConcreteSubclassForDummy___Should_throw_ArgumentException___When_there_are_no_concrete_subclasses_of_specified_type()
         {
             // Arrange, Act
             var ex = Record.Exception(() => AutoFixtureBackedDummyFactory.UseRandomConcreteSubclassForDummy<Dog>());
+
+            // Assert
+            ex.Should().BeOfType<ArgumentException>();
+        }
+
+        [Fact]
+        public static void UseRandomConcreteSubclassForDummy___Should_throw_ArgumentException___When_all_concrete_subclasses_of_specified_type_are_specified_in_parameter_typesToExclude()
+        {
+            // Arrange, Act
+            var ex = Record.Exception(() => AutoFixtureBackedDummyFactory.UseRandomConcreteSubclassForDummy<Wine>(typesToExclude: new[] { typeof(Pinonoir), typeof(Shiraz), typeof(Malbec) }));
+
+            // Assert
+            ex.Should().BeOfType<ArgumentException>();
+        }
+
+        [Fact]
+        public static void UseRandomConcreteSubclassForDummy___Should_throw_ArgumentException___When_no_concrete_subclasses_of_specified_type_are_specified_in_parameter_typesToInclude()
+        {
+            // Arrange, Act
+            var ex = Record.Exception(() => AutoFixtureBackedDummyFactory.UseRandomConcreteSubclassForDummy<Beer>(typesToInclude: new[] { typeof(Pinonoir) }));
 
             // Assert
             ex.Should().BeOfType<ArgumentException>();
@@ -465,6 +520,48 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             animals.OfType<Dog>().Count().Should().BeGreaterThan(1);
             animals.OfType<Lion>().Count().Should().BeGreaterThan(1);
             animals.OfType<Zebra>().Count().Should().BeGreaterThan(1);
+        }
+
+        [Fact]
+        public static void ADummy___Should_return_all_TwoWheelers_except_Bicycle_and_Moped___When_UseRandomConcreteSubclassForDummy_is_called_for_type_TwoWheeler_and_Bicycle_and_Moped_are_specified_in_parameter_typesToExclude()
+        {
+            // Arrange
+            AutoFixtureBackedDummyFactory.UseRandomConcreteSubclassForDummy<TwoWheelers>(typesToExclude: new[] { typeof(Bicycle), typeof(Moped) });
+            var twoWheelers = new List<TwoWheelers>();
+
+            // Act
+            for (int i = 0; i < 100; i++)
+            {
+                var twoWheeler = A.Dummy<TwoWheelers>();
+                twoWheelers.Add(twoWheeler);
+            }
+
+            // Assert
+            twoWheelers.OfType<Motorcycle>().Should().NotBeEmpty();
+            twoWheelers.OfType<Bicycle>().Should().BeEmpty();
+            twoWheelers.OfType<Moped>().Should().BeEmpty();
+            twoWheelers.OfType<Scooter>().Should().NotBeEmpty();
+        }
+
+        [Fact]
+        public static void ADummy___Should_return_only_HighSchool_and_University___When_UseRandomConcreteSubclassForDummy_is_called_for_type_School_and_HighSchool_and_University_are_specified_in_parameter_typesToInclude()
+        {
+            // Arrange
+            AutoFixtureBackedDummyFactory.UseRandomConcreteSubclassForDummy<School>(typesToInclude: new[] { typeof(HighSchool), typeof(University) });
+            var schools = new List<School>();
+
+            // Act
+            for (int i = 0; i < 100; i++)
+            {
+                var school = A.Dummy<School>();
+                schools.Add(school);
+            }
+
+            // Assert
+            schools.OfType<HighSchool>().Should().NotBeEmpty();
+            schools.OfType<Elementary>().Should().BeEmpty();
+            schools.OfType<Postgraduate>().Should().BeEmpty();
+            schools.OfType<University>().Should().NotBeEmpty();
         }
 
         [Fact]

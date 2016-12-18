@@ -50,6 +50,95 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
 
         public DateTime Born { get; }
     }
+
+    public abstract class TwoWheelers
+    {
+    }
+
+    public class Motorcycle : TwoWheelers
+    {
+    }
+
+    public class Bicycle : TwoWheelers
+    {
+    }
+
+    public class Scooter : TwoWheelers
+    {
+    }
+
+    public class Moped : TwoWheelers
+    {
+    }
+
+    public abstract class School
+    {
+    }
+
+    public class Elementary : School
+    {
+    }
+
+    public class University : School
+    {
+    }
+
+    public class Postgraduate : School
+    {
+    }
+
+    public class HighSchool : School
+    {
+    }
+
+    public abstract class Wine
+    {
+    }
+
+    public class Malbec : Wine
+    {
+    }
+
+    public class Pinonoir : Wine
+    {
+    }
+
+    public class Shiraz : Wine
+    {
+    }
+
+    public abstract class Beer
+    {
+    }
+
+    public class Lager : Beer
+    {
+    }
+
+    public class Stout : Beer
+    {
+    }
+
+    public class Ipa : Beer
+    {
+    }
+
+    public abstract class Cake
+    {
+    }
+
+    public class PoundCake : Cake
+    {
+    }
+
+    public class StrawberryShortcake : Cake
+    {
+    }
+
+    public class ChocolateCake : Cake
+    {
+    }
+
 #pragma warning restore SA1402 // File may only contain a single class
 #pragma warning restore SA1649 // File name must match first type name
 }
