@@ -36,12 +36,17 @@ namespace OBeautifulCode.AutoFakeItEasy
         private static readonly MethodInfo AutoFixtureCreateMethod =
             typeof(SpecimenFactory)
             .GetMethods()
-            .Single(_ => (_.Name == "Create") && (_.GetParameters().Length == 1) && (_.GetParameters().Single().ParameterType == typeof(ISpecimenBuilder)));
+            .Single(_ => (_.Name == nameof(SpecimenFactory.Create)) && (_.GetParameters().Length == 1) && (_.GetParameters().Single().ParameterType == typeof(ISpecimenBuilder)));
+
+        private static readonly Type[] AllowedInterfacesBackedByList = { typeof(IEnumerable<>), typeof(IList<>), typeof(ICollection<>), typeof(IReadOnlyList<>), typeof(IReadOnlyCollection<>) };
+
+        private static readonly Type[] AllowedInterfacesBackedByDictionary = { typeof(IDictionary<,>), typeof(IReadOnlyDictionary<,>) };
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AutoFixtureBackedDummyFactory"/> class.
+        /// Initializes static members of the <see cref="AutoFixtureBackedDummyFactory"/> class.
         /// </summary>
-        public AutoFixtureBackedDummyFactory()
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = "These cannot be in-lined.")]
+        static AutoFixtureBackedDummyFactory()
         {
             ConfigureRecursionBehavior(FixtureWithCreators);
             ConfigureRecursionBehavior(FixtureWithoutCreators);
@@ -323,7 +328,7 @@ namespace OBeautifulCode.AutoFakeItEasy
 
             if (type.IsInterface)
             {
-                return false;
+                return CanCreateUnregisteredInterface(type);
             }
 
             if (type.IsAbstract)
@@ -334,8 +339,34 @@ namespace OBeautifulCode.AutoFakeItEasy
             return true;
         }
 
+        private static bool CanCreateUnregisteredInterface(Type type)
+        {
+            if (type.IsGenericType)
+            {
+                var genericInterfaceType = type.GetGenericTypeDefinition();
+
+                if (AllowedInterfacesBackedByList.Contains(genericInterfaceType))
+                {
+                    return true;
+                }
+
+                if (AllowedInterfacesBackedByDictionary.Contains(genericInterfaceType))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         private static object CreateType(Fixture fixture, Type type)
         {
+             // handle the supported, but unregistered interface types
+             if ((!RegisteredTypes.ContainsKey(type)) && type.IsInterface)
+             {
+                 type = ConvertUnregisteredInterfaceTypeToConcreteType(type);
+             }
+
             // call the AutoFixture Create() method, lock because AutoFixture is not thread safe.
             var autoFixtureGenericCreateMethod = AutoFixtureCreateMethod.MakeGenericMethod(type);
 
@@ -344,6 +375,25 @@ namespace OBeautifulCode.AutoFakeItEasy
                 object result = autoFixtureGenericCreateMethod.Invoke(null, new object[] { fixture });
                 return result;
             }
+        }
+
+        private static Type ConvertUnregisteredInterfaceTypeToConcreteType(Type type)
+        {
+            var genericInterfaceType = type.GetGenericTypeDefinition();
+            if (AllowedInterfacesBackedByList.Contains(genericInterfaceType))
+            {
+                type = typeof(List<>).MakeGenericType(type.GenericTypeArguments);
+            }
+            else if (AllowedInterfacesBackedByDictionary.Contains(genericInterfaceType))
+            {
+                type = typeof(Dictionary<,>).MakeGenericType(type.GenericTypeArguments);
+            }
+            else
+            {
+                throw new InvalidOperationException("something went wrong");
+            }
+
+            return type;
         }
     }
 }
