@@ -12,7 +12,6 @@ namespace OBeautifulCode.AutoFakeItEasy
     using System.Globalization;
     using System.Linq;
     using System.Reflection;
-    using System.Threading;
 
     using FakeItEasy;
 
@@ -26,15 +25,13 @@ namespace OBeautifulCode.AutoFakeItEasy
     /// </summary>
     public class AutoFixtureBackedDummyFactory : IDummyFactory
     {
-        private static readonly Fixture Fixture = new Fixture();
+        private static readonly Fixture FixtureWithCreators = new Fixture();
+
+        private static readonly Fixture FixtureWithoutCreators = new Fixture();
 
         private static readonly object FixtureLock = new object();
 
         private static readonly ConcurrentDictionary<Type, object> RegisteredTypes = new ConcurrentDictionary<Type, object>();
-
-        private static readonly ConcurrentDictionary<Type, Func<object>> ConstrainedDummyCreatorFuncsByType = new ConcurrentDictionary<Type, Func<object>>();
-
-        private static readonly ThreadLocal<HashSet<Type>> ConstrainedDummyCreatorFuncsInUse = new ThreadLocal<HashSet<Type>>(() => new HashSet<Type>());
 
         private static readonly MethodInfo AutoFixtureCreateMethod =
             typeof(SpecimenFactory)
@@ -46,11 +43,13 @@ namespace OBeautifulCode.AutoFakeItEasy
         /// </summary>
         public AutoFixtureBackedDummyFactory()
         {
-            ConfigureRecursionBehavior();
+            ConfigureRecursionBehavior(FixtureWithCreators);
+            ConfigureRecursionBehavior(FixtureWithoutCreators);
 
-            AddCustomizations();
+            AddCustomizations(FixtureWithCreators);
+            AddCustomizations(FixtureWithoutCreators);
 
-            RegisterCustomTypes();
+            RegisterCustomTypes(FixtureWithCreators);
         }
 
         /// <inheritdoc />
@@ -77,13 +76,7 @@ namespace OBeautifulCode.AutoFakeItEasy
         /// </remarks>
         public static void AddDummyCreator<T>(Func<T> dummyCreatorFunc)
         {
-            lock (FixtureLock)
-            {
-                Fixture.Register(dummyCreatorFunc);
-            }
-
-            Type type = typeof(T);
-            RegisteredTypes.TryAdd(type, new object());
+            AddDummyCreator(FixtureWithCreators, dummyCreatorFunc);
         }
 
         /// <summary>
@@ -104,23 +97,15 @@ namespace OBeautifulCode.AutoFakeItEasy
         /// <param name="comparer">An equality comparer to use when comparing constructed dummies against the dummies that can be returned.</param>
         public static void ConstrainDummyToBeOneOf<T>(IEnumerable<T> possibleDummies, IEqualityComparer<T> comparer = null)
         {
-            Type type = typeof(T);
-            Func<object> creatorFunc = () =>
+            Func<T> creatorFunc = () =>
             {
-                try
-                {
-                    T result = comparer == null
-                        ? A.Dummy<T>().ThatIsIn(possibleDummies)
-                        : A.Dummy<T>().ThatIsIn(possibleDummies, comparer);
-                    return result;
-                }
-                finally
-                {
-                    ConstrainedDummyCreatorFuncsInUse.Value.Remove(type);
-                }
+                T result = comparer == null
+                    ? ((T)CreateType(FixtureWithoutCreators, typeof(T))).ThatIsIn(possibleDummies)
+                    : ((T)CreateType(FixtureWithoutCreators, typeof(T))).ThatIsIn(possibleDummies, comparer);
+                return result;
             };
 
-            ConstrainedDummyCreatorFuncsByType.AddOrUpdate(type, creatorFunc, (t, c) => creatorFunc);
+            AddDummyCreator(creatorFunc);
         }
 
         /// <summary>
@@ -141,23 +126,15 @@ namespace OBeautifulCode.AutoFakeItEasy
         /// <param name="comparer">An equality comparer to use when comparing constructed dummies against the dummies to exclude.</param>
         public static void ConstrainDummyToExclude<T>(IEnumerable<T> possibleDummies, IEqualityComparer<T> comparer = null)
         {
-            Type type = typeof(T);
-            Func<object> creatorFunc = () =>
+            Func<T> creatorFunc = () =>
             {
-                try
-                {
-                    T result = comparer == null
-                        ? A.Dummy<T>().ThatIsNotIn(possibleDummies)
-                        : A.Dummy<T>().ThatIsNotIn(possibleDummies, comparer);
-                    return result;
-                }
-                finally
-                {
-                    ConstrainedDummyCreatorFuncsInUse.Value.Remove(type);
-                }
+                T result = comparer == null
+                    ? ((T)CreateType(FixtureWithoutCreators, typeof(T))).ThatIsNotIn(possibleDummies)
+                    : ((T)CreateType(FixtureWithoutCreators, typeof(T))).ThatIsNotIn(possibleDummies, comparer);
+                return result;
             };
 
-            ConstrainedDummyCreatorFuncsByType.AddOrUpdate(type, creatorFunc, (t, c) => creatorFunc);
+            AddDummyCreator(creatorFunc);
         }
 
         /// <summary>
@@ -281,49 +258,60 @@ namespace OBeautifulCode.AutoFakeItEasy
         /// <inheritdoc />
         public object Create(Type type)
         {
-            var result = CreateType(type);
+            var result = CreateType(FixtureWithCreators, type);
             return result;
         }
 
-        private static void ConfigureRecursionBehavior()
+        private static void ConfigureRecursionBehavior(Fixture fixture)
         {
             // It's not AutoFixture's job to detect recursion.  Infinite recursion will cause the process to blow-up;
             // it's typically a behavior that's easy to observe/detect.  By allowing recursion we enable a swath
             // of legitimate scenarios (e.g. a tree).
-            var throwingRecursionBehaviors = Fixture.Behaviors.OfType<ThrowingRecursionBehavior>().ToList();
+            var throwingRecursionBehaviors = fixture.Behaviors.OfType<ThrowingRecursionBehavior>().ToList();
             foreach (var throwingRecursionBehavior in throwingRecursionBehaviors)
             {
-                Fixture.Behaviors.Remove(throwingRecursionBehavior);
+                fixture.Behaviors.Remove(throwingRecursionBehavior);
             }
         }
 
-        private static void AddCustomizations()
+        private static void AddCustomizations(Fixture fixture)
         {
             // fix some of AutoFixture's poor defaults - see README.md
             // ReSharper disable RedundantNameQualifier
 
             // this will generate numbers in the range [-32768,32768]
-            Fixture.Customizations.Insert(0, new AutoFakeItEasy.RandomNumericSequenceGenerator(short.MinValue, short.MaxValue + 2));
-            Fixture.Customizations.Insert(0, new AutoFakeItEasy.RandomBoolSequenceGenerator());
-            Fixture.Customizations.Insert(0, new AutoFakeItEasy.RandomEnumSequenceGenerator());
+            fixture.Customizations.Insert(0, new AutoFakeItEasy.RandomNumericSequenceGenerator(short.MinValue, short.MaxValue + 2));
+            fixture.Customizations.Insert(0, new AutoFakeItEasy.RandomBoolSequenceGenerator());
+            fixture.Customizations.Insert(0, new AutoFakeItEasy.RandomEnumSequenceGenerator());
 
             // ReSharper restore RedundantNameQualifier
         }
 
-        private static void RegisterCustomTypes()
+        private static void RegisterCustomTypes(Fixture fixture)
         {
-            AddDummyCreator(() => new PositiveInteger(Math.Abs(A.Dummy<int>().ThatIsNot(0))));
-            AddDummyCreator(() => new NegativeInteger(-1 * Math.Abs(A.Dummy<int>().ThatIsNot(0))));
-            AddDummyCreator(() => new ZeroOrPositiveInteger(Math.Abs(Fixture.Create<int>())));
-            AddDummyCreator(() => new ZeroOrNegativeInteger(-1 * Math.Abs(Fixture.Create<int>())));
+            AddDummyCreator(fixture, () => new PositiveInteger(Math.Abs(A.Dummy<int>().ThatIsNot(0))));
+            AddDummyCreator(fixture, () => new NegativeInteger(-1 * Math.Abs(A.Dummy<int>().ThatIsNot(0))));
+            AddDummyCreator(fixture, () => new ZeroOrPositiveInteger(Math.Abs(A.Dummy<int>())));
+            AddDummyCreator(fixture, () => new ZeroOrNegativeInteger(-1 * Math.Abs(A.Dummy<int>())));
 
-            AddDummyCreator(() => new PositiveDouble(Math.Abs(A.Dummy<double>().ThatIsNot(0))));
-            AddDummyCreator(() => new NegativeDouble(-1d * Math.Abs(A.Dummy<double>().ThatIsNot(0))));
-            AddDummyCreator(() => new ZeroOrPositiveDouble(Math.Abs(Fixture.Create<double>())));
-            AddDummyCreator(() => new ZeroOrNegativeDouble(-1 * Math.Abs(Fixture.Create<double>())));
+            AddDummyCreator(fixture, () => new PositiveDouble(Math.Abs(A.Dummy<double>().ThatIsNot(0))));
+            AddDummyCreator(fixture, () => new NegativeDouble(-1d * Math.Abs(A.Dummy<double>().ThatIsNot(0))));
+            AddDummyCreator(fixture, () => new ZeroOrPositiveDouble(Math.Abs(A.Dummy<double>())));
+            AddDummyCreator(fixture, () => new ZeroOrNegativeDouble(-1 * Math.Abs(A.Dummy<double>())));
 
-            AddDummyCreator(PercentChangeAsDouble.CreateConstrainedValue);
-            AddDummyCreator(PercentChangeAsDecimal.CreateConstrainedValue);
+            AddDummyCreator(fixture, PercentChangeAsDouble.CreateConstrainedValue);
+            AddDummyCreator(fixture, PercentChangeAsDecimal.CreateConstrainedValue);
+        }
+
+        private static void AddDummyCreator<T>(Fixture fixture, Func<T> dummyCreatorFunc)
+        {
+            lock (FixtureLock)
+            {
+                fixture.Register(dummyCreatorFunc);
+            }
+
+            Type type = typeof(T);
+            RegisteredTypes.TryAdd(type, new object());
         }
 
         private static bool CanCreateType(Type type)
@@ -346,31 +334,14 @@ namespace OBeautifulCode.AutoFakeItEasy
             return true;
         }
 
-        private static object CreateType(Type type)
+        private static object CreateType(Fixture fixture, Type type)
         {
-            // trying to create a constrained dummy?  these dummies are NOT registered with AutoFixture
-            // otherwise it would result in infinite recursion and an OverflowException
-            if (ConstrainedDummyCreatorFuncsByType.ContainsKey(type))
-            {
-                // has the creator func already called on this thread?
-                // if so we don't want to call it again, rather we want to just drop down
-                // to AutoFixture and build an unconstrained dummy.  we can let the currently
-                // running creator func handle the retries needed to satisfy the constraint
-                if (!ConstrainedDummyCreatorFuncsInUse.Value.Contains(type))
-                {
-                    ConstrainedDummyCreatorFuncsInUse.Value.Add(type);
-                    var creatorFunc = ConstrainedDummyCreatorFuncsByType[type];
-                    var result = creatorFunc();
-                    return result;
-                }
-            }
-
             // call the AutoFixture Create() method, lock because AutoFixture is not thread safe.
-            MethodInfo autoFixtureGenericCreateMethod = AutoFixtureCreateMethod.MakeGenericMethod(type);
+            var autoFixtureGenericCreateMethod = AutoFixtureCreateMethod.MakeGenericMethod(type);
 
             lock (FixtureLock)
             {
-                object result = autoFixtureGenericCreateMethod.Invoke(null, new object[] { Fixture });
+                object result = autoFixtureGenericCreateMethod.Invoke(null, new object[] { fixture });
                 return result;
             }
         }
