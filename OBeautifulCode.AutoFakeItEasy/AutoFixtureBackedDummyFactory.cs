@@ -38,9 +38,7 @@ namespace OBeautifulCode.AutoFakeItEasy
             .GetMethods()
             .Single(_ => (_.Name == nameof(SpecimenFactory.Create)) && (_.GetParameters().Length == 1) && (_.GetParameters().Single().ParameterType == typeof(ISpecimenBuilder)));
 
-        private static readonly Type[] AllowedInterfacesBackedByList = { typeof(IEnumerable<>), typeof(IList<>), typeof(ICollection<>), typeof(IReadOnlyList<>), typeof(IReadOnlyCollection<>) };
-
-        private static readonly Type[] AllowedInterfacesBackedByDictionary = { typeof(IDictionary<,>), typeof(IReadOnlyDictionary<,>) };
+        private static readonly Type[] SupportedUnregisteredInterfaces = { typeof(IEnumerable<>), typeof(IList<>), typeof(ICollection<>), typeof(IReadOnlyList<>), typeof(IReadOnlyCollection<>), typeof(IDictionary<,>), typeof(IReadOnlyDictionary<,>) };
 
         /// <summary>
         /// Initializes static members of the <see cref="AutoFixtureBackedDummyFactory"/> class.
@@ -345,12 +343,7 @@ namespace OBeautifulCode.AutoFakeItEasy
             {
                 var genericInterfaceType = type.GetGenericTypeDefinition();
 
-                if (AllowedInterfacesBackedByList.Contains(genericInterfaceType))
-                {
-                    return true;
-                }
-
-                if (AllowedInterfacesBackedByDictionary.Contains(genericInterfaceType))
+                if (SupportedUnregisteredInterfaces.Contains(genericInterfaceType))
                 {
                     return true;
                 }
@@ -361,12 +354,6 @@ namespace OBeautifulCode.AutoFakeItEasy
 
         private static object CreateType(Fixture fixture, Type type)
         {
-             // handle the supported, but unregistered interface types
-             if ((!RegisteredTypes.ContainsKey(type)) && type.IsInterface)
-             {
-                 type = ConvertUnregisteredInterfaceTypeToConcreteType(type);
-             }
-
             // call the AutoFixture Create() method, lock because AutoFixture is not thread safe.
             var autoFixtureGenericCreateMethod = AutoFixtureCreateMethod.MakeGenericMethod(type);
 
@@ -375,25 +362,6 @@ namespace OBeautifulCode.AutoFakeItEasy
                 object result = autoFixtureGenericCreateMethod.Invoke(null, new object[] { fixture });
                 return result;
             }
-        }
-
-        private static Type ConvertUnregisteredInterfaceTypeToConcreteType(Type type)
-        {
-            var genericInterfaceType = type.GetGenericTypeDefinition();
-            if (AllowedInterfacesBackedByList.Contains(genericInterfaceType))
-            {
-                type = typeof(List<>).MakeGenericType(type.GenericTypeArguments);
-            }
-            else if (AllowedInterfacesBackedByDictionary.Contains(genericInterfaceType))
-            {
-                type = typeof(Dictionary<,>).MakeGenericType(type.GenericTypeArguments);
-            }
-            else
-            {
-                throw new InvalidOperationException("something went wrong");
-            }
-
-            return type;
         }
     }
 }

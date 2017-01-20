@@ -7,6 +7,8 @@
 // ReSharper disable CheckNamespace
 namespace OBeautifulCode.AutoFakeItEasy.Test
 {
+    using System.Collections.Generic;
+
 #pragma warning disable SA1649 // File name must match first type name
 #pragma warning disable SA1402 // File may only contain a single class
     public enum MostlyGoodStuffWithoutComparer
@@ -111,6 +113,40 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         Bulldogs
     }
 
+    public enum MostlyGoodStuffInGenericInterface
+    {
+        WorkingFromHome,
+
+        RainyDays,
+
+        Chocolate,
+
+        Vacation,
+
+        Meditation,
+
+        FoodPoisoning,
+
+        Bulldogs
+    }
+
+    public enum MostlyGoodStuffInGenericInterfaceIndirect
+    {
+        WorkingFromHome,
+
+        RainyDays,
+
+        Chocolate,
+
+        Vacation,
+
+        Meditation,
+
+        FoodPoisoning,
+
+        Bulldogs
+    }
+
     public class ConstrainDummiesToExcludeIndirect
     {
         public string SomeProperty { get; set; }
@@ -118,6 +154,14 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         public MostlyGoodStuffWithoutComparerIndirect MostlyGoodStuffWithoutComparerIndirect { get; set; }
 
         public MostlyGoodStuffWithComparerIndirect MostlyGoodStuffWithComparerIndirect { get; set; }
+    }
+
+    public class SupportedButUnregisteredGenericInterfaceIndirect
+    {
+        public string SomeProperty { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly", Justification = "For testing purposes.")]
+        public IList<MostlyGoodStuffInGenericInterfaceIndirect> MostlyGoodStuffIndirectForSupportedButUnregisteredGenericInterface { get; set; }
     }
 
 #pragma warning restore SA1402 // File may only contain a single class

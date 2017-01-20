@@ -893,6 +893,52 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             dummies.OfType<ClassInterfaceImplementation6>().Count().Should().BeGreaterThan(1);
         }
 
+        [Fact]
+        public static void ADummy___Should_use_dummy_creator___When_creating_dummies_of_unregistered_but_supported_generic_interfaces_of_types_for_which_dummy_creators_have_been_registered()
+        {
+            // Arrange
+            AutoFixtureBackedDummyFactory.ConstrainDummyToExclude(MostlyGoodStuffInGenericInterface.Chocolate, MostlyGoodStuffInGenericInterface.Vacation, MostlyGoodStuffInGenericInterface.WorkingFromHome);
+            var goodStuff = new List<MostlyGoodStuffInGenericInterface>();
+
+            // Act
+            for (int x = 0; x < 1000; x++)
+            {
+                var listOfMostlyGoodStuff = A.Dummy<IList<MostlyGoodStuffInGenericInterface>>();
+                goodStuff.AddRange(listOfMostlyGoodStuff);
+            }
+
+            // Assert
+            goodStuff = goodStuff.Distinct().ToList();
+            goodStuff.Should().HaveCount(4);
+            goodStuff.Should().Contain(MostlyGoodStuffInGenericInterface.Bulldogs);
+            goodStuff.Should().Contain(MostlyGoodStuffInGenericInterface.FoodPoisoning);
+            goodStuff.Should().Contain(MostlyGoodStuffInGenericInterface.Meditation);
+            goodStuff.Should().Contain(MostlyGoodStuffInGenericInterface.RainyDays);
+        }
+
+        [Fact]
+        public static void ADummy___Should_use_dummy_creator___When_creating_dummies_of_type_that_contains_unregistered_but_supported_generic_interfaces_of_types_for_which_dummy_creators_have_been_registered()
+        {
+            // Arrange
+            AutoFixtureBackedDummyFactory.ConstrainDummyToExclude(MostlyGoodStuffInGenericInterfaceIndirect.FoodPoisoning, MostlyGoodStuffInGenericInterfaceIndirect.Bulldogs, MostlyGoodStuffInGenericInterfaceIndirect.RainyDays);
+            var goodStuff = new List<MostlyGoodStuffInGenericInterfaceIndirect>();
+
+            // Act
+            for (int x = 0; x < 1000; x++)
+            {
+                var listOfMostlyGoodStuff = A.Dummy<SupportedButUnregisteredGenericInterfaceIndirect>();
+                goodStuff.AddRange(listOfMostlyGoodStuff.MostlyGoodStuffIndirectForSupportedButUnregisteredGenericInterface);
+            }
+
+            // Assert
+            goodStuff = goodStuff.Distinct().ToList();
+            goodStuff.Should().HaveCount(4);
+            goodStuff.Should().Contain(MostlyGoodStuffInGenericInterfaceIndirect.Chocolate);
+            goodStuff.Should().Contain(MostlyGoodStuffInGenericInterfaceIndirect.Meditation);
+            goodStuff.Should().Contain(MostlyGoodStuffInGenericInterfaceIndirect.WorkingFromHome);
+            goodStuff.Should().Contain(MostlyGoodStuffInGenericInterfaceIndirect.Vacation);
+        }
+
         // ReSharper restore InconsistentNaming
     }
 }
