@@ -655,6 +655,164 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         }
 
         [Fact]
+        public static void ConstrainDummyToBeOneOf___Should_construct_objects_with_constrained_properties___When_called_for_type_that_contains_constrained_types()
+        {
+            // Arrange
+            AutoFixtureBackedDummyFactory.ConstrainDummyToBeOneOf(MostlyBadStuffWithoutComparerIndirect.Hurricane, MostlyBadStuffWithoutComparerIndirect.Chores, MostlyBadStuffWithoutComparerIndirect.MeanPeople);
+            AutoFixtureBackedDummyFactory.ConstrainDummyToBeOneOf(new[] { MostlyBadStuffWithComparerIndirect.MeanPeople, MostlyBadStuffWithComparerIndirect.Tulips, MostlyBadStuffWithComparerIndirect.WalkInThePark }, EqualityComparer<MostlyBadStuffWithComparerIndirect>.Default);
+            var results = new List<ConstrainDummiesToBeOneOfIndirect>();
+
+            // Act
+            for (int i = 0; i < 1000; i++)
+            {
+                var objectWithConstrainedProperties = A.Dummy<ConstrainDummiesToBeOneOfIndirect>();
+                results.Add(objectWithConstrainedProperties);
+            }
+
+            // Assert
+            var constrainedProperty1Values = results.Select(_ => _.MostlyBadStuffWithoutComparerIndirect).Distinct().ToList();
+            constrainedProperty1Values.Should().HaveCount(3);
+            constrainedProperty1Values.Should().Contain(MostlyBadStuffWithoutComparerIndirect.Hurricane);
+            constrainedProperty1Values.Should().Contain(MostlyBadStuffWithoutComparerIndirect.Chores);
+            constrainedProperty1Values.Should().Contain(MostlyBadStuffWithoutComparerIndirect.MeanPeople);
+
+            var constrainedProperty2Values = results.Select(_ => _.MostlyBadStuffWithComparerIndirect).Distinct().ToList();
+            constrainedProperty2Values.Should().HaveCount(3);
+            constrainedProperty2Values.Should().Contain(MostlyBadStuffWithComparerIndirect.MeanPeople);
+            constrainedProperty2Values.Should().Contain(MostlyBadStuffWithComparerIndirect.Tulips);
+            constrainedProperty2Values.Should().Contain(MostlyBadStuffWithComparerIndirect.WalkInThePark);
+        }
+
+        [Fact]
+        public static void ConstrainDummyToExclude_without_IEqualityComparer___Should_use_most_recently_registered_constraint___When_called_multiple_times_for_same_type()
+        {
+            // Arrange
+            AutoFixtureBackedDummyFactory.ConstrainDummyToExclude(MostlyGoodStuffWithoutComparerReestablished.Chocolate);
+            AutoFixtureBackedDummyFactory.ConstrainDummyToExclude(MostlyGoodStuffWithoutComparerReestablished.Vacation, MostlyGoodStuffWithoutComparerReestablished.WorkingFromHome);
+            AutoFixtureBackedDummyFactory.ConstrainDummyToExclude(MostlyGoodStuffWithoutComparerReestablished.Meditation, MostlyGoodStuffWithoutComparerReestablished.Bulldogs);
+            var allStuff = new List<MostlyGoodStuffWithoutComparerReestablished>();
+
+            // Act
+            for (int i = 0; i < 5000; i++)
+            {
+                var mostlyGoodStuff = A.Dummy<MostlyGoodStuffWithoutComparerReestablished>();
+                allStuff.Add(mostlyGoodStuff);
+            }
+
+            // Assert
+            allStuff = allStuff.Distinct().ToList();
+            allStuff.Should().HaveCount(5);
+            allStuff.Should().Contain(MostlyGoodStuffWithoutComparerReestablished.WorkingFromHome);
+            allStuff.Should().Contain(MostlyGoodStuffWithoutComparerReestablished.RainyDays);
+            allStuff.Should().Contain(MostlyGoodStuffWithoutComparerReestablished.Chocolate);
+            allStuff.Should().Contain(MostlyGoodStuffWithoutComparerReestablished.Vacation);
+            allStuff.Should().Contain(MostlyGoodStuffWithoutComparerReestablished.FoodPoisoning);
+        }
+
+        [Fact]
+        public static void ConstrainDummyToExclude_without_IEqualityComparer___Should_return_only_values_within_set_of_possibleDummies___When_called_for_type_MostlyGoodStuffWithoutComparer()
+        {
+            // Arrange
+            AutoFixtureBackedDummyFactory.ConstrainDummyToExclude(MostlyGoodStuffWithoutComparer.WorkingFromHome, MostlyGoodStuffWithoutComparer.FoodPoisoning, MostlyGoodStuffWithoutComparer.RainyDays);
+            var goodStuff = new List<MostlyGoodStuffWithoutComparer>();
+
+            // Act
+            for (int i = 0; i < 5000; i++)
+            {
+                var mostlyGoodStuff = A.Dummy<MostlyGoodStuffWithoutComparer>();
+                goodStuff.Add(mostlyGoodStuff);
+            }
+
+            // Assert
+            goodStuff = goodStuff.Distinct().ToList();
+            goodStuff.Should().HaveCount(4);
+            goodStuff.Should().Contain(MostlyGoodStuffWithoutComparer.Chocolate);
+            goodStuff.Should().Contain(MostlyGoodStuffWithoutComparer.Vacation);
+            goodStuff.Should().Contain(MostlyGoodStuffWithoutComparer.Meditation);
+            goodStuff.Should().Contain(MostlyGoodStuffWithoutComparer.Bulldogs);
+        }
+
+        [Fact]
+        public static void ConstrainDummyToExclude_with_IEqualityComparer___Should_use_most_recently_registered_constraint___When_called_multiple_times_for_same_type()
+        {
+            // Arrange
+            AutoFixtureBackedDummyFactory.ConstrainDummyToExclude(new[] { MostlyGoodStuffWithComparerReestablished.Chocolate }, EqualityComparer<MostlyGoodStuffWithComparerReestablished>.Default);
+            AutoFixtureBackedDummyFactory.ConstrainDummyToExclude(new[] { MostlyGoodStuffWithComparerReestablished.Meditation, MostlyGoodStuffWithComparerReestablished.WorkingFromHome }, EqualityComparer<MostlyGoodStuffWithComparerReestablished>.Default);
+            AutoFixtureBackedDummyFactory.ConstrainDummyToExclude(new[] { MostlyGoodStuffWithComparerReestablished.RainyDays, MostlyGoodStuffWithComparerReestablished.FoodPoisoning }, EqualityComparer<MostlyGoodStuffWithComparerReestablished>.Default);
+            var allStuff = new List<MostlyGoodStuffWithComparerReestablished>();
+
+            // Act
+            for (int i = 0; i < 5000; i++)
+            {
+                var mostlyGoodStuff = A.Dummy<MostlyGoodStuffWithComparerReestablished>();
+                allStuff.Add(mostlyGoodStuff);
+            }
+
+            // Assert
+            allStuff = allStuff.Distinct().ToList();
+            allStuff.Should().HaveCount(5);
+            allStuff.Should().Contain(MostlyGoodStuffWithComparerReestablished.WorkingFromHome);
+            allStuff.Should().Contain(MostlyGoodStuffWithComparerReestablished.Chocolate);
+            allStuff.Should().Contain(MostlyGoodStuffWithComparerReestablished.Vacation);
+            allStuff.Should().Contain(MostlyGoodStuffWithComparerReestablished.Meditation);
+            allStuff.Should().Contain(MostlyGoodStuffWithComparerReestablished.Bulldogs);
+        }
+
+        [Fact]
+        public static void ConstrainDummyToExclude_with_IEqualityComparer___Should_return_only_values_within_set_of_possibleDummies___When_called_for_type_MostlyGoodStuffWithComparer()
+        {
+            // Arrange
+            AutoFixtureBackedDummyFactory.ConstrainDummyToExclude(new[] { MostlyGoodStuffWithComparer.FoodPoisoning, MostlyGoodStuffWithComparer.Chocolate, MostlyGoodStuffWithComparer.WorkingFromHome }, EqualityComparer<MostlyGoodStuffWithComparer>.Default);
+            var goodStuff = new List<MostlyGoodStuffWithComparer>();
+
+            // Act
+            for (int i = 0; i < 5000; i++)
+            {
+                var mostlyGoodStuff = A.Dummy<MostlyGoodStuffWithComparer>();
+                goodStuff.Add(mostlyGoodStuff);
+            }
+
+            // Assert
+            goodStuff = goodStuff.Distinct().ToList();
+            goodStuff.Should().HaveCount(4);
+            goodStuff.Should().Contain(MostlyGoodStuffWithComparer.RainyDays);
+            goodStuff.Should().Contain(MostlyGoodStuffWithComparer.Vacation);
+            goodStuff.Should().Contain(MostlyGoodStuffWithComparer.Meditation);
+            goodStuff.Should().Contain(MostlyGoodStuffWithComparer.Bulldogs);
+        }
+
+        [Fact]
+        public static void ConstrainDummyToExclude___Should_construct_objects_with_constrained_properties___When_called_for_type_that_contains_constrained_types()
+        {
+            // Arrange
+            AutoFixtureBackedDummyFactory.ConstrainDummyToExclude(MostlyGoodStuffWithoutComparerIndirect.Vacation, MostlyGoodStuffWithoutComparerIndirect.RainyDays, MostlyGoodStuffWithoutComparerIndirect.Meditation);
+            AutoFixtureBackedDummyFactory.ConstrainDummyToExclude(new[] { MostlyGoodStuffWithComparerIndirect.Chocolate, MostlyGoodStuffWithComparerIndirect.Meditation, MostlyGoodStuffWithComparerIndirect.WorkingFromHome }, EqualityComparer<MostlyGoodStuffWithComparerIndirect>.Default);
+            var results = new List<ConstrainDummiesToExcludeIndirect>();
+
+            // Act
+            for (int i = 0; i < 5000; i++)
+            {
+                var objectWithConstrainedProperties = A.Dummy<ConstrainDummiesToExcludeIndirect>();
+                results.Add(objectWithConstrainedProperties);
+            }
+
+            // Assert
+            var constrainedProperty1Values = results.Select(_ => _.MostlyGoodStuffWithoutComparerIndirect).Distinct().ToList();
+            constrainedProperty1Values.Should().HaveCount(4);
+            constrainedProperty1Values.Should().Contain(MostlyGoodStuffWithoutComparerIndirect.WorkingFromHome);
+            constrainedProperty1Values.Should().Contain(MostlyGoodStuffWithoutComparerIndirect.Chocolate);
+            constrainedProperty1Values.Should().Contain(MostlyGoodStuffWithoutComparerIndirect.FoodPoisoning);
+            constrainedProperty1Values.Should().Contain(MostlyGoodStuffWithoutComparerIndirect.Bulldogs);
+
+            var constrainedProperty2Values = results.Select(_ => _.MostlyGoodStuffWithComparerIndirect).Distinct().ToList();
+            constrainedProperty2Values.Should().HaveCount(4);
+            constrainedProperty2Values.Should().Contain(MostlyGoodStuffWithComparerIndirect.RainyDays);
+            constrainedProperty2Values.Should().Contain(MostlyGoodStuffWithComparerIndirect.Vacation);
+            constrainedProperty2Values.Should().Contain(MostlyGoodStuffWithComparerIndirect.FoodPoisoning);
+            constrainedProperty2Values.Should().Contain(MostlyGoodStuffWithComparerIndirect.Bulldogs);
+        }
+
+        [Fact]
         public static void UseRandomInterfaceImplementationForDummy___Should_throw_ArgumentException___When_there_are_no_implementations_of_the_specified_type()
         {
             // Arrange, Act

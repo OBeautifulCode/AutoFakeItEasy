@@ -87,7 +87,8 @@
     </Compile>
     <Compile Include="TypesForTesting\ClassHierarchy.cs" />
     <Compile Include="AutoFixtureBackedDummyFactoryTest.cs" />
-    <Compile Include="TypesForTesting\ConstrainedDummies.cs" />
+    <Compile Include="TypesForTesting\ConstrainDummyToExclude.cs" />
+    <Compile Include="TypesForTesting\ConstrainDummyToBeOneOf.cs" />
     <Compile Include="TypesForTesting\CustomizedDummies.cs" />
     <Compile Include="CustomTypes\NegativeDoubleTest.cs" />
     <Compile Include="CustomTypes\NegativeIntegerTest.cs" />
