@@ -19,7 +19,7 @@ after_build:
 - ps: (New-Object Net.WebClient).DownloadFile('https://raw.githubusercontent.com/NaosProject/Naos.Powershell/master/Build/Nuget-Functions.ps1', "$($env:appveyor_build_folder)\Nuget-Functions.ps1")
 - ps: . "$($env:appveyor_build_folder)\Nuget-Functions.ps1"
 - ps: $version = Nuget-CreatePreReleaseSupportedVersion -version $env:appveyor_build_version -branchName $env:appveyor_repo_branch
-- ps: nuget pack "$($env:appveyor_build_folder)\OBeautifulCode.AutoFakeItEasy\OBeautifulCode.AutoFakeItEasy.csproj" -Version $version -Prop Platform=AnyCPU
+- ps: nuget pack "$($env:appveyor_build_folder)\OBeautifulCode.AutoFakeItEasy\OBeautifulCode.AutoFakeItEasy.csproj" -Version $version -Prop Platform=AnyCPU -Symbols
 artifacts:
 - path: OBeautifulCode.AutoFakeItEasy.zip
 - path: '*.nupkg'
