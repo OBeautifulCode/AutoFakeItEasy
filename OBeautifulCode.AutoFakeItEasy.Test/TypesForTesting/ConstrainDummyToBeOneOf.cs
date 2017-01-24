@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ConstrainedDummies.cs" company="OBeautifulCode">
+// <copyright file="ConstrainDummyToBeOneOf.cs" company="OBeautifulCode">
 //   Copyright (c) OBeautifulCode. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
@@ -76,6 +76,50 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
 
         Chores
     }
+
+    public enum MostlyBadStuffWithoutComparerIndirect
+    {
+        JunkFood,
+
+        WalkInThePark,
+
+        Hurricane,
+
+        Tulips,
+
+        Treasure,
+
+        MeanPeople,
+
+        Chores
+    }
+
+    public enum MostlyBadStuffWithComparerIndirect
+    {
+        JunkFood,
+
+        WalkInThePark,
+
+        Hurricane,
+
+        Tulips,
+
+        Treasure,
+
+        MeanPeople,
+
+        Chores
+    }
+
+    public class ConstrainDummiesToBeOneOfIndirect
+    {
+        public string SomeProperty { get; set; }
+
+        public MostlyBadStuffWithoutComparerIndirect MostlyBadStuffWithoutComparerIndirect { get; set; }
+
+        public MostlyBadStuffWithComparerIndirect MostlyBadStuffWithComparerIndirect { get; set; }
+    }
+
 #pragma warning restore SA1402 // File may only contain a single class
 #pragma warning restore SA1649 // File name must match first type name
 }
