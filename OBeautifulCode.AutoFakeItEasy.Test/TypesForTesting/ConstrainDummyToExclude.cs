@@ -161,7 +161,16 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         public string SomeProperty { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly", Justification = "For testing purposes.")]
-        public IList<MostlyGoodStuffInGenericInterfaceIndirect> MostlyGoodStuffIndirectForSupportedButUnregisteredGenericInterface { get; set; }
+        public IEnumerable<MostlyGoodStuffInGenericInterfaceIndirect> Enumerable { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly", Justification = "For testing purposes.")]
+        public ICollection<MostlyGoodStuffInGenericInterfaceIndirect> Collection { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly", Justification = "For testing purposes.")]
+        public IList<MostlyGoodStuffInGenericInterfaceIndirect> List { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly", Justification = "For testing purposes.")]
+        public IDictionary<string, MostlyGoodStuffInGenericInterfaceIndirect> Dictionary { get; set; }
     }
 
 #pragma warning restore SA1402 // File may only contain a single class

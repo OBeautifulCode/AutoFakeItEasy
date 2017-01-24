@@ -894,6 +894,22 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         }
 
         [Fact]
+        public static void ADummy___Should_return_supported_but_unregistered_generic_interfaces_types___When_called_for_those_interface_types()
+        {
+            // Arrange, Act
+            var list1 = A.Dummy<IEnumerable<string>>();
+            var list2 = A.Dummy<IList<string>>();
+            var list3 = A.Dummy<ICollection<string>>();
+            var dictionary1 = A.Dummy<IDictionary<int, string>>();
+
+            // Assert
+            list1.ToList().Should().HaveCount(3);
+            list2.ToList().Should().HaveCount(3);
+            list3.ToList().Should().HaveCount(3);
+            dictionary1.ToDictionary(_ => _, _ => _).Should().HaveCount(3);
+        }
+
+        [Fact]
         public static void ADummy___Should_use_dummy_creator___When_creating_dummies_of_unregistered_but_supported_generic_interfaces_of_types_for_which_dummy_creators_have_been_registered()
         {
             // Arrange
@@ -903,8 +919,15 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             // Act
             for (int x = 0; x < 1000; x++)
             {
-                var listOfMostlyGoodStuff = A.Dummy<IList<MostlyGoodStuffInGenericInterface>>();
-                goodStuff.AddRange(listOfMostlyGoodStuff);
+                var listOfMostlyGoodStuff1 = A.Dummy<IEnumerable<MostlyGoodStuffInGenericInterface>>();
+                var listOfMostlyGoodStuff2 = A.Dummy<ICollection<MostlyGoodStuffInGenericInterface>>();
+                var listOfMostlyGoodStuff3 = A.Dummy<IList<MostlyGoodStuffInGenericInterface>>();
+                var listOfMostlyGoodStuff4 = A.Dummy<IDictionary<string, MostlyGoodStuffInGenericInterface>>();
+
+                goodStuff.AddRange(listOfMostlyGoodStuff1);
+                goodStuff.AddRange(listOfMostlyGoodStuff2);
+                goodStuff.AddRange(listOfMostlyGoodStuff3);
+                goodStuff.AddRange(listOfMostlyGoodStuff4.Values);
             }
 
             // Assert
@@ -927,7 +950,10 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             for (int x = 0; x < 1000; x++)
             {
                 var listOfMostlyGoodStuff = A.Dummy<SupportedButUnregisteredGenericInterfaceIndirect>();
-                goodStuff.AddRange(listOfMostlyGoodStuff.MostlyGoodStuffIndirectForSupportedButUnregisteredGenericInterface);
+                goodStuff.AddRange(listOfMostlyGoodStuff.Enumerable);
+                goodStuff.AddRange(listOfMostlyGoodStuff.Collection);
+                goodStuff.AddRange(listOfMostlyGoodStuff.List);
+                goodStuff.AddRange(listOfMostlyGoodStuff.Dictionary.Values);
             }
 
             // Assert

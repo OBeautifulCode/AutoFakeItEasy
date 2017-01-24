@@ -38,7 +38,7 @@ namespace OBeautifulCode.AutoFakeItEasy
             .GetMethods()
             .Single(_ => (_.Name == nameof(SpecimenFactory.Create)) && (_.GetParameters().Length == 1) && (_.GetParameters().Single().ParameterType == typeof(ISpecimenBuilder)));
 
-        private static readonly Type[] SupportedUnregisteredInterfaces = { typeof(IEnumerable<>), typeof(IList<>), typeof(ICollection<>), typeof(IReadOnlyList<>), typeof(IReadOnlyCollection<>), typeof(IDictionary<,>), typeof(IReadOnlyDictionary<,>) };
+        private static readonly Type[] SupportedUnregisteredInterfaces = { typeof(IEnumerable<>), typeof(IList<>), typeof(ICollection<>), typeof(IDictionary<,>) };
 
         /// <summary>
         /// Initializes static members of the <see cref="AutoFixtureBackedDummyFactory"/> class.
