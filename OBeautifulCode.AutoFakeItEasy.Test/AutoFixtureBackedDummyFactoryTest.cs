@@ -8,6 +8,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.Linq;
 
     using FakeItEasy;
@@ -900,13 +901,19 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var list1 = A.Dummy<IEnumerable<string>>();
             var list2 = A.Dummy<IList<string>>();
             var list3 = A.Dummy<ICollection<string>>();
+            var list4 = A.Dummy<IReadOnlyCollection<string>>();
+            var list5 = A.Dummy<IReadOnlyList<string>>();
             var dictionary1 = A.Dummy<IDictionary<int, string>>();
+            var dictionary2 = A.Dummy<IReadOnlyDictionary<int, string>>();
 
             // Assert
             list1.ToList().Should().HaveCount(3);
             list2.ToList().Should().HaveCount(3);
             list3.ToList().Should().HaveCount(3);
+            list4.ToList().Should().HaveCount(3);
+            list5.ToList().Should().HaveCount(3);
             dictionary1.ToDictionary(_ => _, _ => _).Should().HaveCount(3);
+            dictionary2.ToDictionary(_ => _, _ => _).Should().HaveCount(3);
         }
 
         [Fact]
@@ -922,15 +929,22 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
                 var listOfMostlyGoodStuff1 = A.Dummy<IEnumerable<MostlyGoodStuffInGenericInterface>>();
                 var listOfMostlyGoodStuff2 = A.Dummy<ICollection<MostlyGoodStuffInGenericInterface>>();
                 var listOfMostlyGoodStuff3 = A.Dummy<IList<MostlyGoodStuffInGenericInterface>>();
-                var listOfMostlyGoodStuff4 = A.Dummy<IDictionary<string, MostlyGoodStuffInGenericInterface>>();
+                var listOfMostlyGoodStuff4 = A.Dummy<IReadOnlyCollection<MostlyGoodStuffInGenericInterface>>();
+                var listOfMostlyGoodStuff5 = A.Dummy<IReadOnlyList<MostlyGoodStuffInGenericInterface>>();
+                var listOfMostlyGoodStuff6 = A.Dummy<IDictionary<string, MostlyGoodStuffInGenericInterface>>();
+                var listOfMostlyGoodStuff7 = A.Dummy<IReadOnlyDictionary<string, MostlyGoodStuffInGenericInterface>>();
 
                 goodStuff.AddRange(listOfMostlyGoodStuff1);
                 goodStuff.AddRange(listOfMostlyGoodStuff2);
                 goodStuff.AddRange(listOfMostlyGoodStuff3);
-                goodStuff.AddRange(listOfMostlyGoodStuff4.Values);
+                goodStuff.AddRange(listOfMostlyGoodStuff4);
+                goodStuff.AddRange(listOfMostlyGoodStuff5);
+                goodStuff.AddRange(listOfMostlyGoodStuff6.Values);
+                goodStuff.AddRange(listOfMostlyGoodStuff7.Values);
             }
 
             // Assert
+            goodStuff.Should().HaveCount(1000 * 7 * 3);
             goodStuff = goodStuff.Distinct().ToList();
             goodStuff.Should().HaveCount(4);
             goodStuff.Should().Contain(MostlyGoodStuffInGenericInterface.Bulldogs);
@@ -953,10 +967,14 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
                 goodStuff.AddRange(listOfMostlyGoodStuff.Enumerable);
                 goodStuff.AddRange(listOfMostlyGoodStuff.Collection);
                 goodStuff.AddRange(listOfMostlyGoodStuff.List);
+                goodStuff.AddRange(listOfMostlyGoodStuff.ReadOnlyCollection);
+                goodStuff.AddRange(listOfMostlyGoodStuff.ReadOnlyList);
                 goodStuff.AddRange(listOfMostlyGoodStuff.Dictionary.Values);
+                goodStuff.AddRange(listOfMostlyGoodStuff.ReadOnlyDictionary.Values);
             }
 
             // Assert
+            goodStuff.Should().HaveCount(1000 * 7 * 3);
             goodStuff = goodStuff.Distinct().ToList();
             goodStuff.Should().HaveCount(4);
             goodStuff.Should().Contain(MostlyGoodStuffInGenericInterfaceIndirect.Chocolate);

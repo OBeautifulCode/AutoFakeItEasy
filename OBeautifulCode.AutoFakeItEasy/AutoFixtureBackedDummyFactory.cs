@@ -38,7 +38,7 @@ namespace OBeautifulCode.AutoFakeItEasy
             .GetMethods()
             .Single(_ => (_.Name == nameof(SpecimenFactory.Create)) && (_.GetParameters().Length == 1) && (_.GetParameters().Single().ParameterType == typeof(ISpecimenBuilder)));
 
-        private static readonly Type[] SupportedUnregisteredInterfaces = { typeof(IEnumerable<>), typeof(IList<>), typeof(ICollection<>), typeof(IDictionary<,>) };
+        private static readonly Type[] SupportedUnregisteredInterfaces = { typeof(IEnumerable<>), typeof(IList<>), typeof(ICollection<>), typeof(IReadOnlyCollection<>), typeof(IReadOnlyList<>), typeof(IDictionary<,>), typeof(IReadOnlyDictionary<,>) };
 
         /// <summary>
         /// Initializes static members of the <see cref="AutoFixtureBackedDummyFactory"/> class.
@@ -286,6 +286,9 @@ namespace OBeautifulCode.AutoFakeItEasy
             fixture.Customizations.Insert(0, new AutoFakeItEasy.RandomNumericSequenceGenerator(short.MinValue, short.MaxValue + 2));
             fixture.Customizations.Insert(0, new AutoFakeItEasy.RandomBoolSequenceGenerator());
             fixture.Customizations.Insert(0, new AutoFakeItEasy.RandomEnumSequenceGenerator());
+            fixture.Customizations.Insert(0, new AutoFakeItEasy.ReadOnlyCollectionRelay());
+            fixture.Customizations.Insert(0, new AutoFakeItEasy.ReadOnlyListRelay());
+            fixture.Customizations.Insert(0, new AutoFakeItEasy.ReadOnlyDictionaryRelay());
 
             // ReSharper restore RedundantNameQualifier
         }
