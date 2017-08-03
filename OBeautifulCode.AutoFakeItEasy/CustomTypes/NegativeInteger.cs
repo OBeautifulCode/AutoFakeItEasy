@@ -20,7 +20,8 @@ namespace OBeautifulCode.AutoFakeItEasy
         /// Initializes a new instance of the <see cref="NegativeInteger"/> class.
         /// </summary>
         /// <param name="value">The value held by the <see cref="NegativeInteger"/> instance.</param>
-        public NegativeInteger(int value)
+        public NegativeInteger(
+            int value)
             : base(value)
         {
             if (value >= 0)

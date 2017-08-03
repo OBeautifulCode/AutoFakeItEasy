@@ -38,7 +38,9 @@ namespace OBeautifulCode.AutoFakeItEasy
         /// <param name="createWith">Determines if and how to populate the list with nulls.  The default is to create a list with no nulls.</param>
         /// <typeparam name="T">The type of dummies to return.</typeparam>
         /// <returns>A list of dummy objects of the specified type.</returns>
-        public static IList<T> Dummies<T>(int numberOfElements = -1, CreateWith createWith = CreateWith.NoNulls)
+        public static IList<T> Dummies<T>(
+            int numberOfElements = -1,
+            CreateWith createWith = CreateWith.NoNulls)
         {
             var result = new SomeDummiesList<T>(numberOfElements, createWith);
             if (numberOfElements < 0)
@@ -98,7 +100,9 @@ namespace OBeautifulCode.AutoFakeItEasy
         /// <param name="createWith">Determines if and how to populate the read-only list with nulls.  The default is to create a list with no nulls.</param>
         /// <typeparam name="T">The type of dummies to return.</typeparam>
         /// <returns>A list of read-only dummy objects of the specified type.</returns>
-        public static IReadOnlyList<T> ReadOnlyDummies<T>(int numberOfElements = -1, CreateWith createWith = CreateWith.NoNulls)
+        public static IReadOnlyList<T> ReadOnlyDummies<T>(
+            int numberOfElements = -1,
+            CreateWith createWith = CreateWith.NoNulls)
         {
             var dummies = Dummies<T>(numberOfElements, createWith);
             var result = new SomeReadOnlyDummiesList<T>(dummies, numberOfElements, createWith);

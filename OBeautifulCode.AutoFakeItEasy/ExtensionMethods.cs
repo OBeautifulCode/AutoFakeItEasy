@@ -8,6 +8,7 @@ namespace OBeautifulCode.AutoFakeItEasy
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Linq;
 
     using FakeItEasy;
@@ -32,7 +33,10 @@ namespace OBeautifulCode.AutoFakeItEasy
         /// </param>
         /// <typeparam name="T">The type of dummy.</typeparam>
         /// <returns>Returns the reference dummy if it meets the specified condition.  Otherwise, returns a new dummy that meets the condition.</returns>
-        public static T ThatIs<T>(this T referenceDummy, Func<T, bool> condition, int maxAttempts = -1)
+        public static T ThatIs<T>(
+            this T referenceDummy,
+            Func<T, bool> condition,
+            int maxAttempts = -1)
         {
             if (condition == null)
             {
@@ -64,12 +68,14 @@ namespace OBeautifulCode.AutoFakeItEasy
 
                 if (someDummiesCallName != null)
                 {
+                    // ReSharper disable PossibleNullReferenceException
                     var someDummiesMethod = typeof(Some).GetMethods().Single(_ => _.Name == someDummiesCallName);
                     var typeOfElementsInList = referenceDummyType.GetGenericArguments().Single();
                     var someDummiesGenericMethod = someDummiesMethod.MakeGenericMethod(typeOfElementsInList);
                     var numberOfElements = referenceDummyType.GetProperty(nameof(ISomeDummies.NumberOfElementsSpecifiedInCallToSomeDummies)).GetValue(referenceDummy);
                     var createWith = referenceDummyType.GetProperty(nameof(ISomeDummies.CreateWithSpecifiedInCallToSomeDummies)).GetValue(referenceDummy);
                     referenceDummy = (T)someDummiesGenericMethod.Invoke(null, new[] { numberOfElements, createWith });
+                    // ReSharper restore PossibleNullReferenceException
                 }
                 else
                 {
@@ -98,7 +104,10 @@ namespace OBeautifulCode.AutoFakeItEasy
         /// </param>
         /// <typeparam name="T">The type of dummy.</typeparam>
         /// <returns>Returns the reference dummy if it meets the specified condition.  Otherwise, returns a new dummy that meets the condition.</returns>
-        public static T Whose<T>(this T referenceDummy, Func<T, bool> condition, int maxAttempts = -1)
+        public static T Whose<T>(
+            this T referenceDummy,
+            Func<T, bool> condition,
+            int maxAttempts = -1)
             => ThatIs(referenceDummy, condition, maxAttempts);
 
         /// <summary>
@@ -120,10 +129,13 @@ namespace OBeautifulCode.AutoFakeItEasy
         /// Returns the reference dummy if is not equal to the comparison dummy.
         /// Otherwise, returns a new dummy that that is not equal to the comparison dummy.
         /// </returns>
-        public static T ThatIsNot<T>(this T referenceDummy, T comparisonDummy, int maxAttempts = -1)
+        public static T ThatIsNot<T>(
+            this T referenceDummy,
+            T comparisonDummy,
+            int maxAttempts = -1)
         {
-            Func<T, bool> condition = t => !Equals(t, comparisonDummy);
-            var result = ThatIs(referenceDummy, condition, maxAttempts);
+            bool Condition(T t) => !Equals(t, comparisonDummy);
+            var result = ThatIs(referenceDummy, Condition, maxAttempts);
             return result;
         }
 
@@ -146,15 +158,15 @@ namespace OBeautifulCode.AutoFakeItEasy
         /// Returns the reference dummy if is not in the set of comparison dummies.
         /// Otherwise, returns a new dummy that that is not in the set of comparison dummies.
         /// </returns>
-        public static T ThatIsNotIn<T>(this T referenceDummy, IEnumerable<T> comparisonDummies, int maxAttempts = -1)
+        public static T ThatIsNotIn<T>(
+            this T referenceDummy,
+            IEnumerable<T> comparisonDummies,
+            int maxAttempts = -1)
         {
-            if (comparisonDummies == null)
-            {
-                throw new ArgumentNullException(nameof(comparisonDummies));
-            }
+            comparisonDummies = comparisonDummies?.ToList() ?? throw new ArgumentNullException(nameof(comparisonDummies));
 
-            Func<T, bool> condition = t => !comparisonDummies.Contains(t);
-            var result = ThatIs(referenceDummy, condition, maxAttempts);
+            bool Condition(T t) => !comparisonDummies.Contains(t);
+            var result = ThatIs(referenceDummy, Condition, maxAttempts);
             return result;
         }
 
@@ -178,15 +190,16 @@ namespace OBeautifulCode.AutoFakeItEasy
         /// Returns the reference dummy if is not in the set of comparison dummies.
         /// Otherwise, returns a new dummy that that is not in the set of comparison dummies.
         /// </returns>
-        public static T ThatIsNotIn<T>(this T referenceDummy, IEnumerable<T> comparisonDummies, IEqualityComparer<T> comparer, int maxAttempts = -1)
+        public static T ThatIsNotIn<T>(
+            this T referenceDummy,
+            IEnumerable<T> comparisonDummies,
+            IEqualityComparer<T> comparer,
+            int maxAttempts = -1)
         {
-            if (comparisonDummies == null)
-            {
-                throw new ArgumentNullException(nameof(comparisonDummies));
-            }
+            comparisonDummies = comparisonDummies?.ToList() ?? throw new ArgumentNullException(nameof(comparisonDummies));
 
-            Func<T, bool> condition = t => !comparisonDummies.Contains(t, comparer);
-            var result = ThatIs(referenceDummy, condition, maxAttempts);
+            bool Condition(T t) => !comparisonDummies.Contains(t, comparer);
+            var result = ThatIs(referenceDummy, Condition, maxAttempts);
             return result;
         }
 
@@ -209,7 +222,10 @@ namespace OBeautifulCode.AutoFakeItEasy
         /// Returns the reference dummy if is in the set of comparison dummies.
         /// Otherwise, returns a new dummy that that is in the set of comparison dummies.
         /// </returns>
-        public static T ThatIsIn<T>(this T referenceDummy, IEnumerable<T> comparisonDummies, int maxAttempts = -1)
+        public static T ThatIsIn<T>(
+            this T referenceDummy,
+            IEnumerable<T> comparisonDummies,
+            int maxAttempts = -1)
         {
             if (comparisonDummies == null)
             {
@@ -241,15 +257,111 @@ namespace OBeautifulCode.AutoFakeItEasy
         /// Returns the reference dummy if is in the set of comparison dummies.
         /// Otherwise, returns a new dummy that that is in the set of comparison dummies.
         /// </returns>
-        public static T ThatIsIn<T>(this T referenceDummy, IEnumerable<T> comparisonDummies, IEqualityComparer<T> comparer, int maxAttempts = -1)
+        public static T ThatIsIn<T>(
+            this T referenceDummy,
+            IEnumerable<T> comparisonDummies,
+            IEqualityComparer<T> comparer,
+            int maxAttempts = -1)
         {
-            if (comparisonDummies == null)
+            comparisonDummies = comparisonDummies?.ToList() ?? throw new ArgumentNullException(nameof(comparisonDummies));
+
+            bool Condition(T t) => comparisonDummies.Contains(t, comparer);
+            var result = ThatIs(referenceDummy, Condition, maxAttempts);
+            return result;
+        }
+
+        /// <summary>
+        /// Returns a reference dummy if it is contained within a specified range (inclusive of endpoints)
+        /// or creates new dummies of the same type until a dummy is created that is within the specified range.
+        /// Uses the comparison dummy's implementation of <see cref="IComparable.CompareTo(object)"/>
+        /// </summary>
+        /// <param name="referenceDummy">The reference dummy.</param>
+        /// <param name="rangeStartInclusive">The start of the range.  The range is inclusive of this value.</param>
+        /// <param name="rangeEndInclusive">The end of the range.  The range is inclusive of this value.</param>
+        /// <param name="maxAttempts">
+        /// The maximum number of times to attempt to create a dummy that is in specified range, before throwing.
+        /// The reference dummy is itself considered the first attempt.  If this method creates a new dummy because
+        /// the reference dummy is not within the specified range, that is considered the second attempt.
+        /// If max attempts is zero or negative then the method tries an infinite number of times to create a dummy
+        /// that is in the specified range, which is the default.
+        /// </param>
+        /// <typeparam name="T">The type of dummy.</typeparam>
+        /// <returns>
+        /// Returns the reference dummy if is in the specified range.
+        /// Otherwise, returns a new dummy that that is in the specified range.
+        /// </returns>
+        public static T ThatIsInRange<T>(
+            this T referenceDummy,
+            T rangeStartInclusive,
+            T rangeEndInclusive,
+            int maxAttempts = -1)
+            where T : IComparable<T>
+        {
+            if (rangeStartInclusive == null)
             {
-                throw new ArgumentNullException(nameof(comparisonDummies));
+                throw new ArgumentNullException(nameof(rangeStartInclusive));
             }
 
-            Func<T, bool> condition = t => comparisonDummies.Contains(t, comparer);
-            var result = ThatIs(referenceDummy, condition, maxAttempts);
+            if (rangeEndInclusive == null)
+            {
+                throw new ArgumentNullException(nameof(rangeEndInclusive));
+            }
+
+            if (rangeStartInclusive.CompareTo(rangeEndInclusive) >= 1)
+            {
+                throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, "{0} is > {1}", nameof(rangeStartInclusive), nameof(rangeEndInclusive)));
+            }
+
+            bool Condition(T dummy) => (dummy.CompareTo(rangeStartInclusive) >= 0) && (dummy.CompareTo(rangeEndInclusive) <= 0);
+            var result = ThatIs(referenceDummy, Condition, maxAttempts);
+            return result;
+        }
+
+        /// <summary>
+        /// Returns a reference dummy if it is contained within a specified range (inclusive of endpoints)
+        /// or creates new dummies of the same type until a dummy is created that is within the specified range.
+        /// Uses the comparison dummy's implementation of <see cref="IComparable.CompareTo(object)"/>
+        /// </summary>
+        /// <param name="referenceDummy">The reference dummy.</param>
+        /// <param name="rangeStartInclusive">The start of the range.  The range is inclusive of this value.</param>
+        /// <param name="rangeEndInclusive">The end of the range.  The range is inclusive of this value.</param>
+        /// <param name="comparer">The comparer to use when comparing dummies against the range.</param>
+        /// <param name="maxAttempts">
+        /// The maximum number of times to attempt to create a dummy that is in specified range, before throwing.
+        /// The reference dummy is itself considered the first attempt.  If this method creates a new dummy because
+        /// the reference dummy is not within the specified range, that is considered the second attempt.
+        /// If max attempts is zero or negative then the method tries an infinite number of times to create a dummy
+        /// that is in the specified range, which is the default.
+        /// </param>
+        /// <typeparam name="T">The type of dummy.</typeparam>
+        /// <returns>
+        /// Returns the reference dummy if is in the specified range.
+        /// Otherwise, returns a new dummy that that is in the specified range.
+        /// </returns>
+        public static T ThatIsInRange<T>(
+            this T referenceDummy,
+            T rangeStartInclusive,
+            T rangeEndInclusive,
+            IComparer<T> comparer,
+            int maxAttempts = -1)
+        {
+            if (rangeStartInclusive == null)
+            {
+                throw new ArgumentNullException(nameof(rangeStartInclusive));
+            }
+
+            if (rangeEndInclusive == null)
+            {
+                throw new ArgumentNullException(nameof(rangeEndInclusive));
+            }
+
+            if (comparer.Compare(rangeStartInclusive, rangeEndInclusive) >= 1)
+            {
+                throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, "{0} is > {1}", nameof(rangeStartInclusive), nameof(rangeEndInclusive)));
+            }
+
+            bool Condition(T dummy) => (comparer.Compare(dummy, rangeStartInclusive) >= 0) && (comparer.Compare(dummy, rangeEndInclusive) <= 0);
+            var result = ThatIs(referenceDummy, Condition, maxAttempts);
             return result;
         }
     }

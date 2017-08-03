@@ -20,7 +20,9 @@ namespace OBeautifulCode.AutoFakeItEasy
     internal class ReadOnlyDictionaryRelay : ISpecimenBuilder
     {
         /// <inheritdoc />
-        public object Create(object request, ISpecimenContext context)
+        public object Create(
+            object request,
+            ISpecimenContext context)
         {
             if (context == null)
             {

@@ -77,7 +77,8 @@ namespace OBeautifulCode.AutoFakeItEasy
         /// If this method is called multiple times for the same type,
         /// the most recently added creator will be used.
         /// </remarks>
-        public static void AddDummyCreator<T>(Func<T> dummyCreatorFunc)
+        public static void AddDummyCreator<T>(
+            Func<T> dummyCreatorFunc)
         {
             AddDummyCreator(FixtureWithCreators, dummyCreatorFunc);
         }
@@ -87,7 +88,8 @@ namespace OBeautifulCode.AutoFakeItEasy
         /// </summary>
         /// <typeparam name="T">The type of the dummy to create.</typeparam>
         /// <param name="possibleDummies">The dummies that can be returned.</param>
-        public static void ConstrainDummyToBeOneOf<T>(params T[] possibleDummies)
+        public static void ConstrainDummyToBeOneOf<T>(
+            params T[] possibleDummies)
         {
             ConstrainDummyToBeOneOf<T>(possibleDummies, null);
         }
@@ -98,7 +100,9 @@ namespace OBeautifulCode.AutoFakeItEasy
         /// <typeparam name="T">The type of the dummy to create.</typeparam>
         /// <param name="possibleDummies">The dummies that can be returned.</param>
         /// <param name="comparer">An equality comparer to use when comparing constructed dummies against the dummies that can be returned.</param>
-        public static void ConstrainDummyToBeOneOf<T>(IEnumerable<T> possibleDummies, IEqualityComparer<T> comparer = null)
+        public static void ConstrainDummyToBeOneOf<T>(
+            IEnumerable<T> possibleDummies,
+            IEqualityComparer<T> comparer = null)
         {
             Func<T> creatorFunc = () =>
             {
@@ -116,7 +120,8 @@ namespace OBeautifulCode.AutoFakeItEasy
         /// </summary>
         /// <typeparam name="T">The type of the dummy to create.</typeparam>
         /// <param name="possibleDummies">The dummies that cannot be returned.</param>
-        public static void ConstrainDummyToExclude<T>(params T[] possibleDummies)
+        public static void ConstrainDummyToExclude<T>(
+            params T[] possibleDummies)
         {
             ConstrainDummyToExclude<T>(possibleDummies, null);
         }
@@ -127,7 +132,9 @@ namespace OBeautifulCode.AutoFakeItEasy
         /// <typeparam name="T">The type of the dummy to create.</typeparam>
         /// <param name="possibleDummies">The dummies that cannot be returned.</param>
         /// <param name="comparer">An equality comparer to use when comparing constructed dummies against the dummies to exclude.</param>
-        public static void ConstrainDummyToExclude<T>(IEnumerable<T> possibleDummies, IEqualityComparer<T> comparer = null)
+        public static void ConstrainDummyToExclude<T>(
+            IEnumerable<T> possibleDummies,
+            IEqualityComparer<T> comparer = null)
         {
             Func<T> creatorFunc = () =>
             {
@@ -151,7 +158,9 @@ namespace OBeautifulCode.AutoFakeItEasy
         /// <exception cref="ArgumentException"><paramref name="typesToExclude"/> is not null, but empty.</exception>
         /// <exception cref="ArgumentException"><paramref name="typesToInclude"/> is not null, but empty.</exception>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter", Justification = "In this case we just need the type, not a parameter of that type.")]
-        public static void UseRandomConcreteSubclassForDummy<T>(IEnumerable<Type> typesToExclude = null, IEnumerable<Type> typesToInclude = null)
+        public static void UseRandomConcreteSubclassForDummy<T>(
+            IEnumerable<Type> typesToExclude = null,
+            IEnumerable<Type> typesToInclude = null)
         {
             if ((typesToExclude != null) && (typesToInclude != null))
             {
@@ -222,7 +231,8 @@ namespace OBeautifulCode.AutoFakeItEasy
         /// </param>
         /// <typeparam name="T">The interface type.</typeparam>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter", Justification = "In this case we just need the type, not a parameter of that type.")]
-        public static void UseRandomInterfaceImplementationForDummy<T>(bool includeOtherInterfaces = false)
+        public static void UseRandomInterfaceImplementationForDummy<T>(
+            bool includeOtherInterfaces = false)
         {
             Type type = typeof(T);
             var interfaceImplementations = type.Assembly
@@ -253,19 +263,22 @@ namespace OBeautifulCode.AutoFakeItEasy
 
         /// <inheritdoc />
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "factory caller will ensure this is not null")]
-        public bool CanCreate(Type type)
+        public bool CanCreate(
+            Type type)
         {
             return CanCreateType(type);
         }
 
         /// <inheritdoc />
-        public object Create(Type type)
+        public object Create(
+            Type type)
         {
             var result = CreateType(FixtureWithCreators, type);
             return result;
         }
 
-        private static void ConfigureRecursionBehavior(Fixture fixture)
+        private static void ConfigureRecursionBehavior(
+            Fixture fixture)
         {
             // It's not AutoFixture's job to detect recursion.  Infinite recursion will cause the process to blow-up;
             // it's typically a behavior that's easy to observe/detect.  By allowing recursion we enable a swath
@@ -277,7 +290,8 @@ namespace OBeautifulCode.AutoFakeItEasy
             }
         }
 
-        private static void AddCustomizations(Fixture fixture)
+        private static void AddCustomizations(
+            Fixture fixture)
         {
             // fix some of AutoFixture's poor defaults - see README.md
             // ReSharper disable RedundantNameQualifier
@@ -293,7 +307,8 @@ namespace OBeautifulCode.AutoFakeItEasy
             // ReSharper restore RedundantNameQualifier
         }
 
-        private static void RegisterCustomTypes(Fixture fixture)
+        private static void RegisterCustomTypes(
+            Fixture fixture)
         {
             AddDummyCreator(fixture, () => new PositiveInteger(Math.Abs(A.Dummy<int>().ThatIsNot(0))));
             AddDummyCreator(fixture, () => new NegativeInteger(-1 * Math.Abs(A.Dummy<int>().ThatIsNot(0))));
@@ -309,7 +324,9 @@ namespace OBeautifulCode.AutoFakeItEasy
             AddDummyCreator(fixture, PercentChangeAsDecimal.CreateConstrainedValue);
         }
 
-        private static void AddDummyCreator<T>(Fixture fixture, Func<T> dummyCreatorFunc)
+        private static void AddDummyCreator<T>(
+            Fixture fixture,
+            Func<T> dummyCreatorFunc)
         {
             lock (FixtureLock)
             {
@@ -320,7 +337,8 @@ namespace OBeautifulCode.AutoFakeItEasy
             RegisteredTypes.TryAdd(type, new object());
         }
 
-        private static bool CanCreateType(Type type)
+        private static bool CanCreateType(
+            Type type)
         {
             if (RegisteredTypes.ContainsKey(type))
             {
@@ -340,7 +358,8 @@ namespace OBeautifulCode.AutoFakeItEasy
             return true;
         }
 
-        private static bool CanCreateUnregisteredInterface(Type type)
+        private static bool CanCreateUnregisteredInterface(
+            Type type)
         {
             if (type.IsGenericType)
             {
@@ -355,7 +374,9 @@ namespace OBeautifulCode.AutoFakeItEasy
             return false;
         }
 
-        private static object CreateType(Fixture fixture, Type type)
+        private static object CreateType(
+            Fixture fixture,
+            Type type)
         {
             // call the AutoFixture Create() method, lock because AutoFixture is not thread safe.
             var autoFixtureGenericCreateMethod = AutoFixtureCreateMethod.MakeGenericMethod(type);

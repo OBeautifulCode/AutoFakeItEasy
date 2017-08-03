@@ -20,7 +20,9 @@ namespace OBeautifulCode.AutoFakeItEasy
         /// </summary>
         /// <param name="numberOfElementsSpecifiedInCallToSomeDummies">The number of elements in the list to generate as specified in the call to <see cref="Some.Dummies{T}(int,AutoFakeItEasy.CreateWith)"/>.</param>
         /// <param name="createWithSpecifiedInCallToSomeDummies">Determines if and how to populate the list with nulls as specified in the call to <see cref="Some.Dummies{T}(int,AutoFakeItEasy.CreateWith)"/>.</param>
-        public SomeDummiesList(int numberOfElementsSpecifiedInCallToSomeDummies, CreateWith createWithSpecifiedInCallToSomeDummies)
+        public SomeDummiesList(
+            int numberOfElementsSpecifiedInCallToSomeDummies,
+            CreateWith createWithSpecifiedInCallToSomeDummies)
         {
             this.NumberOfElementsSpecifiedInCallToSomeDummies = numberOfElementsSpecifiedInCallToSomeDummies;
             this.CreateWithSpecifiedInCallToSomeDummies = createWithSpecifiedInCallToSomeDummies;

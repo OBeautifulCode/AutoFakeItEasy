@@ -21,7 +21,8 @@ namespace OBeautifulCode.AutoFakeItEasy
         /// Initializes a new instance of the <see cref="ConstrainedValue{T}"/> class.
         /// </summary>
         /// <param name="value">The value of the <see cref="ConstrainedValue{T}"/> instance.</param>
-        protected ConstrainedValue(T value)
+        protected ConstrainedValue(
+            T value)
         {
             this.Value = value;
         }
@@ -38,7 +39,8 @@ namespace OBeautifulCode.AutoFakeItEasy
         /// <returns>
         /// The result of the conversion.
         /// </returns>
-        public static implicit operator T(ConstrainedValue<T> from)
+        public static implicit operator T(
+            ConstrainedValue<T> from)
         {
             return from.Value;
         }

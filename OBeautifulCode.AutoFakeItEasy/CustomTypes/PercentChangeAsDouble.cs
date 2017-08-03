@@ -32,7 +32,8 @@ namespace OBeautifulCode.AutoFakeItEasy
         /// Initializes a new instance of the <see cref="PercentChangeAsDouble"/> class.
         /// </summary>
         /// <param name="value">The value held by the <see cref="PercentChangeAsDouble"/> instance.</param>
-        public PercentChangeAsDouble(double value)
+        public PercentChangeAsDouble(
+            double value)
             : base(value)
         {
             if (value < MinPercentChange)

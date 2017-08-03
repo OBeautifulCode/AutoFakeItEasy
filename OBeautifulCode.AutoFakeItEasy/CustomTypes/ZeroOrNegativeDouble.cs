@@ -20,7 +20,8 @@ namespace OBeautifulCode.AutoFakeItEasy
         /// Initializes a new instance of the <see cref="ZeroOrNegativeDouble"/> class.
         /// </summary>
         /// <param name="value">The value held by the <see cref="ZeroOrNegativeDouble"/> instance.</param>
-        public ZeroOrNegativeDouble(double value)
+        public ZeroOrNegativeDouble(
+            double value)
             : base(value)
         {
             if (value > 0)

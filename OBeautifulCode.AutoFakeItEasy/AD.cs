@@ -25,7 +25,8 @@ namespace OBeautifulCode.AutoFakeItEasy
         // ReSharper disable InconsistentNaming
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "ummy", Justification = "Attempting to get something as close to A.Dummy<T> as possible.")]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "ummy", Justification = "Attempting to get something as close to A.Dummy<T> as possible.")]
-        public static object ummy(Type typeOfDummy)
+        public static object ummy(
+            Type typeOfDummy)
         // ReSharper restore InconsistentNaming
         #pragma warning restore SA1300
         {

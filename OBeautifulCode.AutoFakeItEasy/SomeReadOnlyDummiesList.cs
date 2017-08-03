@@ -22,7 +22,10 @@ namespace OBeautifulCode.AutoFakeItEasy
         /// <param name="list">The list to wrap.</param>
         /// <param name="numberOfElementsSpecifiedInCallToSomeDummies">The number of elements in the list to generate as specified in the call to <see cref="Some.ReadOnlyDummies{T}(int,AutoFakeItEasy.CreateWith)"/>.</param>
         /// <param name="createWithSpecifiedInCallToSomeDummies">Determines if and how to populate the list with nulls as specified in the call to <see cref="Some.ReadOnlyDummies{T}(int,AutoFakeItEasy.CreateWith)"/>.</param>
-        public SomeReadOnlyDummiesList(IList<T> list, int numberOfElementsSpecifiedInCallToSomeDummies, CreateWith createWithSpecifiedInCallToSomeDummies)
+        public SomeReadOnlyDummiesList(
+            IList<T> list,
+            int numberOfElementsSpecifiedInCallToSomeDummies,
+            CreateWith createWithSpecifiedInCallToSomeDummies)
             : base(list)
         {
             this.NumberOfElementsSpecifiedInCallToSomeDummies = numberOfElementsSpecifiedInCallToSomeDummies;

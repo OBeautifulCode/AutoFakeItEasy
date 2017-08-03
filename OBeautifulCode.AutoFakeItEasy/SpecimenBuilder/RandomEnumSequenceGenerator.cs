@@ -30,7 +30,9 @@ namespace OBeautifulCode.AutoFakeItEasy
         /// <returns>
         /// An enum value if appropriate; otherwise a <see cref="NoSpecimen"/> instance.
         /// </returns>
-        public object Create(object request, ISpecimenContext context)
+        public object Create(
+            object request,
+            ISpecimenContext context)
         {
             // can I handle this request?
             var t = request as Type;

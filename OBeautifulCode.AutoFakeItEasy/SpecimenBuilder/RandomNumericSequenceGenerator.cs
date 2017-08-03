@@ -30,7 +30,9 @@ namespace OBeautifulCode.AutoFakeItEasy
         /// </summary>
         /// <param name="inclusiveLowerLimit">The lower limit.</param>
         /// <param name="exclusiveUpperLimit">The upper limit.</param>
-        public RandomNumericSequenceGenerator(long inclusiveLowerLimit, long exclusiveUpperLimit)
+        public RandomNumericSequenceGenerator(
+            long inclusiveLowerLimit,
+            long exclusiveUpperLimit)
         {
             if (inclusiveLowerLimit >= exclusiveUpperLimit)
             {
@@ -50,7 +52,9 @@ namespace OBeautifulCode.AutoFakeItEasy
         /// The next random number in a sequence, if <paramref name="request"/> is a request
         /// for a numeric value; otherwise, a <see cref="NoSpecimen"/> instance.
         /// </returns>
-        public object Create(object request, ISpecimenContext context)
+        public object Create(
+            object request,
+            ISpecimenContext context)
         {
             var type = request as Type;
             if (type == null)
@@ -61,7 +65,9 @@ namespace OBeautifulCode.AutoFakeItEasy
             return this.CreateRandom(type);
         }
 
-        private static long RandomLong(long inclusiveMin, long exclusiveMax)
+        private static long RandomLong(
+            long inclusiveMin,
+            long exclusiveMax)
         {
             byte[] buffer = new byte[8];
             ThreadSafeRandom.NextBytes(buffer);
@@ -70,7 +76,8 @@ namespace OBeautifulCode.AutoFakeItEasy
             return result;
         }
 
-        private object CreateRandom(Type request)
+        private object CreateRandom(
+            Type request)
         {
             switch (Type.GetTypeCode(request))
             {

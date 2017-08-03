@@ -30,7 +30,9 @@ namespace OBeautifulCode.AutoFakeItEasy
         /// <see langword="true"/> or <see langword="false"/> generated randomly using <see cref="Random"/>,
         /// if <paramref name="request"/> is a request for a boolean; otherwise, a <see cref="NoSpecimen"/> instance.
         /// </returns>
-        public object Create(object request, ISpecimenContext context)
+        public object Create(
+            object request,
+            ISpecimenContext context)
         {
             if (!typeof(bool).Equals(request))
             {
