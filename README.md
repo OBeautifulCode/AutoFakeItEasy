@@ -199,7 +199,7 @@ Returns an `IReadOnlyList<T>`; otherwise behaves exactly like `Some.Dummies<T>` 
 
 Constrained Dummies
 -------------------
-Sometimes it's useful to constrain dummies.  AutoFakeItEasy implements these extension methods for that purpose: `ThatIs`, `ThatIsNot`, `Whose`, `ThatIsIn`, `ThatIsNotIn`
+Sometimes it's useful to constrain dummies.  AutoFakeItEasy implements these extension methods for that purpose: `ThatIs`, `ThatIsNot`, `Whose`, `ThatIsIn`, `ThatIsNotIn`, `ThatIsInRange`, `ThatIsNotInRange`
 
 ```c#
 var nonZero = A.Dummy<int>().ThatIs(i => i != 0);
@@ -209,15 +209,20 @@ var tallPerson = A.Dummy<Person>().Whose(p => p.HeightInCentimeters > 182);
 var green = new Green();
 var notGreen = A.Dummy<Color>().ThatIsNot(green);
 
-var winterMonthsInNorthAmerica = A.Dummy<Month>().ThatIsIn(new[] { Month.December, Month.January, Month.February })
+var winterMonthsInNorthAmerica = A.Dummy<Month>().ThatIsIn(new[] { Month.December, Month.January, Month.February });
 
-var springThruFallInNorthAmerica = A.Dummy<Month>().ThatIsNotIn(new[] { Month.December, Month.January, Month.February })
+var springThruFallInNorthAmerica = A.Dummy<Month>().ThatIsNotIn(new[] { Month.December, Month.January, Month.February });
+
+var ageOfPerson = A.Dummy<int>().ThatIsInRange(1, 99);
+var positiveNumber = A.Dummy<int>().ThatIsNotInRange(int.MinValue, 0);
 ```
 
 - `ThatIs`, `Whose`: These methods do the same thing; select one based on readability.  A lambda is used to test dummies against a constraint/condition.  If the condition fails, then another dummy is created and tested ... and so on until the condition is satisifed or a maximum number of attempts has been made.  `maxAttempts` is an optional parameter with default of -1, which is unlimited attempts.
 - `ThatIsNot`: This method creates a dummy that is not equal (using `object.Equals(object)`) to some comparison dummy.  It also has an optional `maxAttempts` parameter that works the same way as described above.
 - `ThatIsIn`: This method creates a dummy that is contained within a set (`IEnumerable`) of comparison dummies.  There are two overloads.  One uses `object.Equals(object)` for comparison.  The other takes an `IEqualityComparer<T>` to use when comparing.  It also has an optional `maxAttempts` parameter that works the same way as described above.
 - `ThatIsNotIn`: This method creates a dummy that is NOT contained within a set (`IEnumerable`) of comparison dummies.  There are two overloads.  One uses `object.Equals(object)` for comparison.  The other takes an `IEqualityComparer<T>` to use when comparing.  It also has an optional `maxAttempts` parameter that works the same way as described above.
+- `ThatIsInRange`: This method creates a dummy that falls within a specified range.  There are two overloads.  One requires the type of dummy being created to implement `IComparable` and calls `IComparable<T>.CompareTo()` for comparison.  The other takes an `IComparer<T>` as a parameter and calls `IComparer<T>.Compare()` for comparison.  It also has an optional `maxAttempts` parameter that works the same way as described above.
+- `ThatIsNotInRange`: This method creates a dummy that falls outside of a specified range.  There are two overloads.  One requires the type of dummy being created to implement `IComparable` and calls `IComparable<T>.CompareTo()` for comparison.  The other takes an `IComparer<T>` as a parameter and calls `IComparer<T>.Compare()` for comparison.  It also has an optional `maxAttempts` parameter that works the same way as described above.
 
 These constraining methods also work with `Some.Dummies<T>()`  For example, this will make 5 attempts to create an IList of doubles until there are an even number of elements in the list:
 
