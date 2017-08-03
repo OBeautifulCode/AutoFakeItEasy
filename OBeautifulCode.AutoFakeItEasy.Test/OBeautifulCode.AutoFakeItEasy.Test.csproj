@@ -83,6 +83,7 @@
     </Compile>
     <Compile Include="TypesForTesting\ClassHierarchy.cs" />
     <Compile Include="AutoFixtureBackedDummyFactoryTest.cs" />
+    <Compile Include="TypesForTesting\ComparableDummies.cs" />
     <Compile Include="TypesForTesting\ConstrainDummyToExclude.cs" />
     <Compile Include="TypesForTesting\ConstrainDummyToBeOneOf.cs" />
     <Compile Include="TypesForTesting\CustomizedDummies.cs" />

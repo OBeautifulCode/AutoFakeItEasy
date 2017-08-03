@@ -288,7 +288,7 @@ namespace OBeautifulCode.AutoFakeItEasy
         /// <typeparam name="T">The type of dummy.</typeparam>
         /// <returns>
         /// Returns the reference dummy if is in the specified range.
-        /// Otherwise, returns a new dummy that that is in the specified range.
+        /// Otherwise, returns a new dummy that is in the specified range.
         /// </returns>
         public static T ThatIsInRange<T>(
             this T referenceDummy,
@@ -297,22 +297,21 @@ namespace OBeautifulCode.AutoFakeItEasy
             int maxAttempts = -1)
             where T : IComparable<T>
         {
-            if (rangeStartInclusive == null)
+            if ((rangeStartInclusive != null) && (rangeEndInclusive != null))
             {
-                throw new ArgumentNullException(nameof(rangeStartInclusive));
+                if (rangeStartInclusive.CompareTo(rangeEndInclusive) > 0)
+                {
+                    throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, "{0} is > {1}", nameof(rangeStartInclusive), nameof(rangeEndInclusive)));
+                }
             }
 
-            if (rangeEndInclusive == null)
-            {
-                throw new ArgumentNullException(nameof(rangeEndInclusive));
-            }
-
-            if (rangeStartInclusive.CompareTo(rangeEndInclusive) >= 1)
+            if ((rangeStartInclusive != null) && (rangeEndInclusive == null))
             {
                 throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, "{0} is > {1}", nameof(rangeStartInclusive), nameof(rangeEndInclusive)));
             }
 
-            bool Condition(T dummy) => (dummy.CompareTo(rangeStartInclusive) >= 0) && (dummy.CompareTo(rangeEndInclusive) <= 0);
+            bool Condition(T dummy) => dummy == null ? rangeStartInclusive == null : (dummy.CompareTo(rangeStartInclusive) >= 0) && (dummy.CompareTo(rangeEndInclusive) <= 0);
+
             var result = ThatIs(referenceDummy, Condition, maxAttempts);
             return result;
         }
@@ -336,7 +335,7 @@ namespace OBeautifulCode.AutoFakeItEasy
         /// <typeparam name="T">The type of dummy.</typeparam>
         /// <returns>
         /// Returns the reference dummy if is in the specified range.
-        /// Otherwise, returns a new dummy that that is in the specified range.
+        /// Otherwise, returns a new dummy that is in the specified range.
         /// </returns>
         public static T ThatIsInRange<T>(
             this T referenceDummy,
@@ -345,22 +344,102 @@ namespace OBeautifulCode.AutoFakeItEasy
             IComparer<T> comparer,
             int maxAttempts = -1)
         {
-            if (rangeStartInclusive == null)
-            {
-                throw new ArgumentNullException(nameof(rangeStartInclusive));
-            }
-
-            if (rangeEndInclusive == null)
-            {
-                throw new ArgumentNullException(nameof(rangeEndInclusive));
-            }
-
-            if (comparer.Compare(rangeStartInclusive, rangeEndInclusive) >= 1)
+            // not throwing ArgumentNullException if start or end of range is null
+            // according to the documentation of IComparer<T>, null is comparable
+            // https://msdn.microsoft.com/en-us/library/xh5ks3b3(v=vs.110).aspx
+            if (comparer.Compare(rangeStartInclusive, rangeEndInclusive) > 0)
             {
                 throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, "{0} is > {1}", nameof(rangeStartInclusive), nameof(rangeEndInclusive)));
             }
 
             bool Condition(T dummy) => (comparer.Compare(dummy, rangeStartInclusive) >= 0) && (comparer.Compare(dummy, rangeEndInclusive) <= 0);
+            var result = ThatIs(referenceDummy, Condition, maxAttempts);
+            return result;
+        }
+
+        /// <summary>
+        /// Returns a reference dummy if it is not contained within a specified range (inclusive of endpoints)
+        /// or creates new dummies of the same type until a dummy is created that is not within the specified range.
+        /// Uses the comparison dummy's implementation of <see cref="IComparable.CompareTo(object)"/>
+        /// </summary>
+        /// <param name="referenceDummy">The reference dummy.</param>
+        /// <param name="rangeStartInclusive">The start of the range.  The range is inclusive of this value.</param>
+        /// <param name="rangeEndInclusive">The end of the range.  The range is inclusive of this value.</param>
+        /// <param name="maxAttempts">
+        /// The maximum number of times to attempt to create a dummy that is not in specified range, before throwing.
+        /// The reference dummy is itself considered the first attempt.  If this method creates a new dummy because
+        /// the reference dummy is within the specified range, that is considered the second attempt.
+        /// If max attempts is zero or negative then the method tries an infinite number of times to create a dummy
+        /// that is not in the specified range, which is the default.
+        /// </param>
+        /// <typeparam name="T">The type of dummy.</typeparam>
+        /// <returns>
+        /// Returns the reference dummy if is not in the specified range.
+        /// Otherwise, returns a new dummy that is not in the specified range.
+        /// </returns>
+        public static T ThatIsNotInRange<T>(
+            this T referenceDummy,
+            T rangeStartInclusive,
+            T rangeEndInclusive,
+            int maxAttempts = -1)
+            where T : IComparable<T>
+        {
+            if ((rangeStartInclusive != null) && (rangeEndInclusive != null))
+            {
+                if (rangeStartInclusive.CompareTo(rangeEndInclusive) > 0)
+                {
+                    throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, "{0} is > {1}", nameof(rangeStartInclusive), nameof(rangeEndInclusive)));
+                }
+            }
+
+            if ((rangeStartInclusive != null) && (rangeEndInclusive == null))
+            {
+                throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, "{0} is > {1}", nameof(rangeStartInclusive), nameof(rangeEndInclusive)));
+            }
+
+            bool Condition(T dummy) => dummy == null ? rangeStartInclusive != null : (dummy.CompareTo(rangeStartInclusive) < 0) || (dummy.CompareTo(rangeEndInclusive) > 0);
+
+            var result = ThatIs(referenceDummy, Condition, maxAttempts);
+            return result;
+        }
+
+        /// <summary>
+        /// Returns a reference dummy if it is not contained within a specified range (inclusive of endpoints)
+        /// or creates new dummies of the same type until a dummy is created that is not within the specified range.
+        /// Uses the comparison dummy's implementation of <see cref="IComparable.CompareTo(object)"/>
+        /// </summary>
+        /// <param name="referenceDummy">The reference dummy.</param>
+        /// <param name="rangeStartInclusive">The start of the range.  The range is inclusive of this value.</param>
+        /// <param name="rangeEndInclusive">The end of the range.  The range is inclusive of this value.</param>
+        /// <param name="comparer">The comparer to use when comparing dummies against the range.</param>
+        /// <param name="maxAttempts">
+        /// The maximum number of times to attempt to create a dummy that is not in specified range, before throwing.
+        /// The reference dummy is itself considered the first attempt.  If this method creates a new dummy because
+        /// the reference dummy is within the specified range, that is considered the second attempt.
+        /// If max attempts is zero or negative then the method tries an infinite number of times to create a dummy
+        /// that is not in the specified range, which is the default.
+        /// </param>
+        /// <typeparam name="T">The type of dummy.</typeparam>
+        /// <returns>
+        /// Returns the reference dummy if is not in the specified range.
+        /// Otherwise, returns a new dummy that is not in the specified range.
+        /// </returns>
+        public static T ThatIsNotInRange<T>(
+            this T referenceDummy,
+            T rangeStartInclusive,
+            T rangeEndInclusive,
+            IComparer<T> comparer,
+            int maxAttempts = -1)
+        {
+            // not throwing ArgumentNullException if start or end of range is null
+            // according to the documentation of IComparer<T>, null is comparable
+            // https://msdn.microsoft.com/en-us/library/xh5ks3b3(v=vs.110).aspx
+            if (comparer.Compare(rangeStartInclusive, rangeEndInclusive) > 0)
+            {
+                throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, "{0} is > {1}", nameof(rangeStartInclusive), nameof(rangeEndInclusive)));
+            }
+
+            bool Condition(T dummy) => (comparer.Compare(dummy, rangeStartInclusive) < 0) || (comparer.Compare(dummy, rangeEndInclusive) > 0);
             var result = ThatIs(referenceDummy, Condition, maxAttempts);
             return result;
         }

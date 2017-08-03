@@ -22,6 +22,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
     /// <summary>
     /// Tests the <see cref="ExtensionMethods"/> class.
     /// </summary>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Justification = "there are a lot of methods to test")]
     public static class ExtensionMethodsTest
     {
         // ReSharper disable InconsistentNaming
@@ -2643,6 +2644,572 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             actualDummies = actualDummies.Distinct().OrderBy(_ => _).ToList();
             actualDummies.Should().HaveCount(3);
             actualDummies.Should().ContainInOrder(ThatIsInOrNotInSet.One, ThatIsInOrNotInSet.Three, ThatIsInOrNotInSet.Five);
+        }
+
+        [Fact]
+        public static void ThatIsInRange_without_IComparer___Should_throw_ArgumentException___When_parameter_rangeStartInclusive_is_less_than_parameter_rangeEndInclusive()
+        {
+            // Arrange
+            var referenceDummy = A.Dummy<int>();
+
+            // Act
+            var ex1 = Record.Exception(() => referenceDummy.ThatIsInRange(11, 10));
+            var ex2 = Record.Exception(() => referenceDummy.ThatIsInRange(11, 10, maxAttempts: 1));
+
+            // Assert
+            ex1.Should().BeOfType<ArgumentException>();
+            ex1.Message.Should().Contain("rangeStartInclusive is > rangeEndInclusive");
+
+            ex2.Should().BeOfType<ArgumentException>();
+            ex2.Message.Should().Contain("rangeStartInclusive is > rangeEndInclusive");
+        }
+
+        [Fact]
+        public static void ThatIsInRange_without_IComparer___Should_throw_ArgumentException___When_parameter_rangeStartInclusive_is_not_null_and_rangeEndInclusive_is_null()
+        {
+            // Arrange
+            var referenceDummy = new ComparableIntAsObject(A.Dummy<int>());
+            var startRangeInclusive = new ComparableIntAsObject(A.Dummy<int>());
+
+            // Act
+            var ex1 = Record.Exception(() => referenceDummy.ThatIsInRange(startRangeInclusive, null));
+            var ex2 = Record.Exception(() => referenceDummy.ThatIsInRange(startRangeInclusive, null, maxAttempts: 1));
+
+            // Assert
+            ex1.Should().BeOfType<ArgumentException>();
+            ex1.Message.Should().Contain("rangeStartInclusive is > rangeEndInclusive");
+
+            ex2.Should().BeOfType<ArgumentException>();
+            ex2.Message.Should().Contain("rangeStartInclusive is > rangeEndInclusive");
+        }
+
+        [Fact]
+        public static void ThatIsInRange_without_IComparer___Should_not_throw___When_parameter_rangeStartInclusive_is_null_and_rangeEndInclusive_is_null()
+        {
+            // Arrange
+            ComparableIntAsObject referenceDummy = null;
+
+            // Act
+            // ReSharper disable ExpressionIsAlwaysNull
+            var ex1 = Record.Exception(() => referenceDummy.ThatIsInRange(null, null));
+            var ex2 = Record.Exception(() => referenceDummy.ThatIsInRange(null, null, maxAttempts: 1));
+            // ReSharper restore ExpressionIsAlwaysNull
+
+            // Assert
+            ex1.Should().BeNull();
+            ex2.Should().BeNull();
+        }
+
+        [Fact]
+        public static void ThatIsInRange_without_IComparer___Should_not_throw___When_parameter_rangeStartInclusive_is_null_and_rangeEndInclusive_is_not_null()
+        {
+            // Arrange
+            var referenceDummy = new ComparableIntAsObject(50);
+            var endRangeInclusive = new ComparableIntAsObject(100);
+
+            // Act
+            var ex1 = Record.Exception(() => referenceDummy.ThatIsInRange(null, endRangeInclusive));
+            var ex2 = Record.Exception(() => referenceDummy.ThatIsInRange(null, endRangeInclusive, maxAttempts: 1));
+
+            // Assert
+            ex1.Should().BeNull();
+            ex2.Should().BeNull();
+        }
+
+        [Fact]
+        public static void ThatIsInRange_without_IComparer___Should_return_referenceDummy___When_referenceDummy_is_within_the_specified_range()
+        {
+            // Arrange
+            var referenceDummy1 = 11;
+            ComparableIntAsObject referenceDummy2 = null;
+            var referenceDummy3 = new ComparableIntAsObject(50);
+
+            // Act
+            var actual1 = referenceDummy1.ThatIsInRange(11, 11);
+            var actual2 = referenceDummy1.ThatIsInRange(11, 12);
+            var actual3 = referenceDummy1.ThatIsInRange(10, 11);
+            var actual4 = referenceDummy1.ThatIsInRange(10, 12);
+
+            // ReSharper disable ExpressionIsAlwaysNull
+            var actual5 = referenceDummy2.ThatIsInRange(null, null);
+            var actual6 = referenceDummy2.ThatIsInRange(null, new ComparableIntAsObject(A.Dummy<int>()));
+
+            // ReSharper restore ExpressionIsAlwaysNull
+            var actual7 = referenceDummy3.ThatIsInRange(null, new ComparableIntAsObject(51));
+            var actual8 = referenceDummy3.ThatIsInRange(new ComparableIntAsObject(49), new ComparableIntAsObject(51));
+
+            // Assert
+            actual1.Should().Be(referenceDummy1);
+            actual2.Should().Be(referenceDummy1);
+            actual3.Should().Be(referenceDummy1);
+            actual4.Should().Be(referenceDummy1);
+
+            actual5.Should().BeNull();
+            actual6.Should().BeNull();
+
+            actual7.Should().BeSameAs(referenceDummy3);
+            actual8.Should().BeSameAs(referenceDummy3);
+        }
+
+        [Fact]
+        public static void ThatIsInRange_without_IComparer___Should_return_new_dummy_that_is_within_specified_range___When_referenceDummy_is_not_within_the_specified_range()
+        {
+            // Arrange
+            var startRangeInclusive = -192322;
+            var endRangeInclusive = 500000;
+
+            var referenceDummy1 = -192323;
+            ComparableIntAsObject referenceDummy2 = null;
+            var referenceDummy3 = new ComparableIntAsObject(referenceDummy1);
+
+            var actual1 = new List<int>();
+            var actual2 = new List<ComparableIntAsObject>();
+            var actual3 = new List<ComparableIntAsObject>();
+
+            // Act
+            for (int x = 0; x < 1000; x++)
+            {
+                actual1.Add(referenceDummy1.ThatIsInRange(startRangeInclusive, endRangeInclusive));
+                actual2.Add(referenceDummy2.ThatIsInRange(new ComparableIntAsObject(startRangeInclusive), new ComparableIntAsObject(endRangeInclusive)));
+                actual3.Add(referenceDummy3.ThatIsInRange(new ComparableIntAsObject(startRangeInclusive), new ComparableIntAsObject(endRangeInclusive)));
+            }
+
+            // Assert
+            actual1.Select(_ => (_ >= startRangeInclusive) && (_ <= endRangeInclusive)).ToList().ForEach(_ => _.Should().BeTrue());
+            actual2.Select(_ => (_.Value >= startRangeInclusive) && (_.Value <= endRangeInclusive)).ToList().ForEach(_ => _.Should().BeTrue());
+            actual3.Select(_ => (_.Value >= startRangeInclusive) && (_.Value <= endRangeInclusive)).ToList().ForEach(_ => _.Should().BeTrue());
+        }
+
+        [Fact]
+        public static void ThatIsInRange_with_IComparer___Should_throw_ArgumentException___When_parameter_rangeStartInclusive_is_less_than_parameter_rangeEndInclusive()
+        {
+            // Arrange
+            var referenceDummy = A.Dummy<int>();
+            var comparer = Comparer<int>.Default;
+
+            // Act
+            var ex1 = Record.Exception(() => referenceDummy.ThatIsInRange(11, 10, comparer));
+            var ex2 = Record.Exception(() => referenceDummy.ThatIsInRange(11, 10, comparer, maxAttempts: 1));
+
+            // Assert
+            ex1.Should().BeOfType<ArgumentException>();
+            ex1.Message.Should().Contain("rangeStartInclusive is > rangeEndInclusive");
+
+            ex2.Should().BeOfType<ArgumentException>();
+            ex2.Message.Should().Contain("rangeStartInclusive is > rangeEndInclusive");
+        }
+
+        [Fact]
+        public static void ThatIsInRange_with_IComparer___Should_throw_ArgumentException___When_parameter_rangeStartInclusive_is_not_null_and_rangeEndInclusive_is_null()
+        {
+            // Arrange
+            var referenceDummy = new ComparableIntAsObject(A.Dummy<int>());
+            var startRangeInclusive = new ComparableIntAsObject(A.Dummy<int>());
+            var comparer = new ComparableIntAsObjectComparer();
+
+            // Act
+            var ex1 = Record.Exception(() => referenceDummy.ThatIsInRange(startRangeInclusive, null, comparer));
+            var ex2 = Record.Exception(() => referenceDummy.ThatIsInRange(startRangeInclusive, null, comparer, maxAttempts: 1));
+
+            // Assert
+            ex1.Should().BeOfType<ArgumentException>();
+            ex1.Message.Should().Contain("rangeStartInclusive is > rangeEndInclusive");
+
+            ex2.Should().BeOfType<ArgumentException>();
+            ex2.Message.Should().Contain("rangeStartInclusive is > rangeEndInclusive");
+        }
+
+        [Fact]
+        public static void ThatIsInRange_with_IComparer___Should_not_throw___When_parameter_rangeStartInclusive_is_null_and_rangeEndInclusive_is_null()
+        {
+            // Arrange
+            ComparableIntAsObject referenceDummy = null;
+            var comparer = new ComparableIntAsObjectComparer();
+
+            // Act
+            // ReSharper disable ExpressionIsAlwaysNull
+            var ex1 = Record.Exception(() => referenceDummy.ThatIsInRange(null, null, comparer));
+            var ex2 = Record.Exception(() => referenceDummy.ThatIsInRange(null, null, comparer, maxAttempts: 1));
+            // ReSharper restore ExpressionIsAlwaysNull
+
+            // Assert
+            ex1.Should().BeNull();
+            ex2.Should().BeNull();
+        }
+
+        [Fact]
+        public static void ThatIsInRange_with_IComparer___Should_not_throw___When_parameter_rangeStartInclusive_is_null_and_rangeEndInclusive_is_not_null()
+        {
+            // Arrange
+            var referenceDummy = new ComparableIntAsObject(50);
+            var endRangeInclusive = new ComparableIntAsObject(100);
+            var comparer = new ComparableIntAsObjectComparer();
+
+            // Act
+            var ex1 = Record.Exception(() => referenceDummy.ThatIsInRange(null, endRangeInclusive, comparer));
+            var ex2 = Record.Exception(() => referenceDummy.ThatIsInRange(null, endRangeInclusive, comparer, maxAttempts: 1));
+
+            // Assert
+            ex1.Should().BeNull();
+            ex2.Should().BeNull();
+        }
+
+        [Fact]
+        public static void ThatIsInRange_with_IComparer___Should_return_referenceDummy___When_referenceDummy_is_within_the_specified_range()
+        {
+            // Arrange
+            var referenceDummy1 = 11;
+            ComparableIntAsObject referenceDummy2 = null;
+            var referenceDummy3 = new ComparableIntAsObject(50);
+
+            var comparer1 = Comparer<int>.Default;
+            var comparer2 = new ComparableIntAsObjectComparer();
+            var comparer3 = new ComparableIntAsObjectComparer();
+
+            // Act
+            var actual1 = referenceDummy1.ThatIsInRange(11, 11, comparer1);
+            var actual2 = referenceDummy1.ThatIsInRange(11, 12, comparer1);
+            var actual3 = referenceDummy1.ThatIsInRange(10, 11, comparer1);
+            var actual4 = referenceDummy1.ThatIsInRange(10, 12, comparer1);
+
+            // ReSharper disable ExpressionIsAlwaysNull
+            var actual5 = referenceDummy2.ThatIsInRange(null, null, comparer2);
+            var actual6 = referenceDummy2.ThatIsInRange(null, new ComparableIntAsObject(A.Dummy<int>()), comparer2);
+
+            // ReSharper restore ExpressionIsAlwaysNull
+            var actual7 = referenceDummy3.ThatIsInRange(null, new ComparableIntAsObject(51), comparer3);
+            var actual8 = referenceDummy3.ThatIsInRange(new ComparableIntAsObject(49), new ComparableIntAsObject(51), comparer3);
+
+            // Assert
+            actual1.Should().Be(referenceDummy1);
+            actual2.Should().Be(referenceDummy1);
+            actual3.Should().Be(referenceDummy1);
+            actual4.Should().Be(referenceDummy1);
+
+            actual5.Should().BeNull();
+            actual6.Should().BeNull();
+
+            actual7.Should().BeSameAs(referenceDummy3);
+            actual8.Should().BeSameAs(referenceDummy3);
+        }
+
+        [Fact]
+        public static void ThatIsInRange_with_IComparer___Should_return_new_dummy_that_is_within_specified_range___When_referenceDummy_is_not_within_the_specified_range()
+        {
+            // Arrange
+            var startRangeInclusive = -192322;
+            var endRangeInclusive = 500000;
+
+            var referenceDummy1 = -192323;
+            ComparableIntAsObject referenceDummy2 = null;
+            var referenceDummy3 = new ComparableIntAsObject(referenceDummy1);
+
+            var comparer1 = Comparer<int>.Default;
+            var comparer2 = new ComparableIntAsObjectComparer();
+            var comparer3 = new ComparableIntAsObjectComparer();
+
+            var actual1 = new List<int>();
+            var actual2 = new List<ComparableIntAsObject>();
+            var actual3 = new List<ComparableIntAsObject>();
+
+            // Act
+            for (int x = 0; x < 1000; x++)
+            {
+                actual1.Add(referenceDummy1.ThatIsInRange(startRangeInclusive, endRangeInclusive, comparer1));
+                actual2.Add(referenceDummy2.ThatIsInRange(new ComparableIntAsObject(startRangeInclusive), new ComparableIntAsObject(endRangeInclusive), comparer2));
+                actual3.Add(referenceDummy3.ThatIsInRange(new ComparableIntAsObject(startRangeInclusive), new ComparableIntAsObject(endRangeInclusive), comparer3));
+            }
+
+            // Assert
+            actual1.Select(_ => (_ >= startRangeInclusive) && (_ <= endRangeInclusive)).ToList().ForEach(_ => _.Should().BeTrue());
+            actual2.Select(_ => (_.Value >= startRangeInclusive) && (_.Value <= endRangeInclusive)).ToList().ForEach(_ => _.Should().BeTrue());
+            actual3.Select(_ => (_.Value >= startRangeInclusive) && (_.Value <= endRangeInclusive)).ToList().ForEach(_ => _.Should().BeTrue());
+        }
+
+        [Fact]
+        public static void ThatIsNotInRange_without_IComparer___Should_throw_ArgumentException___When_parameter_rangeStartInclusive_is_less_than_parameter_rangeEndInclusive()
+        {
+            // Arrange
+            var referenceDummy = A.Dummy<int>();
+
+            // Act
+            var ex1 = Record.Exception(() => referenceDummy.ThatIsNotInRange(11, 10));
+            var ex2 = Record.Exception(() => referenceDummy.ThatIsNotInRange(11, 10, maxAttempts: 1));
+
+            // Assert
+            ex1.Should().BeOfType<ArgumentException>();
+            ex1.Message.Should().Contain("rangeStartInclusive is > rangeEndInclusive");
+
+            ex2.Should().BeOfType<ArgumentException>();
+            ex2.Message.Should().Contain("rangeStartInclusive is > rangeEndInclusive");
+        }
+
+        [Fact]
+        public static void ThatIsNotInRange_without_IComparer___Should_throw_ArgumentException___When_parameter_rangeStartInclusive_is_not_null_and_rangeEndInclusive_is_null()
+        {
+            // Arrange
+            var referenceDummy = new ComparableIntAsObject(A.Dummy<int>());
+            var startRangeInclusive = new ComparableIntAsObject(A.Dummy<int>());
+
+            // Act
+            var ex1 = Record.Exception(() => referenceDummy.ThatIsNotInRange(startRangeInclusive, null));
+            var ex2 = Record.Exception(() => referenceDummy.ThatIsNotInRange(startRangeInclusive, null, maxAttempts: 1));
+
+            // Assert
+            ex1.Should().BeOfType<ArgumentException>();
+            ex1.Message.Should().Contain("rangeStartInclusive is > rangeEndInclusive");
+
+            ex2.Should().BeOfType<ArgumentException>();
+            ex2.Message.Should().Contain("rangeStartInclusive is > rangeEndInclusive");
+        }
+
+        [Fact]
+        public static void ThatIsNotInRange_without_IComparer___Should_not_throw___When_parameter_rangeStartInclusive_is_null_and_rangeEndInclusive_is_null()
+        {
+            // Arrange
+            ComparableIntAsObject referenceDummy = null;
+
+            // Act
+            var ex = Record.Exception(() => referenceDummy.ThatIsNotInRange(null, null));
+
+            // Assert
+            ex.Should().BeNull();
+        }
+
+        [Fact]
+        public static void ThatIsNotInRange_without_IComparer___Should_not_throw___When_parameter_rangeStartInclusive_is_null_and_rangeEndInclusive_is_not_null()
+        {
+            // Arrange
+            var referenceDummy = new ComparableIntAsObject(50);
+            var endRangeInclusive = new ComparableIntAsObject(100);
+
+            // Act
+            var ex = Record.Exception(() => referenceDummy.ThatIsNotInRange(null, endRangeInclusive));
+
+            // Assert
+            ex.Should().BeNull();
+        }
+
+        [Fact]
+        public static void ThatIsNotInRange_without_IComparer___Should_return_referenceDummy___When_referenceDummy_is_not_within_the_specified_range()
+        {
+            // Arrange
+            var referenceDummy1 = 11;
+            ComparableIntAsObject referenceDummy2 = null;
+            var referenceDummy3 = new ComparableIntAsObject(50);
+
+            // Act
+            var actual1 = referenceDummy1.ThatIsNotInRange(12, 12);
+            var actual2 = referenceDummy1.ThatIsNotInRange(10, 10);
+            var actual3 = referenceDummy1.ThatIsNotInRange(1, 10);
+            var actual4 = referenceDummy1.ThatIsNotInRange(12, 20);
+
+            var actual5 = referenceDummy2.ThatIsNotInRange(new ComparableIntAsObject(50), new ComparableIntAsObject(100));
+
+            var actual6 = referenceDummy3.ThatIsNotInRange(null, null);
+            var actual7 = referenceDummy3.ThatIsNotInRange(null, new ComparableIntAsObject(49));
+            var actual8 = referenceDummy3.ThatIsNotInRange(new ComparableIntAsObject(0), new ComparableIntAsObject(49));
+            var actual9 = referenceDummy3.ThatIsNotInRange(new ComparableIntAsObject(51), new ComparableIntAsObject(100));
+
+            // Assert
+            actual1.Should().Be(referenceDummy1);
+            actual2.Should().Be(referenceDummy1);
+            actual3.Should().Be(referenceDummy1);
+            actual4.Should().Be(referenceDummy1);
+
+            actual5.Should().BeNull();
+
+            actual6.Should().BeSameAs(referenceDummy3);
+            actual7.Should().BeSameAs(referenceDummy3);
+            actual8.Should().BeSameAs(referenceDummy3);
+            actual9.Should().BeSameAs(referenceDummy3);
+        }
+
+        [Fact]
+        public static void ThatIsNotInRange_without_IComparer___Should_return_new_dummy_that_is_not_within_specified_range___When_referenceDummy_is_within_the_specified_range()
+        {
+            // Arrange
+            var startRangeInclusive = -1000;
+            var endRangeInclusive = 1000;
+
+            var referenceDummy1 = startRangeInclusive;
+            ComparableIntAsObject referenceDummy2 = null;
+            ComparableIntAsObject referenceDummy3 = null;
+            var referenceDummy4 = new ComparableIntAsObject(int.MinValue);
+            var referenceDummy5 = new ComparableIntAsObject(endRangeInclusive - 1);
+
+            var actual1 = new List<int>();
+            var actual2 = new List<ComparableIntAsObject>();
+            var actual3 = new List<ComparableIntAsObject>();
+            var actual4 = new List<ComparableIntAsObject>();
+            var actual5 = new List<ComparableIntAsObject>();
+
+            // Act
+            for (int x = 0; x < 1000; x++)
+            {
+                actual1.Add(referenceDummy1.ThatIsNotInRange(startRangeInclusive, endRangeInclusive));
+                actual2.Add(referenceDummy2.ThatIsNotInRange(null, null));
+                actual3.Add(referenceDummy3.ThatIsNotInRange(null, new ComparableIntAsObject(endRangeInclusive)));
+                actual4.Add(referenceDummy4.ThatIsNotInRange(null, new ComparableIntAsObject(endRangeInclusive)));
+                actual5.Add(referenceDummy5.ThatIsNotInRange(new ComparableIntAsObject(startRangeInclusive), new ComparableIntAsObject(endRangeInclusive)));
+            }
+
+            // Assert
+            actual1.Select(_ => (_ < startRangeInclusive) || (_ > endRangeInclusive)).ToList().ForEach(_ => _.Should().BeTrue());
+            actual2.ForEach(_ => _.Should().NotBeNull());
+            actual3.Select(_ => _.Value > endRangeInclusive).ToList().ForEach(_ => _.Should().BeTrue());
+            actual4.Select(_ => _.Value > endRangeInclusive).ToList().ForEach(_ => _.Should().BeTrue());
+            actual5.Select(_ => (_.Value < startRangeInclusive) || (_.Value > endRangeInclusive)).ToList().ForEach(_ => _.Should().BeTrue());
+        }
+
+        [Fact]
+        public static void ThatIsNotInRange_with_IComparer___Should_throw_ArgumentException___When_parameter_rangeStartInclusive_is_less_than_parameter_rangeEndInclusive()
+        {
+            // Arrange
+            var referenceDummy = A.Dummy<int>();
+            var comparer = Comparer<int>.Default;
+
+            // Act
+            var ex1 = Record.Exception(() => referenceDummy.ThatIsNotInRange(11, 10, comparer));
+            var ex2 = Record.Exception(() => referenceDummy.ThatIsNotInRange(11, 10, comparer, maxAttempts: 1));
+
+            // Assert
+            ex1.Should().BeOfType<ArgumentException>();
+            ex1.Message.Should().Contain("rangeStartInclusive is > rangeEndInclusive");
+
+            ex2.Should().BeOfType<ArgumentException>();
+            ex2.Message.Should().Contain("rangeStartInclusive is > rangeEndInclusive");
+        }
+
+        [Fact]
+        public static void ThatIsNotInRange_with_IComparer___Should_throw_ArgumentException___When_parameter_rangeStartInclusive_is_not_null_and_rangeEndInclusive_is_null()
+        {
+            // Arrange
+            var referenceDummy = new ComparableIntAsObject(A.Dummy<int>());
+            var startRangeInclusive = new ComparableIntAsObject(A.Dummy<int>());
+            var comparer = new ComparableIntAsObjectComparer();
+
+            // Act
+            var ex1 = Record.Exception(() => referenceDummy.ThatIsNotInRange(startRangeInclusive, null, comparer));
+            var ex2 = Record.Exception(() => referenceDummy.ThatIsNotInRange(startRangeInclusive, null, comparer, maxAttempts: 1));
+
+            // Assert
+            ex1.Should().BeOfType<ArgumentException>();
+            ex1.Message.Should().Contain("rangeStartInclusive is > rangeEndInclusive");
+
+            ex2.Should().BeOfType<ArgumentException>();
+            ex2.Message.Should().Contain("rangeStartInclusive is > rangeEndInclusive");
+        }
+
+        [Fact]
+        public static void ThatIsNotInRange_with_IComparer___Should_not_throw___When_parameter_rangeStartInclusive_is_null_and_rangeEndInclusive_is_null()
+        {
+            // Arrange
+            ComparableIntAsObject referenceDummy = null;
+            var comparer = new ComparableIntAsObjectComparer();
+
+            // Act
+            var ex = Record.Exception(() => referenceDummy.ThatIsNotInRange(null, null, comparer));
+
+            // Assert
+            ex.Should().BeNull();
+        }
+
+        [Fact]
+        public static void ThatIsNotInRange_with_IComparer___Should_not_throw___When_parameter_rangeStartInclusive_is_null_and_rangeEndInclusive_is_not_null()
+        {
+            // Arrange
+            var referenceDummy = new ComparableIntAsObject(50);
+            var endRangeInclusive = new ComparableIntAsObject(100);
+            var comparer = new ComparableIntAsObjectComparer();
+
+            // Act
+            var ex = Record.Exception(() => referenceDummy.ThatIsNotInRange(null, endRangeInclusive, comparer));
+
+            // Assert
+            ex.Should().BeNull();
+        }
+
+        [Fact]
+        public static void ThatIsNotInRange_with_IComparer___Should_return_referenceDummy___When_referenceDummy_is_not_within_the_specified_range()
+        {
+            // Arrange
+            var referenceDummy1 = 11;
+            ComparableIntAsObject referenceDummy2 = null;
+            var referenceDummy3 = new ComparableIntAsObject(50);
+
+            var comparer1 = Comparer<int>.Default;
+            var comparer2 = new ComparableIntAsObjectComparer();
+            var comparer3 = new ComparableIntAsObjectComparer();
+
+            // Act
+            var actual1 = referenceDummy1.ThatIsNotInRange(12, 12, comparer1);
+            var actual2 = referenceDummy1.ThatIsNotInRange(10, 10, comparer1);
+            var actual3 = referenceDummy1.ThatIsNotInRange(1, 10, comparer1);
+            var actual4 = referenceDummy1.ThatIsNotInRange(12, 20, comparer1);
+
+            var actual5 = referenceDummy2.ThatIsNotInRange(new ComparableIntAsObject(50), new ComparableIntAsObject(100), comparer2);
+
+            var actual6 = referenceDummy3.ThatIsNotInRange(null, null, comparer3);
+            var actual7 = referenceDummy3.ThatIsNotInRange(null, new ComparableIntAsObject(49), comparer3);
+            var actual8 = referenceDummy3.ThatIsNotInRange(new ComparableIntAsObject(0), new ComparableIntAsObject(49), comparer3);
+            var actual9 = referenceDummy3.ThatIsNotInRange(new ComparableIntAsObject(51), new ComparableIntAsObject(100), comparer3);
+
+            // Assert
+            actual1.Should().Be(referenceDummy1);
+            actual2.Should().Be(referenceDummy1);
+            actual3.Should().Be(referenceDummy1);
+            actual4.Should().Be(referenceDummy1);
+
+            actual5.Should().BeNull();
+
+            actual6.Should().BeSameAs(referenceDummy3);
+            actual7.Should().BeSameAs(referenceDummy3);
+            actual8.Should().BeSameAs(referenceDummy3);
+            actual9.Should().BeSameAs(referenceDummy3);
+        }
+
+        [Fact]
+        public static void ThatIsNotInRange_with_IComparer___Should_return_new_dummy_that_is_not_within_specified_range___When_referenceDummy_is_within_the_specified_range()
+        {
+            // Arrange
+            var startRangeInclusive = -1000;
+            var endRangeInclusive = 1000;
+
+            var referenceDummy1 = startRangeInclusive;
+            ComparableIntAsObject referenceDummy2 = null;
+            ComparableIntAsObject referenceDummy3 = null;
+            var referenceDummy4 = new ComparableIntAsObject(int.MinValue);
+            var referenceDummy5 = new ComparableIntAsObject(endRangeInclusive - 1);
+
+            var comparer1 = Comparer<int>.Default;
+            var comparer2 = new ComparableIntAsObjectComparer();
+            var comparer3 = new ComparableIntAsObjectComparer();
+            var comparer4 = new ComparableIntAsObjectComparer();
+            var comparer5 = new ComparableIntAsObjectComparer();
+
+            var actual1 = new List<int>();
+            var actual2 = new List<ComparableIntAsObject>();
+            var actual3 = new List<ComparableIntAsObject>();
+            var actual4 = new List<ComparableIntAsObject>();
+            var actual5 = new List<ComparableIntAsObject>();
+
+            // Act
+            for (int x = 0; x < 1000; x++)
+            {
+                actual1.Add(referenceDummy1.ThatIsNotInRange(startRangeInclusive, endRangeInclusive, comparer1));
+                actual2.Add(referenceDummy2.ThatIsNotInRange(null, null, comparer2));
+                actual3.Add(referenceDummy3.ThatIsNotInRange(null, new ComparableIntAsObject(endRangeInclusive), comparer3));
+                actual4.Add(referenceDummy4.ThatIsNotInRange(null, new ComparableIntAsObject(endRangeInclusive), comparer4));
+                actual5.Add(referenceDummy5.ThatIsNotInRange(new ComparableIntAsObject(startRangeInclusive), new ComparableIntAsObject(endRangeInclusive), comparer5));
+            }
+
+            // Assert
+            actual1.Select(_ => (_ < startRangeInclusive) || (_ > endRangeInclusive)).ToList().ForEach(_ => _.Should().BeTrue());
+            actual2.ForEach(_ => _.Should().NotBeNull());
+            actual3.Select(_ => _.Value > endRangeInclusive).ToList().ForEach(_ => _.Should().BeTrue());
+            actual4.Select(_ => _.Value > endRangeInclusive).ToList().ForEach(_ => _.Should().BeTrue());
+            actual5.Select(_ => (_.Value < startRangeInclusive) || (_.Value > endRangeInclusive)).ToList().ForEach(_ => _.Should().BeTrue());
         }
 
         private static bool ConditionThatCannnotBeMet(string input)
