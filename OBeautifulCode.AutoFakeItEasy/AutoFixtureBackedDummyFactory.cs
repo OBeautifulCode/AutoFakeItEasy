@@ -15,7 +15,7 @@ namespace OBeautifulCode.AutoFakeItEasy
 
     using FakeItEasy;
 
-    using OBeautifulCode.Math;
+    using OBeautifulCode.Math.Recipes;
 
     using Ploeh.AutoFixture;
     using Ploeh.AutoFixture.Kernel;

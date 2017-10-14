@@ -12,7 +12,7 @@ namespace OBeautifulCode.AutoFakeItEasy
 
     using FakeItEasy;
 
-    using OBeautifulCode.Math;
+    using OBeautifulCode.Math.Recipes;
 
     /// <summary>
     /// Provides methods for generating a lists of dummies.

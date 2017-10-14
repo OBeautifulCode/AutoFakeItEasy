@@ -10,7 +10,7 @@ namespace OBeautifulCode.AutoFakeItEasy
     using System;
     using System.Diagnostics;
 
-    using OBeautifulCode.Math;
+    using OBeautifulCode.Math.Recipes;
 
     /// <summary>
     /// Represents a positive integer.

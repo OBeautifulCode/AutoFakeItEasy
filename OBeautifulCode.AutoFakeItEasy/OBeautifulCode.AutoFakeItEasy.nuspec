@@ -15,6 +15,6 @@
     <tags>AutoFixture FakeItEasy Dummy testing data</tags>
   </metadata>
   <files>
-    <file src="AutoFakeItEasyBootstrapper.cs" target="content\net45\.OBeautifulCode.Recipes\OBeautifulCode.AutoFakeItEasy\AutoFakeItEasyBootstrapper.cs" />
+    <file src="AutoFakeItEasyBootstrapper.cs" target="content\net45\.recipes\OBeautifulCode.AutoFakeItEasy\AutoFakeItEasyBootstrapper.cs" />
   </files>
 </package>

@@ -10,7 +10,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
     using System;
     using System.Collections.Generic;
 
-    using Math;
+    using OBeautifulCode.Math.Recipes;
 
 #pragma warning disable SA1649 // File name must match first type name
 #pragma warning disable SA1402 // File may only contain a single class

@@ -15,7 +15,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
 
     using FluentAssertions;
 
-    using OBeautifulCode.Math;
+    using OBeautifulCode.Math.Recipes;
 
     using Xunit;
 

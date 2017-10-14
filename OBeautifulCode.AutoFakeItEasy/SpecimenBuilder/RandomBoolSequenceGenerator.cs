@@ -9,7 +9,7 @@ namespace OBeautifulCode.AutoFakeItEasy
 {
     using System;
 
-    using OBeautifulCode.Math;
+    using OBeautifulCode.Math.Recipes;
 
     using Ploeh.AutoFixture.Kernel;
 
