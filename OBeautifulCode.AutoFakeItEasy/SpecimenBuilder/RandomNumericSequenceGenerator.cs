@@ -69,9 +69,9 @@ namespace OBeautifulCode.AutoFakeItEasy
             long inclusiveMin,
             long exclusiveMax)
         {
-            byte[] buffer = new byte[8];
+            var buffer = new byte[8];
             ThreadSafeRandom.NextBytes(buffer);
-            long longRand = BitConverter.ToInt64(buffer, 0);
+            var longRand = BitConverter.ToInt64(buffer, 0);
             var result = Math.Abs(longRand % (exclusiveMax - inclusiveMin)) + inclusiveMin;
             return result;
         }

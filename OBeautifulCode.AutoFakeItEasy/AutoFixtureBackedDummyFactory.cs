@@ -178,7 +178,7 @@ namespace OBeautifulCode.AutoFakeItEasy
                 throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, "{0} is not null, but empty.", nameof(typesToInclude)));
             }
 
-            Type type = typeof(T);
+            var type = typeof(T);
             var concreteSubclasses = type.Assembly
                 .GetTypes()
                 .Where(_ => _.IsSubclassOf(type))
@@ -234,7 +234,7 @@ namespace OBeautifulCode.AutoFakeItEasy
         public static void UseRandomInterfaceImplementationForDummy<T>(
             bool includeOtherInterfaces = false)
         {
-            Type type = typeof(T);
+            var type = typeof(T);
             var interfaceImplementations = type.Assembly
                 .GetTypes()
                 .Where(t => type != t)
@@ -333,7 +333,7 @@ namespace OBeautifulCode.AutoFakeItEasy
                 fixture.Register(dummyCreatorFunc);
             }
 
-            Type type = typeof(T);
+            var type = typeof(T);
             RegisteredTypes.TryAdd(type, new object());
         }
 
@@ -383,7 +383,7 @@ namespace OBeautifulCode.AutoFakeItEasy
 
             lock (FixtureLock)
             {
-                object result = autoFixtureGenericCreateMethod.Invoke(null, new object[] { fixture });
+                var result = autoFixtureGenericCreateMethod.Invoke(null, new object[] { fixture });
                 return result;
             }
         }
