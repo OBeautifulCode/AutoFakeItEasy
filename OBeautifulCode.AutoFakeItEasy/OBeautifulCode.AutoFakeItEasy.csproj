@@ -89,7 +89,7 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="AutoFakeItEasy.override-nuspec">
+    <None Include="OBeautifulCode.AutoFakeItEasy.override-nuspec">
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
