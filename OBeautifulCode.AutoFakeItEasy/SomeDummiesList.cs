@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="SomeDummiesList.cs" company="OBeautifulCode">
-//   Copyright (c) OBeautifulCode. All rights reserved.
+//   Copyright (c) OBeautifulCode 2018. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -9,7 +9,7 @@ namespace OBeautifulCode.AutoFakeItEasy
     using System.Collections.Generic;
 
     /// <summary>
-    /// Represents a <see cref="List{T}"/> generated via a call to <see cref="Some.Dummies{T}(int,AutoFakeItEasy.CreateWith)"/>
+    /// Represents a <see cref="List{T}"/> generated via a call to <see cref="Some.Dummies{T}(int,AutoFakeItEasy.CreateWith)"/>.
     /// </summary>
     /// <typeparam name="T">The type of elements in the list.</typeparam>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix", Justification = "'List' is a better suffix than 'Collection' in this case.")]

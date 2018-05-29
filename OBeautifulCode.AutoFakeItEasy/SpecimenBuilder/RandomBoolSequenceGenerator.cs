@@ -1,10 +1,9 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="RandomBoolSequenceGenerator.cs" company="OBeautifulCode">
-//   Copyright (c) OBeautifulCode. All rights reserved.
+//   Copyright (c) OBeautifulCode 2018. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-// ReSharper disable CheckNamespace
 namespace OBeautifulCode.AutoFakeItEasy
 {
     using System;
@@ -17,7 +16,7 @@ namespace OBeautifulCode.AutoFakeItEasy
     /// Creates random value <see langword="true"/> or <see langword="false"/>.
     /// </summary>
     /// <remarks>
-    /// Adapted from: <a href="https://github.com/AutoFixture/AutoFixture/blob/master/Src/AutoFixture/RandomNumericSequenceGenerator.cs"/>
+    /// Adapted from: <a href="https://github.com/AutoFixture/AutoFixture/blob/master/Src/AutoFixture/RandomNumericSequenceGenerator.cs"/>.
     /// </remarks>
     public class RandomBoolSequenceGenerator : ISpecimenBuilder
     {
@@ -43,5 +42,3 @@ namespace OBeautifulCode.AutoFakeItEasy
         }
     }
 }
-
-// ReSharper restore CheckNamespace

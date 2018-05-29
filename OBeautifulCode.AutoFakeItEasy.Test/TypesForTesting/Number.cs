@@ -1,15 +1,11 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="Number.cs" company="OBeautifulCode">
-//   Copyright (c) OBeautifulCode. All rights reserved.
+//   Copyright (c) OBeautifulCode 2018. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-// ReSharper disable CheckNamespace
 namespace OBeautifulCode.AutoFakeItEasy.Test
 {
-    /// <summary>
-    /// An enum for testing purposes.
-    /// </summary>
     public enum Number
     {
         One,
@@ -20,8 +16,6 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
 
         Four,
 
-        Five
+        Five,
     }
 }
-
-// ReSharper restore CheckNamespace

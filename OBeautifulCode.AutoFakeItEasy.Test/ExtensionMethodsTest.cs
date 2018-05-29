@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ExtensionMethodsTest.cs" company="OBeautifulCode">
-//   Copyright (c) OBeautifulCode. All rights reserved.
+//   Copyright (c) OBeautifulCode 2018. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -19,13 +19,9 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
 
     using Xunit;
 
-    /// <summary>
-    /// Tests the <see cref="ExtensionMethods"/> class.
-    /// </summary>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Justification = "there are a lot of methods to test")]
     public static class ExtensionMethodsTest
     {
-        // ReSharper disable InconsistentNaming
         [Fact]
         public static void ThatIs___Should_throw_ArgumentNullException___When_parameter_condition_is_null()
         {
@@ -272,8 +268,6 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var referenceDummy3 = Some.ReadOnlyDummies<string>();
 
             // Act
-            // ReSharper disable RedundantArgumentName
-            // ReSharper disable RedundantArgumentDefaultValue
             var result1a = referenceDummy1.ThatIs(ConditionThatsAlwaysMet);
             var result1b = referenceDummy1.ThatIs(ConditionThatsAlwaysMet, maxAttempts: 101);
             var result1c = referenceDummy1.ThatIs(ConditionThatsAlwaysMet, maxAttempts: 0);
@@ -288,8 +282,6 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var result3b = referenceDummy3.ThatIs(ConditionThatsAlwaysMet, maxAttempts: 101);
             var result3c = referenceDummy3.ThatIs(ConditionThatsAlwaysMet, maxAttempts: 0);
             var result3d = referenceDummy3.ThatIs(ConditionThatsAlwaysMet, maxAttempts: -1);
-            // ReSharper restore RedundantArgumentDefaultValue
-            // ReSharper restore RedundantArgumentName
 
             // Assert
             result1a.Should().Be(referenceDummy1);
@@ -317,16 +309,10 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             Func<string, bool> condition = _ => (_ != null) && _.Contains(ExpectedCharacter);
 
             // Act
-            // ReSharper disable RedundantArgumentName
-            // ReSharper disable RedundantArgumentDefaultValue
-            // ReSharper disable ExpressionIsAlwaysNull
             var result1 = referenceDummy.ThatIs(condition);
             var result2 = referenceDummy.ThatIs(condition, maxAttempts: 101);
             var result3 = referenceDummy.ThatIs(condition, maxAttempts: 0);
             var result4 = referenceDummy.ThatIs(condition, maxAttempts: -1);
-            // ReSharper restore ExpressionIsAlwaysNull
-            // ReSharper restore RedundantArgumentDefaultValue
-            // ReSharper restore RedundantArgumentName
 
             // Assert
             result1.Should().Contain(ExpectedCharacter);
@@ -344,14 +330,10 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             Func<string, bool> condition = _ => _.Contains(ExpectedCharacter);
 
             // Act
-            // ReSharper disable RedundantArgumentName
-            // ReSharper disable RedundantArgumentDefaultValue
             var result1 = referenceDummy.ThatIs(condition);
             var result2 = referenceDummy.ThatIs(condition, maxAttempts: 101);
             var result3 = referenceDummy.ThatIs(condition, maxAttempts: 0);
             var result4 = referenceDummy.ThatIs(condition, maxAttempts: -1);
-            // ReSharper restore RedundantArgumentDefaultValue
-            // ReSharper restore RedundantArgumentName
 
             // Assert
             result1.Should().NotBe(referenceDummy);
@@ -375,14 +357,10 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             Func<IList<string>, bool> condition = _ => _.Count >= MinCount;
 
             // Act
-            // ReSharper disable RedundantArgumentName
-            // ReSharper disable RedundantArgumentDefaultValue
             var result1 = referenceDummy.ThatIs(condition);
             var result2 = referenceDummy.ThatIs(condition, maxAttempts: 101);
             var result3 = referenceDummy.ThatIs(condition, maxAttempts: 0);
             var result4 = referenceDummy.ThatIs(condition, maxAttempts: -1);
-            // ReSharper restore RedundantArgumentDefaultValue
-            // ReSharper restore RedundantArgumentName
 
             // Assert
             result1.Count.Should().BeGreaterOrEqualTo(MinCount);
@@ -400,14 +378,10 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             Func<IReadOnlyList<double>, bool> condition = _ => _.Count >= MinCount;
 
             // Act
-            // ReSharper disable RedundantArgumentName
-            // ReSharper disable RedundantArgumentDefaultValue
             var result1 = referenceDummy.ThatIs(condition);
             var result2 = referenceDummy.ThatIs(condition, maxAttempts: 101);
             var result3 = referenceDummy.ThatIs(condition, maxAttempts: 0);
             var result4 = referenceDummy.ThatIs(condition, maxAttempts: -1);
-            // ReSharper restore RedundantArgumentDefaultValue
-            // ReSharper restore RedundantArgumentName
 
             // Assert
             result1.Count.Should().BeGreaterOrEqualTo(MinCount);
@@ -431,10 +405,8 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             Func<IList<string>, bool> trueAfterSeveralRetriesCondition = _ => _.Count(s => s == null) > 1;
 
             // Act
-            // ReSharper disable RedundantArgumentName
             var result1 = referenceDummy1.ThatIs(trueOnFirstRetryCondition, maxAttempts: 2);
             var result2 = referenceDummy2.ThatIs(trueAfterSeveralRetriesCondition, maxAttempts: 0);
-            // ReSharper restore RedundantArgumentName
 
             // Assert
             result1.Should().BeAssignableTo<IList<string>>();
@@ -459,10 +431,8 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             Func<IReadOnlyList<string>, bool> trueAfterSeveralRetriesCondition = _ => _.Count(s => s == null) > 1;
 
             // Act
-            // ReSharper disable RedundantArgumentName
             var result1 = referenceDummy1.ThatIs(trueOnFirstRetryCondition, maxAttempts: 2);
             var result2 = referenceDummy2.ThatIs(trueAfterSeveralRetriesCondition, maxAttempts: 0);
-            // ReSharper restore RedundantArgumentName
 
             // Assert
             result1.Should().BeAssignableTo<IReadOnlyList<string>>();
@@ -720,8 +690,6 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var referenceDummy3 = Some.ReadOnlyDummies<string>();
 
             // Act
-            // ReSharper disable RedundantArgumentName
-            // ReSharper disable RedundantArgumentDefaultValue
             var result1a = referenceDummy1.Whose(ConditionThatsAlwaysMet);
             var result1b = referenceDummy1.Whose(ConditionThatsAlwaysMet, maxAttempts: 101);
             var result1c = referenceDummy1.Whose(ConditionThatsAlwaysMet, maxAttempts: 0);
@@ -736,8 +704,6 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var result3b = referenceDummy3.Whose(ConditionThatsAlwaysMet, maxAttempts: 101);
             var result3c = referenceDummy3.Whose(ConditionThatsAlwaysMet, maxAttempts: 0);
             var result3d = referenceDummy3.Whose(ConditionThatsAlwaysMet, maxAttempts: -1);
-            // ReSharper restore RedundantArgumentDefaultValue
-            // ReSharper restore RedundantArgumentName
 
             // Assert
             result1a.Should().Be(referenceDummy1);
@@ -765,16 +731,10 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             Func<string, bool> condition = _ => (_ != null) && _.Contains(ExpectedCharacter);
 
             // Act
-            // ReSharper disable RedundantArgumentName
-            // ReSharper disable RedundantArgumentDefaultValue
-            // ReSharper disable ExpressionIsAlwaysNull
             var result1 = referenceDummy.Whose(condition);
             var result2 = referenceDummy.Whose(condition, maxAttempts: 101);
             var result3 = referenceDummy.Whose(condition, maxAttempts: 0);
             var result4 = referenceDummy.Whose(condition, maxAttempts: -1);
-            // ReSharper restore ExpressionIsAlwaysNull'
-            // ReSharper restore RedundantArgumentDefaultValue
-            // ReSharper restore RedundantArgumentName
 
             // Assert
             result1.Should().Contain(ExpectedCharacter);
@@ -792,14 +752,10 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             Func<string, bool> condition = _ => _.Contains(ExpectedCharacter);
 
             // Act
-            // ReSharper disable RedundantArgumentName
-            // ReSharper disable RedundantArgumentDefaultValue
             var result1 = referenceDummy.Whose(condition);
             var result2 = referenceDummy.Whose(condition, maxAttempts: 101);
             var result3 = referenceDummy.Whose(condition, maxAttempts: 0);
             var result4 = referenceDummy.Whose(condition, maxAttempts: -1);
-            // ReSharper restore RedundantArgumentDefaultValue
-            // ReSharper restore RedundantArgumentName
 
             // Assert
             result1.Should().NotBe(referenceDummy);
@@ -823,14 +779,10 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             Func<IList<string>, bool> condition = _ => _.Count >= MinCount;
 
             // Act
-            // ReSharper disable RedundantArgumentName
-            // ReSharper disable RedundantArgumentDefaultValue
             var result1 = referenceDummy.Whose(condition);
             var result2 = referenceDummy.Whose(condition, maxAttempts: 101);
             var result3 = referenceDummy.Whose(condition, maxAttempts: 0);
             var result4 = referenceDummy.Whose(condition, maxAttempts: -1);
-            // ReSharper restore RedundantArgumentDefaultValue
-            // ReSharper restore RedundantArgumentName
 
             // Assert
             result1.Count.Should().BeGreaterOrEqualTo(MinCount);
@@ -848,14 +800,10 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             Func<IReadOnlyList<double>, bool> condition = _ => _.Count >= MinCount;
 
             // Act
-            // ReSharper disable RedundantArgumentName
-            // ReSharper disable RedundantArgumentDefaultValue
             var result1 = referenceDummy.Whose(condition);
             var result2 = referenceDummy.Whose(condition, maxAttempts: 101);
             var result3 = referenceDummy.Whose(condition, maxAttempts: 0);
             var result4 = referenceDummy.Whose(condition, maxAttempts: -1);
-            // ReSharper restore RedundantArgumentDefaultValue
-            // ReSharper restore RedundantArgumentName
 
             // Assert
             result1.Count.Should().BeGreaterOrEqualTo(MinCount);
@@ -879,10 +827,8 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             Func<IList<string>, bool> trueAfterSeveralRetriesCondition = _ => _.Count(s => s == null) > 1;
 
             // Act
-            // ReSharper disable RedundantArgumentName
             var result1 = referenceDummy1.Whose(trueOnFirstRetryCondition, maxAttempts: 2);
             var result2 = referenceDummy2.Whose(trueAfterSeveralRetriesCondition, maxAttempts: 0);
-            // ReSharper restore RedundantArgumentName
 
             // Assert
             result1.Should().BeAssignableTo<IList<string>>();
@@ -907,10 +853,8 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             Func<IReadOnlyList<string>, bool> trueAfterSeveralRetriesCondition = _ => _.Count(s => s == null) > 1;
 
             // Act
-            // ReSharper disable RedundantArgumentName
             var result1 = referenceDummy1.Whose(trueOnFirstRetryCondition, maxAttempts: 2);
             var result2 = referenceDummy2.Whose(trueAfterSeveralRetriesCondition, maxAttempts: 0);
-            // ReSharper restore RedundantArgumentName
 
             // Assert
             result1.Should().BeAssignableTo<IReadOnlyList<string>>();
@@ -968,8 +912,6 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var comparisonDummy3 = Some.ReadOnlyDummies<double>();
 
             // Act
-            // ReSharper disable RedundantArgumentName
-            // ReSharper disable RedundantArgumentDefaultValue
             var result1a = referenceDummy1.ThatIsNot(comparisonDummy1);
             var result1b = referenceDummy1.ThatIsNot(comparisonDummy1, maxAttempts: 101);
             var result1c = referenceDummy1.ThatIsNot(comparisonDummy1, maxAttempts: 0);
@@ -984,8 +926,6 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var result3b = referenceDummy3.ThatIsNot(comparisonDummy3, maxAttempts: 101);
             var result3c = referenceDummy3.ThatIsNot(comparisonDummy3, maxAttempts: 0);
             var result3d = referenceDummy3.ThatIsNot(comparisonDummy3, maxAttempts: -1);
-            // ReSharper restore RedundantArgumentDefaultValue
-            // ReSharper restore RedundantArgumentName
 
             // Assert
             result1a.Should().BeSameAs(referenceDummy1);
@@ -1013,8 +953,6 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var referenceDummy3 = Some.ReadOnlyDummies<double>();
 
             // Act
-            // ReSharper disable RedundantArgumentName
-            // ReSharper disable RedundantArgumentDefaultValue
             var result1a = referenceDummy1.ThatIsNot(referenceDummy1);
             var result1b = referenceDummy1.ThatIsNot(referenceDummy1, maxAttempts: 101);
             var result1c = referenceDummy1.ThatIsNot(referenceDummy1, maxAttempts: 0);
@@ -1029,8 +967,6 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var result3b = referenceDummy3.ThatIsNot(referenceDummy3, maxAttempts: 101);
             var result3c = referenceDummy3.ThatIsNot(referenceDummy3, maxAttempts: 0);
             var result3d = referenceDummy3.ThatIsNot(referenceDummy3, maxAttempts: -1);
-            // ReSharper restore RedundantArgumentDefaultValue
-            // ReSharper restore RedundantArgumentName
 
             // Assert
             result1a.Should().NotBeNull().And.NotBeSameAs(referenceDummy1);
@@ -1058,14 +994,10 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var comparisonDummy = now.ToString(CultureInfo.CurrentCulture);
 
             // Act
-            // ReSharper disable RedundantArgumentName
-            // ReSharper disable RedundantArgumentDefaultValue
             var result1 = referenceDummy.ThatIsNot(comparisonDummy);
             var result2 = referenceDummy.ThatIsNot(comparisonDummy, maxAttempts: 101);
             var result3 = referenceDummy.ThatIsNot(comparisonDummy, maxAttempts: 0);
             var result4 = referenceDummy.ThatIsNot(comparisonDummy, maxAttempts: -1);
-            // ReSharper restore RedundantArgumentDefaultValue
-            // ReSharper restore RedundantArgumentName
 
             // Assert
             referenceDummy.Should().NotBeSameAs(comparisonDummy);
@@ -1084,9 +1016,6 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var referenceDummy3 = Some.ReadOnlyDummies<double>();
 
             // Act
-            // ReSharper disable RedundantArgumentName
-            // ReSharper disable RedundantArgumentDefaultValue
-            // ReSharper disable ExpressionIsAlwaysNull
             var result1a = referenceDummy1.ThatIsNot(null);
             var result1b = referenceDummy1.ThatIsNot(null, maxAttempts: 101);
             var result1c = referenceDummy1.ThatIsNot(null, maxAttempts: 0);
@@ -1101,9 +1030,6 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var result3b = referenceDummy3.ThatIsNot(null, maxAttempts: 101);
             var result3c = referenceDummy3.ThatIsNot(null, maxAttempts: 0);
             var result3d = referenceDummy3.ThatIsNot(null, maxAttempts: -1);
-            // ReSharper restore ExpressionIsAlwaysNull
-            // ReSharper restore RedundantArgumentDefaultValue
-            // ReSharper restore RedundantArgumentName
 
             // Assert
             result1a.Should().BeSameAs(referenceDummy1);
@@ -1130,16 +1056,10 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var comparisonDummy = A.Dummy<NoInstancesAreEqual>();
 
             // Act
-            // ReSharper disable RedundantArgumentName
-            // ReSharper disable RedundantArgumentDefaultValue
-            // ReSharper disable ExpressionIsAlwaysNull
             var result1 = referenceDummy.ThatIsNot(comparisonDummy);
             var result2 = referenceDummy.ThatIsNot(comparisonDummy, maxAttempts: 101);
             var result3 = referenceDummy.ThatIsNot(comparisonDummy, maxAttempts: 0);
             var result4 = referenceDummy.ThatIsNot(comparisonDummy, maxAttempts: -1);
-            // ReSharper restore ExpressionIsAlwaysNull
-            // ReSharper restore RedundantArgumentDefaultValue
-            // ReSharper restore RedundantArgumentName
 
             // Assert
             result1.Should().BeNull();
@@ -1156,9 +1076,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var referenceDummy = Some.Dummies<string>(expectedSize, CreateWith.OneOrMoreNulls);
 
             // Act
-            // ReSharper disable RedundantArgumentName
             var result = referenceDummy.ThatIsNot(referenceDummy, maxAttempts: 2);
-            // ReSharper restore RedundantArgumentName
 
             // Assert
             result.Should().BeAssignableTo<IList<string>>();
@@ -1175,9 +1093,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var referenceDummy = Some.ReadOnlyDummies<string>(expectedSize, CreateWith.OneOrMoreNulls);
 
             // Act
-            // ReSharper disable RedundantArgumentName
             var result = referenceDummy.ThatIsNot(referenceDummy, maxAttempts: 2);
-            // ReSharper restore RedundantArgumentName
 
             // Assert
             result.Should().BeAssignableTo<IReadOnlyList<string>>();
@@ -1195,9 +1111,6 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var referenceDummy3 = Some.ReadOnlyDummies<double>();
 
             // Act
-            // ReSharper disable RedundantArgumentName
-            // ReSharper disable RedundantArgumentDefaultValue
-            // ReSharper disable ExpressionIsAlwaysNull
             var ex1a = Record.Exception(() => referenceDummy1.ThatIsNotIn(null));
             var ex1b = Record.Exception(() => referenceDummy1.ThatIsNotIn(null, maxAttempts: 101));
             var ex1c = Record.Exception(() => referenceDummy1.ThatIsNotIn(null, maxAttempts: 0));
@@ -1212,9 +1125,6 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var ex3b = Record.Exception(() => referenceDummy3.ThatIsNotIn(null, maxAttempts: 101));
             var ex3c = Record.Exception(() => referenceDummy3.ThatIsNotIn(null, maxAttempts: 0));
             var ex3d = Record.Exception(() => referenceDummy3.ThatIsNotIn(null, maxAttempts: -1));
-            // ReSharper restore ExpressionIsAlwaysNull
-            // ReSharper restore RedundantArgumentDefaultValue
-            // ReSharper restore RedundantArgumentName
 
             // Assert
             ex1a.Should().BeOfType<ArgumentNullException>();
@@ -1273,16 +1183,10 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var comparisonDummies = new NoInstancesAreEqual[] { };
 
             // Act
-            // ReSharper disable RedundantArgumentName
-            // ReSharper disable RedundantArgumentDefaultValue
-            // ReSharper disable ExpressionIsAlwaysNull
             var result1 = referenceDummy.ThatIsNotIn(comparisonDummies);
             var result2 = referenceDummy.ThatIsNotIn(comparisonDummies, maxAttempts: 101);
             var result3 = referenceDummy.ThatIsNotIn(comparisonDummies, maxAttempts: 0);
             var result4 = referenceDummy.ThatIsNotIn(comparisonDummies, maxAttempts: -1);
-            // ReSharper restore ExpressionIsAlwaysNull
-            // ReSharper restore RedundantArgumentDefaultValue
-            // ReSharper restore RedundantArgumentName
 
             // Assert
             result1.Should().BeNull();
@@ -1299,16 +1203,10 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var comparisonDummy = A.Dummy<NoInstancesAreEqual>();
 
             // Act
-            // ReSharper disable RedundantArgumentName
-            // ReSharper disable RedundantArgumentDefaultValue
-            // ReSharper disable ExpressionIsAlwaysNull
             var result1 = referenceDummy.ThatIsNotIn(new[] { comparisonDummy });
             var result2 = referenceDummy.ThatIsNotIn(new[] { comparisonDummy }, maxAttempts: 101);
             var result3 = referenceDummy.ThatIsNotIn(new[] { comparisonDummy }, maxAttempts: 0);
             var result4 = referenceDummy.ThatIsNotIn(new[] { comparisonDummy }, maxAttempts: -1);
-            // ReSharper restore ExpressionIsAlwaysNull
-            // ReSharper restore RedundantArgumentDefaultValue
-            // ReSharper restore RedundantArgumentName
 
             // Assert
             result1.Should().BeNull();
@@ -1331,8 +1229,6 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var comparisonDummies3 = new IReadOnlyList<double>[] { };
 
             // Act
-            // ReSharper disable RedundantArgumentName
-            // ReSharper disable RedundantArgumentDefaultValue
             var result1a = referenceDummy1.ThatIsNotIn(comparisonDummies1);
             var result1b = referenceDummy1.ThatIsNotIn(comparisonDummies1, maxAttempts: 101);
             var result1c = referenceDummy1.ThatIsNotIn(comparisonDummies1, maxAttempts: 0);
@@ -1347,8 +1243,6 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var result3b = referenceDummy3.ThatIsNotIn(comparisonDummies3, maxAttempts: 101);
             var result3c = referenceDummy3.ThatIsNotIn(comparisonDummies3, maxAttempts: 0);
             var result3d = referenceDummy3.ThatIsNotIn(comparisonDummies3, maxAttempts: -1);
-            // ReSharper restore RedundantArgumentDefaultValue
-            // ReSharper restore RedundantArgumentName
 
             // Assert
             result1a.Should().BeSameAs(referenceDummy1);
@@ -1381,8 +1275,6 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var comparisonDummy3 = Some.ReadOnlyDummies<double>();
 
             // Act
-            // ReSharper disable RedundantArgumentName
-            // ReSharper disable RedundantArgumentDefaultValue
             var result1a = referenceDummy1.ThatIsNotIn(new[] { comparisonDummy1 });
             var result1b = referenceDummy1.ThatIsNotIn(new[] { comparisonDummy1 }, maxAttempts: 101);
             var result1c = referenceDummy1.ThatIsNotIn(new[] { comparisonDummy1 }, maxAttempts: 0);
@@ -1397,8 +1289,6 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var result3b = referenceDummy3.ThatIsNotIn(new[] { comparisonDummy3 }, maxAttempts: 101);
             var result3c = referenceDummy3.ThatIsNotIn(new[] { comparisonDummy3 }, maxAttempts: 0);
             var result3d = referenceDummy3.ThatIsNotIn(new[] { comparisonDummy3 }, maxAttempts: -1);
-            // ReSharper restore RedundantArgumentDefaultValue
-            // ReSharper restore RedundantArgumentName
 
             // Assert
             result1a.Should().BeSameAs(referenceDummy1);
@@ -1426,9 +1316,6 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var referenceDummy3 = Some.ReadOnlyDummies<double>();
 
             // Act
-            // ReSharper disable RedundantArgumentName
-            // ReSharper disable RedundantArgumentDefaultValue
-            // ReSharper disable ExpressionIsAlwaysNull
             var result1a = referenceDummy1.ThatIsNotIn(new NoInstancesAreEqual[] { null });
             var result1b = referenceDummy1.ThatIsNotIn(new NoInstancesAreEqual[] { null }, maxAttempts: 101);
             var result1c = referenceDummy1.ThatIsNotIn(new NoInstancesAreEqual[] { null }, maxAttempts: 0);
@@ -1443,9 +1330,6 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var result3b = referenceDummy3.ThatIsNotIn(new IReadOnlyList<double>[] { null }, maxAttempts: 101);
             var result3c = referenceDummy3.ThatIsNotIn(new IReadOnlyList<double>[] { null }, maxAttempts: 0);
             var result3d = referenceDummy3.ThatIsNotIn(new IReadOnlyList<double>[] { null }, maxAttempts: -1);
-            // ReSharper restore ExpressionIsAlwaysNull
-            // ReSharper restore RedundantArgumentDefaultValue
-            // ReSharper restore RedundantArgumentName
 
             // Assert
             result1a.Should().BeSameAs(referenceDummy1);
@@ -1473,8 +1357,6 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var referenceDummy3 = Some.ReadOnlyDummies<double>();
 
             // Act
-            // ReSharper disable RedundantArgumentName
-            // ReSharper disable RedundantArgumentDefaultValue
             var result1a = referenceDummy1.ThatIsNotIn(new[] { referenceDummy1 });
             var result1b = referenceDummy1.ThatIsNotIn(new[] { referenceDummy1 }, maxAttempts: 101);
             var result1c = referenceDummy1.ThatIsNotIn(new[] { referenceDummy1 }, maxAttempts: 0);
@@ -1489,8 +1371,6 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var result3b = referenceDummy3.ThatIsNotIn(new[] { referenceDummy3 }, maxAttempts: 101);
             var result3c = referenceDummy3.ThatIsNotIn(new[] { referenceDummy3 }, maxAttempts: 0);
             var result3d = referenceDummy3.ThatIsNotIn(new[] { referenceDummy3 }, maxAttempts: -1);
-            // ReSharper restore RedundantArgumentDefaultValue
-            // ReSharper restore RedundantArgumentName
 
             // Assert
             result1a.Should().NotBeNull().And.NotBeSameAs(referenceDummy1);
@@ -1520,8 +1400,6 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var comparisonDummies2 = new[] { ThatIsInOrNotInSet.One, ThatIsInOrNotInSet.Three, ThatIsInOrNotInSet.Five };
 
             // Act
-            // ReSharper disable RedundantArgumentName
-            // ReSharper disable RedundantArgumentDefaultValue
             var result1a = referenceDummy1.ThatIsNotIn(new[] { comparisonDummy1 });
             var result1b = referenceDummy1.ThatIsNotIn(new[] { comparisonDummy1 }, maxAttempts: 101);
             var result1c = referenceDummy1.ThatIsNotIn(new[] { comparisonDummy1 }, maxAttempts: 0);
@@ -1531,9 +1409,6 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var result2b = ThatIsInOrNotInSet.Three.ThatIsNotIn(comparisonDummies2, maxAttempts: 1001);
             var result2c = ThatIsInOrNotInSet.Five.ThatIsNotIn(comparisonDummies2, maxAttempts: 0);
             var result2d = ThatIsInOrNotInSet.One.ThatIsNotIn(comparisonDummies2, maxAttempts: -1);
-
-            // ReSharper restore RedundantArgumentDefaultValue
-            // ReSharper restore RedundantArgumentName
 
             // Assert
             referenceDummy1.Should().NotBeSameAs(comparisonDummy1);
@@ -1577,9 +1452,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var referenceDummy = Some.Dummies<string>(expectedSize, CreateWith.OneOrMoreNulls);
 
             // Act
-            // ReSharper disable RedundantArgumentName
             var result = referenceDummy.ThatIsNotIn(new[] { referenceDummy }, maxAttempts: 2);
-            // ReSharper restore RedundantArgumentName
 
             // Assert
             result.Should().BeAssignableTo<IList<string>>();
@@ -1596,9 +1469,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var referenceDummy = Some.ReadOnlyDummies<string>(expectedSize, CreateWith.OneOrMoreNulls);
 
             // Act
-            // ReSharper disable RedundantArgumentName
             var result = referenceDummy.ThatIsNotIn(new[] { referenceDummy }, maxAttempts: 2);
-            // ReSharper restore RedundantArgumentName
 
             // Assert
             result.Should().BeAssignableTo<IReadOnlyList<string>>();
@@ -1616,9 +1487,6 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var referenceDummy3 = Some.ReadOnlyDummies<double>();
 
             // Act
-            // ReSharper disable RedundantArgumentName
-            // ReSharper disable RedundantArgumentDefaultValue
-            // ReSharper disable ExpressionIsAlwaysNull
             var ex1a = Record.Exception(() => referenceDummy1.ThatIsNotIn(null, new NoInstancesAreEqualEqualityComparer()));
             var ex1b = Record.Exception(() => referenceDummy1.ThatIsNotIn(null, new NoInstancesAreEqualEqualityComparer(), maxAttempts: 101));
             var ex1c = Record.Exception(() => referenceDummy1.ThatIsNotIn(null, new NoInstancesAreEqualEqualityComparer(), maxAttempts: 0));
@@ -1633,9 +1501,6 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var ex3b = Record.Exception(() => referenceDummy3.ThatIsNotIn(null, EqualityComparer<IReadOnlyList<double>>.Default, maxAttempts: 101));
             var ex3c = Record.Exception(() => referenceDummy3.ThatIsNotIn(null, EqualityComparer<IReadOnlyList<double>>.Default, maxAttempts: 0));
             var ex3d = Record.Exception(() => referenceDummy3.ThatIsNotIn(null, EqualityComparer<IReadOnlyList<double>>.Default, maxAttempts: -1));
-            // ReSharper restore ExpressionIsAlwaysNull
-            // ReSharper restore RedundantArgumentDefaultValue
-            // ReSharper restore RedundantArgumentName
 
             // Assert
             ex1a.Should().BeOfType<ArgumentNullException>();
@@ -1695,16 +1560,10 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var comparisonDummies = new NoInstancesAreEqual[] { };
 
             // Act
-            // ReSharper disable RedundantArgumentName
-            // ReSharper disable RedundantArgumentDefaultValue
-            // ReSharper disable ExpressionIsAlwaysNull
             var result1 = referenceDummy.ThatIsNotIn(comparisonDummies, new NoInstancesAreEqualEqualityComparer());
             var result2 = referenceDummy.ThatIsNotIn(comparisonDummies, new NoInstancesAreEqualEqualityComparer(), maxAttempts: 101);
             var result3 = referenceDummy.ThatIsNotIn(comparisonDummies, new NoInstancesAreEqualEqualityComparer(), maxAttempts: 0);
             var result4 = referenceDummy.ThatIsNotIn(comparisonDummies, new NoInstancesAreEqualEqualityComparer(), maxAttempts: -1);
-            // ReSharper restore ExpressionIsAlwaysNull
-            // ReSharper restore RedundantArgumentDefaultValue
-            // ReSharper restore RedundantArgumentName
 
             // Assert
             result1.Should().BeNull();
@@ -1721,16 +1580,10 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var comparisonDummy = A.Dummy<NoInstancesAreEqual>();
 
             // Act
-            // ReSharper disable RedundantArgumentName
-            // ReSharper disable RedundantArgumentDefaultValue
-            // ReSharper disable ExpressionIsAlwaysNull
             var result1 = referenceDummy.ThatIsNotIn(new[] { comparisonDummy }, new NoInstancesAreEqualEqualityComparer());
             var result2 = referenceDummy.ThatIsNotIn(new[] { comparisonDummy }, new NoInstancesAreEqualEqualityComparer(), maxAttempts: 101);
             var result3 = referenceDummy.ThatIsNotIn(new[] { comparisonDummy }, new NoInstancesAreEqualEqualityComparer(), maxAttempts: 0);
             var result4 = referenceDummy.ThatIsNotIn(new[] { comparisonDummy }, new NoInstancesAreEqualEqualityComparer(), maxAttempts: -1);
-            // ReSharper restore ExpressionIsAlwaysNull
-            // ReSharper restore RedundantArgumentDefaultValue
-            // ReSharper restore RedundantArgumentName
 
             // Assert
             result1.Should().BeNull();
@@ -1753,8 +1606,6 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var comparisonDummies3 = new IReadOnlyList<double>[] { };
 
             // Act
-            // ReSharper disable RedundantArgumentName
-            // ReSharper disable RedundantArgumentDefaultValue
             var result1a = referenceDummy1.ThatIsNotIn(comparisonDummies1, new NoInstancesAreEqualEqualityComparer());
             var result1b = referenceDummy1.ThatIsNotIn(comparisonDummies1, new NoInstancesAreEqualEqualityComparer(), maxAttempts: 101);
             var result1c = referenceDummy1.ThatIsNotIn(comparisonDummies1, new NoInstancesAreEqualEqualityComparer(), maxAttempts: 0);
@@ -1769,8 +1620,6 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var result3b = referenceDummy3.ThatIsNotIn(comparisonDummies3, EqualityComparer<IReadOnlyList<double>>.Default, maxAttempts: 101);
             var result3c = referenceDummy3.ThatIsNotIn(comparisonDummies3, EqualityComparer<IReadOnlyList<double>>.Default, maxAttempts: 0);
             var result3d = referenceDummy3.ThatIsNotIn(comparisonDummies3, EqualityComparer<IReadOnlyList<double>>.Default, maxAttempts: -1);
-            // ReSharper restore RedundantArgumentDefaultValue
-            // ReSharper restore RedundantArgumentName
 
             // Assert
             result1a.Should().BeSameAs(referenceDummy1);
@@ -1803,8 +1652,6 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var comparisonDummy3 = Some.ReadOnlyDummies<double>();
 
             // Act
-            // ReSharper disable RedundantArgumentName
-            // ReSharper disable RedundantArgumentDefaultValue
             var result1a = referenceDummy1.ThatIsNotIn(new[] { comparisonDummy1 }, new NoInstancesAreEqualEqualityComparer());
             var result1b = referenceDummy1.ThatIsNotIn(new[] { comparisonDummy1 }, new NoInstancesAreEqualEqualityComparer(), maxAttempts: 101);
             var result1c = referenceDummy1.ThatIsNotIn(new[] { comparisonDummy1 }, new NoInstancesAreEqualEqualityComparer(), maxAttempts: 0);
@@ -1819,8 +1666,6 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var result3b = referenceDummy3.ThatIsNotIn(new[] { comparisonDummy3 }, EqualityComparer<IReadOnlyList<double>>.Default, maxAttempts: 101);
             var result3c = referenceDummy3.ThatIsNotIn(new[] { comparisonDummy3 }, EqualityComparer<IReadOnlyList<double>>.Default, maxAttempts: 0);
             var result3d = referenceDummy3.ThatIsNotIn(new[] { comparisonDummy3 }, EqualityComparer<IReadOnlyList<double>>.Default, maxAttempts: -1);
-            // ReSharper restore RedundantArgumentDefaultValue
-            // ReSharper restore RedundantArgumentName
 
             // Assert
             result1a.Should().BeSameAs(referenceDummy1);
@@ -1848,9 +1693,6 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var referenceDummy3 = Some.ReadOnlyDummies<double>();
 
             // Act
-            // ReSharper disable RedundantArgumentName
-            // ReSharper disable RedundantArgumentDefaultValue
-            // ReSharper disable ExpressionIsAlwaysNull
             var result1a = referenceDummy1.ThatIsNotIn(new NoInstancesAreEqual[] { null }, new NoInstancesAreEqualEqualityComparer());
             var result1b = referenceDummy1.ThatIsNotIn(new NoInstancesAreEqual[] { null }, new NoInstancesAreEqualEqualityComparer(), maxAttempts: 101);
             var result1c = referenceDummy1.ThatIsNotIn(new NoInstancesAreEqual[] { null }, new NoInstancesAreEqualEqualityComparer(), maxAttempts: 0);
@@ -1865,9 +1707,6 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var result3b = referenceDummy3.ThatIsNotIn(new IReadOnlyList<double>[] { null }, EqualityComparer<IReadOnlyList<double>>.Default, maxAttempts: 101);
             var result3c = referenceDummy3.ThatIsNotIn(new IReadOnlyList<double>[] { null }, EqualityComparer<IReadOnlyList<double>>.Default, maxAttempts: 0);
             var result3d = referenceDummy3.ThatIsNotIn(new IReadOnlyList<double>[] { null }, EqualityComparer<IReadOnlyList<double>>.Default, maxAttempts: -1);
-            // ReSharper restore ExpressionIsAlwaysNull
-            // ReSharper restore RedundantArgumentDefaultValue
-            // ReSharper restore RedundantArgumentName
 
             // Assert
             result1a.Should().BeSameAs(referenceDummy1);
@@ -1895,8 +1734,6 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var referenceDummy3 = Some.ReadOnlyDummies<double>();
 
             // Act
-            // ReSharper disable RedundantArgumentName
-            // ReSharper disable RedundantArgumentDefaultValue
             var result1a = referenceDummy1.ThatIsNotIn(new[] { referenceDummy1 }, new NoInstancesAreEqualEqualityComparer());
             var result1b = referenceDummy1.ThatIsNotIn(new[] { referenceDummy1 }, new NoInstancesAreEqualEqualityComparer(), maxAttempts: 101);
             var result1c = referenceDummy1.ThatIsNotIn(new[] { referenceDummy1 }, new NoInstancesAreEqualEqualityComparer(), maxAttempts: 0);
@@ -1911,8 +1748,6 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var result3b = referenceDummy3.ThatIsNotIn(new[] { referenceDummy3 }, EqualityComparer<IReadOnlyList<double>>.Default, maxAttempts: 101);
             var result3c = referenceDummy3.ThatIsNotIn(new[] { referenceDummy3 }, EqualityComparer<IReadOnlyList<double>>.Default, maxAttempts: 0);
             var result3d = referenceDummy3.ThatIsNotIn(new[] { referenceDummy3 }, EqualityComparer<IReadOnlyList<double>>.Default, maxAttempts: -1);
-            // ReSharper restore RedundantArgumentDefaultValue
-            // ReSharper restore RedundantArgumentName
 
             // Assert
             result1a.Should().NotBeNull().And.NotBeSameAs(referenceDummy1);
@@ -1943,8 +1778,6 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var comparisonDummies2 = new[] { ThatIsInOrNotInSet.One, ThatIsInOrNotInSet.Three, ThatIsInOrNotInSet.Five };
 
             // Act
-            // ReSharper disable RedundantArgumentName
-            // ReSharper disable RedundantArgumentDefaultValue
             var result1a = referenceDummy1.ThatIsNotIn(new[] { comparisonDummy1 }, StringComparer.OrdinalIgnoreCase);
             var result1b = referenceDummy1.ThatIsNotIn(new[] { comparisonDummy1 }, StringComparer.OrdinalIgnoreCase, maxAttempts: 101);
             var result1c = referenceDummy1.ThatIsNotIn(new[] { comparisonDummy1 }, StringComparer.OrdinalIgnoreCase, maxAttempts: 0);
@@ -1954,9 +1787,6 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var result2b = ThatIsInOrNotInSet.Three.ThatIsNotIn(comparisonDummies2, EqualityComparer<ThatIsInOrNotInSet>.Default, maxAttempts: 1001);
             var result2c = ThatIsInOrNotInSet.Five.ThatIsNotIn(comparisonDummies2, EqualityComparer<ThatIsInOrNotInSet>.Default, maxAttempts: 0);
             var result2d = ThatIsInOrNotInSet.One.ThatIsNotIn(comparisonDummies2, EqualityComparer<ThatIsInOrNotInSet>.Default, maxAttempts: -1);
-
-            // ReSharper restore RedundantArgumentDefaultValue
-            // ReSharper restore RedundantArgumentName
 
             // Assert
             referenceDummy1.Should().NotBeSameAs(comparisonDummy1);
@@ -2000,9 +1830,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var referenceDummy = Some.Dummies<string>(expectedSize, CreateWith.OneOrMoreNulls);
 
             // Act
-            // ReSharper disable RedundantArgumentName
             var result = referenceDummy.ThatIsNotIn(new[] { referenceDummy }, EqualityComparer<IList<string>>.Default, maxAttempts: 2);
-            // ReSharper restore RedundantArgumentName
 
             // Assert
             result.Should().BeAssignableTo<IList<string>>();
@@ -2019,9 +1847,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var referenceDummy = Some.ReadOnlyDummies<string>(expectedSize, CreateWith.OneOrMoreNulls);
 
             // Act
-            // ReSharper disable RedundantArgumentName
             var result = referenceDummy.ThatIsNotIn(new[] { referenceDummy }, EqualityComparer<IReadOnlyList<string>>.Default, maxAttempts: 2);
-            // ReSharper restore RedundantArgumentName
 
             // Assert
             result.Should().BeAssignableTo<IReadOnlyList<string>>();
@@ -2039,9 +1865,6 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var referenceDummy3 = Some.ReadOnlyDummies<double>();
 
             // Act
-            // ReSharper disable RedundantArgumentName
-            // ReSharper disable RedundantArgumentDefaultValue
-            // ReSharper disable ExpressionIsAlwaysNull
             var ex1a = Record.Exception(() => referenceDummy1.ThatIsIn(null));
             var ex1b = Record.Exception(() => referenceDummy1.ThatIsIn(null, maxAttempts: 101));
             var ex1c = Record.Exception(() => referenceDummy1.ThatIsIn(null, maxAttempts: 0));
@@ -2056,9 +1879,6 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var ex3b = Record.Exception(() => referenceDummy3.ThatIsIn(null, maxAttempts: 101));
             var ex3c = Record.Exception(() => referenceDummy3.ThatIsIn(null, maxAttempts: 0));
             var ex3d = Record.Exception(() => referenceDummy3.ThatIsIn(null, maxAttempts: -1));
-            // ReSharper restore ExpressionIsAlwaysNull
-            // ReSharper restore RedundantArgumentDefaultValue
-            // ReSharper restore RedundantArgumentName
 
             // Assert
             ex1a.Should().BeOfType<ArgumentNullException>();
@@ -2110,13 +1930,9 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var comparisonDummies3 = new IReadOnlyList<double>[] { };
 
             // Act
-            // ReSharper disable RedundantArgumentName
-            // ReSharper disable RedundantArgumentDefaultValue
             var ex1 = Record.Exception(() => referenceDummy1.ThatIsIn(comparisonDummies1, maxAttempts: 101));
             var ex2 = Record.Exception(() => referenceDummy2.ThatIsIn(comparisonDummies2, maxAttempts: 101));
             var ex3 = Record.Exception(() => referenceDummy3.ThatIsIn(comparisonDummies3, maxAttempts: 101));
-            // ReSharper restore RedundantArgumentDefaultValue
-            // ReSharper restore RedundantArgumentName
 
             // Assert
             ex1.Should().BeOfType<InvalidOperationException>();
@@ -2132,12 +1948,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var comparisonDummies = new NoInstancesAreEqual[] { };
 
             // Act
-            // ReSharper disable RedundantArgumentName
-            // ReSharper disable RedundantArgumentDefaultValue
             var ex = Record.Exception(() => referenceDummy.ThatIsIn(comparisonDummies, maxAttempts: 101));
-            // ReSharper restore ExpressionIsAlwaysNull
-            // ReSharper restore RedundantArgumentDefaultValue
-            // ReSharper restore RedundantArgumentName
 
             // Assert
             ex.Should().BeOfType<InvalidOperationException>();
@@ -2165,15 +1976,9 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var referenceDummy3 = Some.ReadOnlyDummies<double>();
 
             // Act
-            // ReSharper disable RedundantArgumentName
-            // ReSharper disable RedundantArgumentDefaultValue
-            // ReSharper disable ExpressionIsAlwaysNull
             var ex1 = Record.Exception(() => referenceDummy1.ThatIsIn(new NoInstancesAreEqual[] { null }, maxAttempts: 101));
             var ex2 = Record.Exception(() => referenceDummy2.ThatIsIn(new IList<double>[] { null }, maxAttempts: 101));
             var ex3 = Record.Exception(() => referenceDummy3.ThatIsIn(new IReadOnlyList<double>[] { null }, maxAttempts: 101));
-            // ReSharper restore ExpressionIsAlwaysNull
-            // ReSharper restore RedundantArgumentDefaultValue
-            // ReSharper restore RedundantArgumentName
 
             // Assert
             ex1.Should().BeOfType<InvalidOperationException>();
@@ -2189,13 +1994,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var comparisonDummies = new[] { A.Dummy<NoInstancesAreEqual>() };
 
             // Act
-            // ReSharper disable RedundantArgumentName
-            // ReSharper disable RedundantArgumentDefaultValue
-            // ReSharper disable ExpressionIsAlwaysNull
             var ex1 = Record.Exception(() => referenceDummy.ThatIsIn(comparisonDummies, maxAttempts: 101));
-            // ReSharper restore ExpressionIsAlwaysNull
-            // ReSharper restore RedundantArgumentDefaultValue
-            // ReSharper restore RedundantArgumentName
 
             // Assert
             ex1.Should().BeOfType<InvalidOperationException>();
@@ -2209,16 +2008,10 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var comparisonDummy = new NoInstancesAreEqual[] { null };
 
             // Act
-            // ReSharper disable RedundantArgumentName
-            // ReSharper disable RedundantArgumentDefaultValue
-            // ReSharper disable ExpressionIsAlwaysNull
             var result1 = referenceDummy.ThatIsIn(comparisonDummy);
             var result2 = referenceDummy.ThatIsIn(comparisonDummy, maxAttempts: 101);
             var result3 = referenceDummy.ThatIsIn(comparisonDummy, maxAttempts: 0);
             var result4 = referenceDummy.ThatIsIn(comparisonDummy, maxAttempts: -1);
-            // ReSharper restore ExpressionIsAlwaysNull
-            // ReSharper restore RedundantArgumentDefaultValue
-            // ReSharper restore RedundantArgumentName
 
             // Assert
             result1.Should().BeNull();
@@ -2236,8 +2029,6 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var referenceDummy3 = Some.ReadOnlyDummies<double>();
 
             // Act
-            // ReSharper disable RedundantArgumentName
-            // ReSharper disable RedundantArgumentDefaultValue
             var result1a = referenceDummy1.ThatIsIn(new[] { referenceDummy1 });
             var result1b = referenceDummy1.ThatIsIn(new[] { referenceDummy1 }, maxAttempts: 101);
             var result1c = referenceDummy1.ThatIsIn(new[] { referenceDummy1 }, maxAttempts: 0);
@@ -2252,8 +2043,6 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var result3b = referenceDummy3.ThatIsIn(new[] { referenceDummy3 }, maxAttempts: 101);
             var result3c = referenceDummy3.ThatIsIn(new[] { referenceDummy3 }, maxAttempts: 0);
             var result3d = referenceDummy3.ThatIsIn(new[] { referenceDummy3 }, maxAttempts: -1);
-            // ReSharper restore RedundantArgumentDefaultValue
-            // ReSharper restore RedundantArgumentName
 
             // Assert
             result1a.Should().BeSameAs(referenceDummy1);
@@ -2279,15 +2068,10 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var comparisonDummies = new[] { ThatIsInOrNotInSet.One, ThatIsInOrNotInSet.Three, ThatIsInOrNotInSet.Five };
 
             // Act
-            // ReSharper disable RedundantArgumentName
-            // ReSharper disable RedundantArgumentDefaultValue
             var result1 = ThatIsInOrNotInSet.None.ThatIsIn(comparisonDummies);
             var result2 = ThatIsInOrNotInSet.Two.ThatIsIn(comparisonDummies, maxAttempts: 101);
             var result3 = ThatIsInOrNotInSet.Four.ThatIsIn(comparisonDummies, maxAttempts: 0);
             var result4 = ThatIsInOrNotInSet.None.ThatIsIn(comparisonDummies, maxAttempts: -1);
-
-            // ReSharper restore RedundantArgumentDefaultValue
-            // ReSharper restore RedundantArgumentName
 
             // Assert
             result1.Should().NotBe(ThatIsInOrNotInSet.None).And.NotBe(ThatIsInOrNotInSet.Two).And.NotBe(ThatIsInOrNotInSet.Four);
@@ -2304,13 +2088,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var comparisonDummies = new ThatIsInOrNotInSet?[] { ThatIsInOrNotInSet.One, ThatIsInOrNotInSet.Three, ThatIsInOrNotInSet.Five };
 
             // Act
-            // ReSharper disable RedundantArgumentName
-            // ReSharper disable RedundantArgumentDefaultValue
-            // ReSharper disable ExpressionIsAlwaysNull
             var result = referenceDummy.ThatIsIn(comparisonDummies, maxAttempts: 101);
-            // ReSharper restore ExpressionIsAlwaysNull
-            // ReSharper restore RedundantArgumentDefaultValue
-            // ReSharper restore RedundantArgumentName
 
             // Assert
             comparisonDummies.Should().Contain(result);
@@ -2346,9 +2124,6 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var referenceDummy3 = Some.ReadOnlyDummies<double>();
 
             // Act
-            // ReSharper disable RedundantArgumentName
-            // ReSharper disable RedundantArgumentDefaultValue
-            // ReSharper disable ExpressionIsAlwaysNull
             var ex1a = Record.Exception(() => referenceDummy1.ThatIsIn(null, new NoInstancesAreEqualEqualityComparer()));
             var ex1b = Record.Exception(() => referenceDummy1.ThatIsIn(null, new NoInstancesAreEqualEqualityComparer(), maxAttempts: 101));
             var ex1c = Record.Exception(() => referenceDummy1.ThatIsIn(null, new NoInstancesAreEqualEqualityComparer(), maxAttempts: 0));
@@ -2363,9 +2138,6 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var ex3b = Record.Exception(() => referenceDummy3.ThatIsIn(null, EqualityComparer<IReadOnlyList<double>>.Default, maxAttempts: 101));
             var ex3c = Record.Exception(() => referenceDummy3.ThatIsIn(null, EqualityComparer<IReadOnlyList<double>>.Default, maxAttempts: 0));
             var ex3d = Record.Exception(() => referenceDummy3.ThatIsIn(null, EqualityComparer<IReadOnlyList<double>>.Default, maxAttempts: -1));
-            // ReSharper restore ExpressionIsAlwaysNull
-            // ReSharper restore RedundantArgumentDefaultValue
-            // ReSharper restore RedundantArgumentName
 
             // Assert
             ex1a.Should().BeOfType<ArgumentNullException>();
@@ -2417,13 +2189,9 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var comparisonDummies3 = new IReadOnlyList<double>[] { };
 
             // Act
-            // ReSharper disable RedundantArgumentName
-            // ReSharper disable RedundantArgumentDefaultValue
             var ex1 = Record.Exception(() => referenceDummy1.ThatIsIn(comparisonDummies1, new AllInstancesEqualEqualityComparer(), maxAttempts: 101));
             var ex2 = Record.Exception(() => referenceDummy2.ThatIsIn(comparisonDummies2, EqualityComparer<IList<double>>.Default, maxAttempts: 101));
             var ex3 = Record.Exception(() => referenceDummy3.ThatIsIn(comparisonDummies3, EqualityComparer<IReadOnlyList<double>>.Default, maxAttempts: 101));
-            // ReSharper restore RedundantArgumentDefaultValue
-            // ReSharper restore RedundantArgumentName
 
             // Assert
             ex1.Should().BeOfType<InvalidOperationException>();
@@ -2439,13 +2207,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var comparisonDummies = new NoInstancesAreEqual[] { };
 
             // Act
-            // ReSharper disable RedundantArgumentName
-            // ReSharper disable RedundantArgumentDefaultValue
-            // ReSharper disable ExpressionIsAlwaysNull
             var ex = Record.Exception(() => referenceDummy.ThatIsIn(comparisonDummies, new NoInstancesAreEqualEqualityComparer(), maxAttempts: 101));
-            // ReSharper restore ExpressionIsAlwaysNull
-            // ReSharper restore RedundantArgumentDefaultValue
-            // ReSharper restore RedundantArgumentName
 
             // Assert
             ex.Should().BeOfType<InvalidOperationException>();
@@ -2473,15 +2235,9 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var referenceDummy3 = Some.ReadOnlyDummies<double>();
 
             // Act
-            // ReSharper disable RedundantArgumentName
-            // ReSharper disable RedundantArgumentDefaultValue
-            // ReSharper disable ExpressionIsAlwaysNull
             var ex1 = Record.Exception(() => referenceDummy1.ThatIsIn(new NoInstancesAreEqual[] { null }, new NoInstancesAreEqualEqualityComparer(), maxAttempts: 101));
             var ex2 = Record.Exception(() => referenceDummy2.ThatIsIn(new IList<double>[] { null }, EqualityComparer<IList<double>>.Default, maxAttempts: 101));
             var ex3 = Record.Exception(() => referenceDummy3.ThatIsIn(new IReadOnlyList<double>[] { null }, EqualityComparer<IReadOnlyList<double>>.Default, maxAttempts: 101));
-            // ReSharper restore ExpressionIsAlwaysNull
-            // ReSharper restore RedundantArgumentDefaultValue
-            // ReSharper restore RedundantArgumentName
 
             // Assert
             ex1.Should().BeOfType<InvalidOperationException>();
@@ -2497,13 +2253,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var comparisonDummies = new[] { A.Dummy<NoInstancesAreEqual>() };
 
             // Act
-            // ReSharper disable RedundantArgumentName
-            // ReSharper disable RedundantArgumentDefaultValue
-            // ReSharper disable ExpressionIsAlwaysNull
             var ex1 = Record.Exception(() => referenceDummy.ThatIsIn(comparisonDummies, new NoInstancesAreEqualEqualityComparer(), maxAttempts: 101));
-            // ReSharper restore ExpressionIsAlwaysNull
-            // ReSharper restore RedundantArgumentDefaultValue
-            // ReSharper restore RedundantArgumentName
 
             // Assert
             ex1.Should().BeOfType<InvalidOperationException>();
@@ -2517,16 +2267,10 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var comparisonDummy = new NoInstancesAreEqual[] { null };
 
             // Act
-            // ReSharper disable RedundantArgumentName
-            // ReSharper disable RedundantArgumentDefaultValue
-            // ReSharper disable ExpressionIsAlwaysNull
             var result1 = referenceDummy.ThatIsIn(comparisonDummy, new NoInstancesAreEqualEqualityComparer());
             var result2 = referenceDummy.ThatIsIn(comparisonDummy, new NoInstancesAreEqualEqualityComparer(), maxAttempts: 101);
             var result3 = referenceDummy.ThatIsIn(comparisonDummy, new NoInstancesAreEqualEqualityComparer(), maxAttempts: 0);
             var result4 = referenceDummy.ThatIsIn(comparisonDummy, new NoInstancesAreEqualEqualityComparer(), maxAttempts: -1);
-            // ReSharper restore ExpressionIsAlwaysNull
-            // ReSharper restore RedundantArgumentDefaultValue
-            // ReSharper restore RedundantArgumentName
 
             // Assert
             result1.Should().BeNull();
@@ -2545,8 +2289,6 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var referenceDummy3 = Some.ReadOnlyDummies<double>();
 
             // Act
-            // ReSharper disable RedundantArgumentName
-            // ReSharper disable RedundantArgumentDefaultValue
             var result1a = referenceDummy1.ThatIsIn(new[] { referenceDummy1.ToLowerInvariant() }, StringComparer.OrdinalIgnoreCase);
             var result1b = referenceDummy1.ThatIsIn(new[] { referenceDummy1.ToLowerInvariant() }, StringComparer.OrdinalIgnoreCase, maxAttempts: 101);
             var result1c = referenceDummy1.ThatIsIn(new[] { referenceDummy1.ToLowerInvariant() }, StringComparer.OrdinalIgnoreCase, maxAttempts: 0);
@@ -2561,8 +2303,6 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var result3b = referenceDummy3.ThatIsIn(new[] { referenceDummy3 }, EqualityComparer<IReadOnlyList<double>>.Default, maxAttempts: 101);
             var result3c = referenceDummy3.ThatIsIn(new[] { referenceDummy3 }, EqualityComparer<IReadOnlyList<double>>.Default, maxAttempts: 0);
             var result3d = referenceDummy3.ThatIsIn(new[] { referenceDummy3 }, EqualityComparer<IReadOnlyList<double>>.Default, maxAttempts: -1);
-            // ReSharper restore RedundantArgumentDefaultValue
-            // ReSharper restore RedundantArgumentName
 
             // Assert
             result1a.Should().BeSameAs(referenceDummy1);
@@ -2588,15 +2328,10 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var comparisonDummies = new[] { ThatIsInOrNotInSet.One, ThatIsInOrNotInSet.Three, ThatIsInOrNotInSet.Five };
 
             // Act
-            // ReSharper disable RedundantArgumentName
-            // ReSharper disable RedundantArgumentDefaultValue
             var result1 = ThatIsInOrNotInSet.None.ThatIsIn(comparisonDummies, EqualityComparer<ThatIsInOrNotInSet>.Default);
             var result2 = ThatIsInOrNotInSet.Two.ThatIsIn(comparisonDummies, EqualityComparer<ThatIsInOrNotInSet>.Default, maxAttempts: 101);
             var result3 = ThatIsInOrNotInSet.Four.ThatIsIn(comparisonDummies, EqualityComparer<ThatIsInOrNotInSet>.Default, maxAttempts: 0);
             var result4 = ThatIsInOrNotInSet.None.ThatIsIn(comparisonDummies, EqualityComparer<ThatIsInOrNotInSet>.Default, maxAttempts: -1);
-
-            // ReSharper restore RedundantArgumentDefaultValue
-            // ReSharper restore RedundantArgumentName
 
             // Assert
             result1.Should().NotBe(ThatIsInOrNotInSet.None).And.NotBe(ThatIsInOrNotInSet.Two).And.NotBe(ThatIsInOrNotInSet.Four);
@@ -2613,13 +2348,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var comparisonDummies = new ThatIsInOrNotInSet?[] { ThatIsInOrNotInSet.One, ThatIsInOrNotInSet.Three, ThatIsInOrNotInSet.Five };
 
             // Act
-            // ReSharper disable RedundantArgumentName
-            // ReSharper disable RedundantArgumentDefaultValue
-            // ReSharper disable ExpressionIsAlwaysNull
             var result = referenceDummy.ThatIsIn(comparisonDummies, EqualityComparer<ThatIsInOrNotInSet?>.Default, maxAttempts: 101);
-            // ReSharper restore ExpressionIsAlwaysNull
-            // ReSharper restore RedundantArgumentDefaultValue
-            // ReSharper restore RedundantArgumentName
 
             // Assert
             comparisonDummies.Should().Contain(result);
@@ -2690,10 +2419,8 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             ComparableIntAsObject referenceDummy = null;
 
             // Act
-            // ReSharper disable ExpressionIsAlwaysNull
             var ex1 = Record.Exception(() => referenceDummy.ThatIsInRange(null, null));
             var ex2 = Record.Exception(() => referenceDummy.ThatIsInRange(null, null, maxAttempts: 1));
-            // ReSharper restore ExpressionIsAlwaysNull
 
             // Assert
             ex1.Should().BeNull();
@@ -2730,11 +2457,9 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var actual3 = referenceDummy1.ThatIsInRange(10, 11);
             var actual4 = referenceDummy1.ThatIsInRange(10, 12);
 
-            // ReSharper disable ExpressionIsAlwaysNull
             var actual5 = referenceDummy2.ThatIsInRange(null, null);
             var actual6 = referenceDummy2.ThatIsInRange(null, new ComparableIntAsObject(A.Dummy<int>()));
 
-            // ReSharper restore ExpressionIsAlwaysNull
             var actual7 = referenceDummy3.ThatIsInRange(null, new ComparableIntAsObject(51));
             var actual8 = referenceDummy3.ThatIsInRange(new ComparableIntAsObject(49), new ComparableIntAsObject(51));
 
@@ -2778,6 +2503,20 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             actual1.Select(_ => (_ >= startRangeInclusive) && (_ <= endRangeInclusive)).ToList().ForEach(_ => _.Should().BeTrue());
             actual2.Select(_ => (_.Value >= startRangeInclusive) && (_.Value <= endRangeInclusive)).ToList().ForEach(_ => _.Should().BeTrue());
             actual3.Select(_ => (_.Value >= startRangeInclusive) && (_.Value <= endRangeInclusive)).ToList().ForEach(_ => _.Should().BeTrue());
+        }
+
+        [Fact]
+        public static void ThatIsInRange_with_IComparer___Should_throw_ArgumentNullException___When_parameter_comparer_is_null()
+        {
+            // Arrange
+            var referenceDummy = A.Dummy<int>();
+
+            // Act
+            var actual = Record.Exception(() => referenceDummy.ThatIsInRange(10, 11, null));
+
+            // Assert
+            actual.Should().BeOfType<ArgumentNullException>();
+            actual.Message.Should().Contain("comparer");
         }
 
         [Fact]
@@ -2827,10 +2566,8 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var comparer = new ComparableIntAsObjectComparer();
 
             // Act
-            // ReSharper disable ExpressionIsAlwaysNull
             var ex1 = Record.Exception(() => referenceDummy.ThatIsInRange(null, null, comparer));
             var ex2 = Record.Exception(() => referenceDummy.ThatIsInRange(null, null, comparer, maxAttempts: 1));
-            // ReSharper restore ExpressionIsAlwaysNull
 
             // Assert
             ex1.Should().BeNull();
@@ -2872,11 +2609,9 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var actual3 = referenceDummy1.ThatIsInRange(10, 11, comparer1);
             var actual4 = referenceDummy1.ThatIsInRange(10, 12, comparer1);
 
-            // ReSharper disable ExpressionIsAlwaysNull
             var actual5 = referenceDummy2.ThatIsInRange(null, null, comparer2);
             var actual6 = referenceDummy2.ThatIsInRange(null, new ComparableIntAsObject(A.Dummy<int>()), comparer2);
 
-            // ReSharper restore ExpressionIsAlwaysNull
             var actual7 = referenceDummy3.ThatIsInRange(null, new ComparableIntAsObject(51), comparer3);
             var actual8 = referenceDummy3.ThatIsInRange(new ComparableIntAsObject(49), new ComparableIntAsObject(51), comparer3);
 
@@ -3063,6 +2798,20 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         }
 
         [Fact]
+        public static void ThatIsNotInRange_with_IComparer___Should_throw_ArgumentNullException___When_parameter_comparer_is_null()
+        {
+            // Arrange
+            var referenceDummy = A.Dummy<int>();
+
+            // Act
+            var actual = Record.Exception(() => referenceDummy.ThatIsNotInRange(10, 11, null));
+
+            // Assert
+            actual.Should().BeOfType<ArgumentNullException>();
+            actual.Message.Should().Contain("comparer");
+        }
+
+        [Fact]
         public static void ThatIsNotInRange_with_IComparer___Should_throw_ArgumentException___When_parameter_rangeStartInclusive_is_less_than_parameter_rangeEndInclusive()
         {
             // Arrange
@@ -3241,7 +2990,5 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         {
             return true;
         }
-
-        // ReSharper restore InconsistentNaming
     }
 }

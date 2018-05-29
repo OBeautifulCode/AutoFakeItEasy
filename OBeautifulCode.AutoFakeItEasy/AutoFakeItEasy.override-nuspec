@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<package>
+  <metadata>
+    <description>Makes FakeItEasy Dummies useful by wiring-them-up to real-looking, random test data.  Leverages the power of AutoFixture to create anonymous variables.  Fixes some of AutoFixture's poor default behaviors.  Makes unit tests more expressive with less lines of code.</description>
+    <tags>AutoFixture FakeItEasy Dummy testing data</tags>
+    <iconUrl>https://raw.githubusercontent.com/OBeautifulCode/OBeautifulCode.AutoFakeItEasy/master/OBeautifulCode.AutoFakeItEasy/nuget-icon.png</iconUrl>
+    <summary>Makes FakeItEasy Dummies useful by wiring-them-up to real-looking, random test data.</summary>
+  </metadata>
+  <files>
+    <file src="AutoFakeItEasyBootstrapper.cs" target="content\net462\.recipes\OBeautifulCode.AutoFakeItEasy\AutoFakeItEasyBootstrapper.cs" />
+  </files>
+</package>

@@ -1,13 +1,13 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ClassHierarchy.cs" company="OBeautifulCode">
-//   Copyright (c) OBeautifulCode. All rights reserved.
+//   Copyright (c) OBeautifulCode 2018. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-// ReSharper disable CheckNamespace
 namespace OBeautifulCode.AutoFakeItEasy.Test
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
 
 #pragma warning disable SA1649 // File name must match first type name
 #pragma warning disable SA1402 // File may only contain a single class
@@ -95,10 +95,12 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
     {
     }
 
+    [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Malbec", Justification = "This is spelled correctly.")]
     public class Malbec : Wine
     {
     }
 
+    [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Pinonoir", Justification = "This is spelled correctly.")]
     public class Pinonoir : Wine
     {
     }
@@ -119,6 +121,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
     {
     }
 
+    [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Ipa", Justification = "This is spelled correctly.")]
     public class Ipa : Beer
     {
     }
@@ -142,5 +145,3 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
 #pragma warning restore SA1402 // File may only contain a single class
 #pragma warning restore SA1649 // File name must match first type name
 }
-
-// ReSharper restore CheckNamespace

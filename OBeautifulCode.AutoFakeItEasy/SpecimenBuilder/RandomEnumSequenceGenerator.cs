@@ -1,10 +1,9 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="RandomEnumSequenceGenerator.cs" company="OBeautifulCode">
-//   Copyright (c) OBeautifulCode. All rights reserved.
+//   Copyright (c) OBeautifulCode 2018. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-// ReSharper disable CheckNamespace
 namespace OBeautifulCode.AutoFakeItEasy
 {
     using System;
@@ -18,7 +17,7 @@ namespace OBeautifulCode.AutoFakeItEasy
     /// Generates random enum values in a round-robin fashion.
     /// </summary>
     /// <remarks>
-    /// Adapted from <a href="https://github.com/AutoFixture/AutoFixture/blob/master/Src/AutoFixture/EnumGenerator.cs"/>
+    /// Adapted from <a href="https://github.com/AutoFixture/AutoFixture/blob/master/Src/AutoFixture/EnumGenerator.cs"/>.
     /// </remarks>
     public class RandomEnumSequenceGenerator : ISpecimenBuilder
     {
@@ -49,5 +48,3 @@ namespace OBeautifulCode.AutoFakeItEasy
         }
     }
 }
-
-// ReSharper restore CheckNamespace

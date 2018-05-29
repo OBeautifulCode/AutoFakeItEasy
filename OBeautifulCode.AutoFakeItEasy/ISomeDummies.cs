@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ISomeDummies.cs" company="OBeautifulCode">
-//   Copyright (c) OBeautifulCode. All rights reserved.
+//   Copyright (c) OBeautifulCode 2018. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -17,7 +17,7 @@ namespace OBeautifulCode.AutoFakeItEasy
         int NumberOfElementsSpecifiedInCallToSomeDummies { get; }
 
         /// <summary>
-        /// Gets a value that determines if and how to populate the list with nulls as specified in the call to generate some dummies."/>
+        /// Gets a value that determines if and how to populate the list with nulls as specified in the call to generate some dummies."/>.
         /// </summary>
         CreateWith CreateWithSpecifiedInCallToSomeDummies { get; }
     }

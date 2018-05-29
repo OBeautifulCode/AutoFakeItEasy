@@ -1,11 +1,9 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="RandomNumericSequenceGeneratorTest.cs" company="OBeautifulCode">
-//   Copyright (c) OBeautifulCode. All rights reserved.
+//   Copyright (c) OBeautifulCode 2018. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-// ReSharper disable CheckNamespace
-// ReSharper disable InconsistentNaming
 namespace OBeautifulCode.AutoFakeItEasy.Test
 {
     using System;
@@ -19,9 +17,6 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
 
     using Xunit;
 
-    /// <summary>
-    /// Tests the <see cref="RandomNumericSequenceGenerator"/> class.
-    /// </summary>
     public static class RandomNumericSequenceGeneratorTest
     {
         [Fact]
@@ -200,6 +195,3 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         }
     }
 }
-
-// ReSharper restore InconsistentNaming
-// ReSharper restore CheckNamespace

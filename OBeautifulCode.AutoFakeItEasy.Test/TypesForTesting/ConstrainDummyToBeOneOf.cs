@@ -1,10 +1,9 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ConstrainDummyToBeOneOf.cs" company="OBeautifulCode">
-//   Copyright (c) OBeautifulCode. All rights reserved.
+//   Copyright (c) OBeautifulCode 2018. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-// ReSharper disable CheckNamespace
 namespace OBeautifulCode.AutoFakeItEasy.Test
 {
 #pragma warning disable SA1649 // File name must match first type name
@@ -23,7 +22,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
 
         MeanPeople,
 
-        Chores
+        Chores,
     }
 
     public enum MostlyBadStuffWithComparer
@@ -40,7 +39,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
 
         MeanPeople,
 
-        Chores
+        Chores,
     }
 
     public enum MostlyBadStuffWithoutComparerReestablished
@@ -57,7 +56,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
 
         MeanPeople,
 
-        Chores
+        Chores,
     }
 
     public enum MostlyBadStuffWithComparerReestablished
@@ -74,7 +73,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
 
         MeanPeople,
 
-        Chores
+        Chores,
     }
 
     public enum MostlyBadStuffWithoutComparerIndirect
@@ -91,7 +90,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
 
         MeanPeople,
 
-        Chores
+        Chores,
     }
 
     public enum MostlyBadStuffWithComparerIndirect
@@ -108,7 +107,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
 
         MeanPeople,
 
-        Chores
+        Chores,
     }
 
     public class ConstrainDummiesToBeOneOfIndirect
@@ -123,5 +122,3 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
 #pragma warning restore SA1402 // File may only contain a single class
 #pragma warning restore SA1649 // File name must match first type name
 }
-
-// ReSharper restore CheckNamespace

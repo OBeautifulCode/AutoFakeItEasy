@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="AutoFixtureBackedDummyFactoryTest.cs" company="OBeautifulCode">
-//   Copyright (c) OBeautifulCode. All rights reserved.
+//   Copyright (c) OBeautifulCode 2018. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -8,17 +8,14 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
 {
     using System;
     using System.Collections.Generic;
-    using System.Collections.ObjectModel;
     using System.Linq;
 
     using FakeItEasy;
+
     using FluentAssertions;
 
     using Xunit;
 
-    /// <summary>
-    /// Tests the <see cref="AutoFixtureBackedDummyFactory"/> class.
-    /// </summary>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Justification = "Testing the dummy factory requires using many types.")]
     public static class AutoFixtureBackedDummyFactoryTest
     {
@@ -28,7 +25,6 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
 
         private static int NumberOfCallsToCoverAllPercentChangeAsDecimal => Convert.ToInt32(((PercentChangeAsDecimal.MaxPercentChange - PercentChangeAsDecimal.MinPercentChange) * 1000m) + 1m);
 
-        // ReSharper disable InconsistentNaming
         [Fact]
         public static void ADummy_bool___Should_return_bool_values_in_random_order___When_creating_object_of_type_bool()
         {
@@ -982,7 +978,5 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             goodStuff.Should().Contain(MostlyGoodStuffInGenericInterfaceIndirect.WorkingFromHome);
             goodStuff.Should().Contain(MostlyGoodStuffInGenericInterfaceIndirect.Vacation);
         }
-
-        // ReSharper restore InconsistentNaming
     }
 }

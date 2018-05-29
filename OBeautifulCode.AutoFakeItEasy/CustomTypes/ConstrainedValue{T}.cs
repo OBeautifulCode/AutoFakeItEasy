@@ -1,19 +1,19 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ConstrainedValue{T}.cs" company="OBeautifulCode">
-//   Copyright (c) OBeautifulCode. All rights reserved.
+//   Copyright (c) OBeautifulCode 2018. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-// ReSharper disable CheckNamespace
 namespace OBeautifulCode.AutoFakeItEasy
 {
     using System.Diagnostics;
+    using System.Diagnostics.CodeAnalysis;
 
     /// <summary>
     /// Represents a constrained value.
     /// </summary>
     /// <typeparam name="T">The type of the constrained value.</typeparam>
-    [DebuggerDisplay("{Value}")]
+    [DebuggerDisplay("{" + nameof(Value) + "}")]
     public abstract class ConstrainedValue<T>
         where T : struct
     {
@@ -39,6 +39,7 @@ namespace OBeautifulCode.AutoFakeItEasy
         /// <returns>
         /// The result of the conversion.
         /// </returns>
+        [SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Violates CA1065 if we throw when from is null")]
         public static implicit operator T(
             ConstrainedValue<T> from)
         {
@@ -46,5 +47,3 @@ namespace OBeautifulCode.AutoFakeItEasy
         }
     }
 }
-
-// ReSharper restore CheckNamespace

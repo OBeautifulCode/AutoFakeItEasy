@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="SomeReadOnlyDummiesListTest.cs" company="OBeautifulCode">
-//   Copyright (c) OBeautifulCode. All rights reserved.
+//   Copyright (c) OBeautifulCode 2018. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -16,12 +16,8 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
 
     using Xunit;
 
-    /// <summary>
-    /// Tests the <see cref="Some"/> class.
-    /// </summary>
     public static class SomeReadOnlyDummiesListTest
     {
-        // ReSharper disable InconsistentNaming
         [Fact]
         public static void Constructor___Should_return_type_derived_from_ReadOnlyCollection_that_is_initialized_with_the_specified_list___When_called()
         {
@@ -31,9 +27,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var underlyingList = Enumerable.Range(1, ThreadSafeRandom.Next(2, 15)).Select(_ => ThreadSafeRandom.NextDouble()).ToList();
 
             // Act
-            // ReSharper disable CollectionNeverUpdated.Local
             var systemUnderTest = new SomeReadOnlyDummiesList<double>(underlyingList, numberOfElements, createWith);
-            // ReSharper restore CollectionNeverUpdated.Local
 
             // Assert
             systemUnderTest.Should().BeAssignableTo<ReadOnlyCollection<double>>();
@@ -71,7 +65,5 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             // Assert
             actualCreateWith.Should().Be(expectedCreateWith);
         }
-
-        // ReSharper restore InconsistentNaming
     }
 }

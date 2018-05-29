@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="CreateWith.cs" company="OBeautifulCode">
-//   Copyright (c) OBeautifulCode. All rights reserved.
+//   Copyright (c) OBeautifulCode 2018. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -27,6 +27,6 @@ namespace OBeautifulCode.AutoFakeItEasy
         /// <summary>
         /// The resulting list should contain zero or more null elements.
         /// </summary>
-        ZeroOrMoreNulls
+        ZeroOrMoreNulls,
     }
 }

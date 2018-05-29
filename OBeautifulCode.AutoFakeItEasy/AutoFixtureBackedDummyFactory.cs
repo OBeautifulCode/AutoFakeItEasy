@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="AutoFixtureBackedDummyFactory.cs" company="OBeautifulCode">
-//   Copyright (c) OBeautifulCode. All rights reserved.
+//   Copyright (c) OBeautifulCode 2018. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -56,9 +56,7 @@ namespace OBeautifulCode.AutoFakeItEasy
         }
 
         /// <inheritdoc />
-        // ReSharper disable RedundantNameQualifier
         public Priority Priority => FakeItEasy.Priority.Default;
-        // ReSharper restore RedundantNameQualifier
 
         /// <summary>
         /// Loads this factory in the app domain, which makes it
@@ -104,15 +102,18 @@ namespace OBeautifulCode.AutoFakeItEasy
             IEnumerable<T> possibleDummies,
             IEqualityComparer<T> comparer = null)
         {
-            Func<T> creatorFunc = () =>
+            T CreatorFunc()
             {
+                // ReSharper disable PossibleMultipleEnumeration
                 T result = comparer == null
                     ? ((T)CreateType(FixtureWithoutCreators, typeof(T))).ThatIsIn(possibleDummies)
                     : ((T)CreateType(FixtureWithoutCreators, typeof(T))).ThatIsIn(possibleDummies, comparer);
                 return result;
-            };
 
-            AddDummyCreator(creatorFunc);
+                // ReSharper restore PossibleMultipleEnumeration
+            }
+
+            AddDummyCreator(CreatorFunc);
         }
 
         /// <summary>
@@ -136,15 +137,18 @@ namespace OBeautifulCode.AutoFakeItEasy
             IEnumerable<T> possibleDummies,
             IEqualityComparer<T> comparer = null)
         {
-            Func<T> creatorFunc = () =>
+            T CreatorFunc()
             {
+                // ReSharper disable PossibleMultipleEnumeration
                 T result = comparer == null
                     ? ((T)CreateType(FixtureWithoutCreators, typeof(T))).ThatIsNotIn(possibleDummies)
                     : ((T)CreateType(FixtureWithoutCreators, typeof(T))).ThatIsNotIn(possibleDummies, comparer);
                 return result;
-            };
 
-            AddDummyCreator(creatorFunc);
+                // ReSharper restore PossibleMultipleEnumeration
+            }
+
+            AddDummyCreator(CreatorFunc);
         }
 
         /// <summary>
@@ -167,12 +171,13 @@ namespace OBeautifulCode.AutoFakeItEasy
                 throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, "Only one of {0} and {1} can be specified.  Both are not null.", nameof(typesToExclude), nameof(typesToInclude)));
             }
 
-            // ReSharper disable PossibleMultipleEnumeration
+            // ReSharper disable once PossibleMultipleEnumeration
             if ((typesToExclude != null) && !typesToExclude.Any())
             {
                 throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, "{0} is not null, but empty.", nameof(typesToExclude)));
             }
 
+            // ReSharper disable once PossibleMultipleEnumeration
             if ((typesToInclude != null) && !typesToInclude.Any())
             {
                 throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, "{0} is not null, but empty.", nameof(typesToInclude)));
@@ -188,11 +193,13 @@ namespace OBeautifulCode.AutoFakeItEasy
                 {
                     if (typesToExclude != null)
                     {
+                        // ReSharper disable once PossibleMultipleEnumeration
                         return !typesToExclude.Contains(_);
                     }
 
                     if (typesToInclude != null)
                     {
+                        // ReSharper disable once PossibleMultipleEnumeration
                         return typesToInclude.Contains(_);
                     }
 
@@ -200,24 +207,23 @@ namespace OBeautifulCode.AutoFakeItEasy
                 })
                 .ToList();
 
-            // ReSharper restore PossibleMultipleEnumeration
             if (concreteSubclasses.Count == 0)
             {
                 throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, "There are no concrete subclasses of {0} (after inclusions and exclusions are applied)", type.Name));
             }
 
-            Func<T> randomSubclassDummyCreator = () =>
-                {
-                    // get random subclass
-                    var randomIndex = ThreadSafeRandom.Next(0, concreteSubclasses.Count);
-                    var randomSubclass = concreteSubclasses[randomIndex];
+            T RandomSubclassDummyCreator()
+            {
+                // get random subclass
+                var randomIndex = ThreadSafeRandom.Next(0, concreteSubclasses.Count);
+                var randomSubclass = concreteSubclasses[randomIndex];
 
-                    // create the subclass
-                    object result = AD.ummy(randomSubclass);
-                    return (T)result;
-                };
+                // create the subclass
+                object result = AD.ummy(randomSubclass);
+                return (T)result;
+            }
 
-            AddDummyCreator(randomSubclassDummyCreator);
+            AddDummyCreator(RandomSubclassDummyCreator);
         }
 
         /// <summary>
@@ -247,7 +253,7 @@ namespace OBeautifulCode.AutoFakeItEasy
                 throw new ArgumentException("There are no implementations of the interface " + type.Name);
             }
 
-            Func<T> randomInterfaceImplementationDummyGenerator = () =>
+            T RandomInterfaceImplementationDummyGenerator()
             {
                 // get random implementation
                 var randomIndex = ThreadSafeRandom.Next(0, interfaceImplementations.Count);
@@ -256,9 +262,9 @@ namespace OBeautifulCode.AutoFakeItEasy
                 // call the FakeItEasy A.Dummy method to create that implementation
                 object result = AD.ummy(randomImplementation);
                 return (T)result;
-            };
+            }
 
-            AddDummyCreator(randomInterfaceImplementationDummyGenerator);
+            AddDummyCreator(RandomInterfaceImplementationDummyGenerator);
         }
 
         /// <inheritdoc />
@@ -294,7 +300,6 @@ namespace OBeautifulCode.AutoFakeItEasy
             Fixture fixture)
         {
             // fix some of AutoFixture's poor defaults - see README.md
-            // ReSharper disable RedundantNameQualifier
 
             // this will generate numbers in the range [-32768,32768]
             fixture.Customizations.Insert(0, new AutoFakeItEasy.RandomNumericSequenceGenerator(short.MinValue, short.MaxValue + 2));
@@ -303,8 +308,6 @@ namespace OBeautifulCode.AutoFakeItEasy
             fixture.Customizations.Insert(0, new AutoFakeItEasy.ReadOnlyCollectionRelay());
             fixture.Customizations.Insert(0, new AutoFakeItEasy.ReadOnlyListRelay());
             fixture.Customizations.Insert(0, new AutoFakeItEasy.ReadOnlyDictionaryRelay());
-
-            // ReSharper restore RedundantNameQualifier
         }
 
         private static void RegisterCustomTypes(

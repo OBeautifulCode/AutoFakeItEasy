@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="SomeDummiesListTest.cs" company="OBeautifulCode">
-//   Copyright (c) OBeautifulCode. All rights reserved.
+//   Copyright (c) OBeautifulCode 2018. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -15,12 +15,8 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
 
     using Xunit;
 
-    /// <summary>
-    /// Tests the <see cref="Some"/> class.
-    /// </summary>
     public static class SomeDummiesListTest
     {
-        // ReSharper disable InconsistentNaming
         [Fact]
         public static void Constructor___Should_return_type_derived_from_List_that_is_empty___When_called()
         {
@@ -29,9 +25,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var createWith = (CreateWith)ThreadSafeRandom.Next(0, Enum.GetNames(typeof(CreateWith)).Length);
 
             // Act
-            // ReSharper disable CollectionNeverUpdated.Local
             var systemUnderTest = new SomeDummiesList<double>(numberOfElements, createWith);
-            // ReSharper restore CollectionNeverUpdated.Local
 
             // Assert
             systemUnderTest.Should().BeAssignableTo<List<double>>();
@@ -67,7 +61,5 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             // Assert
             actualCreateWith.Should().Be(expectedCreateWith);
         }
-
-        // ReSharper restore InconsistentNaming
     }
 }

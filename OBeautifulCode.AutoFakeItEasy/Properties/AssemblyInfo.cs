@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="AssemblyInfo.cs" company="OBeautifulCode">
-//   Copyright (c) OBeautifulCode. All rights reserved.
+//   Copyright (c) OBeautifulCode 2018. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -13,11 +13,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("OBeautifulCode.AutoFakeItEasy")]
-[assembly: AssemblyDescription("Makes FakeItEasy Dummies useful by wiring-them-up to real-looking, random test data.  Leverages the power of AutoFixture to create anonymous variables.  Fixes some of AutoFixture's poor default behaviors.  Makes unit tests more expressive with less lines of code.")]
+[assembly: AssemblyDescription("OBeautifulCode.AutoFakeItEasy")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("OBeautifulCode")]
 [assembly: AssemblyProduct("OBeautifulCode.AutoFakeItEasy")]
-[assembly: AssemblyCopyright("Copyright (c) 2016 OBeautifulCode")]
+[assembly: AssemblyCopyright("Copyright (c) 2018 OBeautifulCode")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

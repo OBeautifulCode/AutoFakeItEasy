@@ -1,10 +1,9 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ZeroOrNegativeDouble.cs" company="OBeautifulCode">
-//   Copyright (c) OBeautifulCode. All rights reserved.
+//   Copyright (c) OBeautifulCode 2018. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-// ReSharper disable CheckNamespace
 namespace OBeautifulCode.AutoFakeItEasy
 {
     using System;
@@ -13,7 +12,7 @@ namespace OBeautifulCode.AutoFakeItEasy
     /// <summary>
     /// Represents a zero or negative double.
     /// </summary>
-    [DebuggerDisplay("{Value}")]
+    [DebuggerDisplay("{" + nameof(Value) + "}")]
     public sealed class ZeroOrNegativeDouble : ConstrainedValue<double>
     {
         /// <summary>
@@ -31,5 +30,3 @@ namespace OBeautifulCode.AutoFakeItEasy
         }
     }
 }
-
-// ReSharper restore CheckNamespace

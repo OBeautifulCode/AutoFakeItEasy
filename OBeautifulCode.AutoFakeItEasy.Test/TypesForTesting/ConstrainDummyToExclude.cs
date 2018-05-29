@@ -1,10 +1,9 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ConstrainDummyToExclude.cs" company="OBeautifulCode">
-//   Copyright (c) OBeautifulCode. All rights reserved.
+//   Copyright (c) OBeautifulCode 2018. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-// ReSharper disable CheckNamespace
 namespace OBeautifulCode.AutoFakeItEasy.Test
 {
     using System.Collections.Generic;
@@ -25,7 +24,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
 
         FoodPoisoning,
 
-        Bulldogs
+        Bulldogs,
     }
 
     public enum MostlyGoodStuffWithComparer
@@ -42,7 +41,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
 
         FoodPoisoning,
 
-        Bulldogs
+        Bulldogs,
     }
 
     public enum MostlyGoodStuffWithoutComparerReestablished
@@ -59,7 +58,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
 
         FoodPoisoning,
 
-        Bulldogs
+        Bulldogs,
     }
 
     public enum MostlyGoodStuffWithComparerReestablished
@@ -76,7 +75,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
 
         FoodPoisoning,
 
-        Bulldogs
+        Bulldogs,
     }
 
     public enum MostlyGoodStuffWithoutComparerIndirect
@@ -93,7 +92,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
 
         FoodPoisoning,
 
-        Bulldogs
+        Bulldogs,
     }
 
     public enum MostlyGoodStuffWithComparerIndirect
@@ -110,7 +109,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
 
         FoodPoisoning,
 
-        Bulldogs
+        Bulldogs,
     }
 
     public enum MostlyGoodStuffInGenericInterface
@@ -127,7 +126,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
 
         FoodPoisoning,
 
-        Bulldogs
+        Bulldogs,
     }
 
     public enum MostlyGoodStuffInGenericInterfaceIndirect
@@ -144,7 +143,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
 
         FoodPoisoning,
 
-        Bulldogs
+        Bulldogs,
     }
 
     public class ConstrainDummiesToExcludeIndirect
@@ -185,5 +184,3 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
 #pragma warning restore SA1402 // File may only contain a single class
 #pragma warning restore SA1649 // File name must match first type name
 }
-
-// ReSharper restore CheckNamespace

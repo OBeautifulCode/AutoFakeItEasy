@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="SomeTest.cs" company="OBeautifulCode">
-//   Copyright (c) OBeautifulCode. All rights reserved.
+//   Copyright (c) OBeautifulCode 2018. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -17,12 +17,8 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
 
     using Xunit;
 
-    /// <summary>
-    /// Tests the <see cref="Some"/> class.
-    /// </summary>
     public static class SomeTest
     {
-        // ReSharper disable InconsistentNaming
         [Fact]
         public static void Dummies___Should_throw_ArgumentException___When_parameter_createWith_is_OneOrMoreNulls_and_parameter_numberOfElements_is_zero()
         {
@@ -125,7 +121,6 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             result2AsSomeDummiesList.Should().NotBeNull();
             result3AsSomeDummiesList.Should().NotBeNull();
 
-            // ReSharper disable PossibleNullReferenceException
             result1AsSomeDummiesList.NumberOfElementsSpecifiedInCallToSomeDummies.Should().Be(numberOfElements1);
             result1AsSomeDummiesList.CreateWithSpecifiedInCallToSomeDummies.Should().Be(createWith);
 
@@ -134,14 +129,12 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
 
             result3AsSomeDummiesList.NumberOfElementsSpecifiedInCallToSomeDummies.Should().Be(0);
             result3AsSomeDummiesList.CreateWithSpecifiedInCallToSomeDummies.Should().Be(CreateWith.ZeroOrMoreNulls);
-            // ReSharper restore PossibleNullReferenceException
         }
 
         [Fact]
         public static void Dummies___Should_return_empty_list___When_parameter_numberOfElements_is_0()
         {
             // Arrange, Act
-            // ReSharper disable RedundantArgumentDefaultValue
             var result1 = Some.Dummies<double>(0, CreateWith.NoNulls);
             var result2 = Some.Dummies<double>(0, CreateWith.ZeroOrMoreNulls);
             var result3 = Some.Dummies<int?>(0, CreateWith.NoNulls);
@@ -150,8 +143,6 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var result6 = Some.Dummies<string>(0, CreateWith.ZeroOrMoreNulls);
             var result7 = Some.Dummies<object>(0, CreateWith.NoNulls);
             var result8 = Some.Dummies<object>(0, CreateWith.ZeroOrMoreNulls);
-
-            // ReSharper restore RedundantArgumentDefaultValue
 
             // Assert
             result1.Should().BeEmpty();
@@ -168,7 +159,6 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         public static void Dummies___Should_return_list_with_MinRandomNumberOfElements_to_MaxRandomNumberOfElements_elements___When_parameter_numberOfElements_is_not_specified()
         {
             // Arrange, Act
-            // ReSharper disable RedundantArgumentDefaultValue
             var result1 = Some.Dummies<double>(createWith: CreateWith.NoNulls);
             var result2 = Some.Dummies<double>(createWith: CreateWith.ZeroOrMoreNulls);
 
@@ -183,8 +173,6 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var result9 = Some.Dummies<object>(createWith: CreateWith.NoNulls);
             var result10 = Some.Dummies<object>(createWith: CreateWith.ZeroOrMoreNulls);
             var result11 = Some.Dummies<object>(createWith: CreateWith.OneOrMoreNulls);
-
-            // ReSharper restore RedundantArgumentDefaultValue
 
             // Assert
             result1.Count.Should().BeGreaterOrEqualTo(Some.MinRandomNumberOfElements).And.BeLessOrEqualTo(Some.MaxRandomNumberOfElements);
@@ -204,7 +192,6 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         public static void Dummies___Should_return_list_with_MinRandomNumberOfElements_to_MaxRandomNumberOfElements_elements___When_parameter_numberOfElements_is_negative()
         {
             // Arrange, Act
-            // ReSharper disable RedundantArgumentDefaultValue
             var result1 = Some.Dummies<double>(A.Dummy<NegativeInteger>(), CreateWith.NoNulls);
             var result2 = Some.Dummies<double>(A.Dummy<NegativeInteger>(), CreateWith.ZeroOrMoreNulls);
 
@@ -219,8 +206,6 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var result9 = Some.Dummies<object>(A.Dummy<NegativeInteger>(), CreateWith.NoNulls);
             var result10 = Some.Dummies<object>(A.Dummy<NegativeInteger>(), CreateWith.ZeroOrMoreNulls);
             var result11 = Some.Dummies<object>(A.Dummy<NegativeInteger>(), CreateWith.OneOrMoreNulls);
-
-            // ReSharper restore RedundantArgumentDefaultValue
 
             // Assert
             result1.Count.Should().BeGreaterOrEqualTo(Some.MinRandomNumberOfElements).And.BeLessOrEqualTo(Some.MaxRandomNumberOfElements);
@@ -240,16 +225,12 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         public static void Dummies___Should_return_random_list_with_specified_number_of_elements_and_no_nulls___When_parameter_createWith_is_not_specified()
         {
             // Arrange, Act
-            // ReSharper disable RedundantArgumentDefaultValue
             const int numberOfElements = 100;
             var result1 = Some.Dummies<double>(numberOfElements);
             var result2 = Some.Dummies<int?>(numberOfElements);
             var result3 = Some.Dummies<string>(numberOfElements);
             var result4 = Some.Dummies<object>(numberOfElements);
-
-            // ReSharper restore RedundantArgumentDefaultValue
-
-            // Assert
+            // Assert
             result1.Should().HaveCount(numberOfElements).And.OnlyHaveUniqueItems();
             result2.Should().HaveCount(numberOfElements).And.OnlyHaveUniqueItems().And.NotContainNulls();
             result3.Should().HaveCount(numberOfElements).And.OnlyHaveUniqueItems().And.NotContainNulls();
@@ -260,16 +241,12 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         public static void Dummies___Should_return_random_list_with_specified_number_of_elements_and_no_nulls___When_parameter_createWith_is_NoNulls()
         {
             // Arrange, Act
-            // ReSharper disable RedundantArgumentDefaultValue
             const int numberOfElements = 100;
             var result1 = Some.Dummies<double>(numberOfElements, CreateWith.NoNulls);
             var result2 = Some.Dummies<int?>(numberOfElements, CreateWith.NoNulls);
             var result3 = Some.Dummies<string>(numberOfElements, CreateWith.NoNulls);
             var result4 = Some.Dummies<object>(numberOfElements, CreateWith.NoNulls);
-
-            // ReSharper restore RedundantArgumentDefaultValue
-
-            // Assert
+            // Assert
             result1.Should().HaveCount(numberOfElements).And.OnlyHaveUniqueItems();
             result2.Should().HaveCount(numberOfElements).And.OnlyHaveUniqueItems().And.NotContainNulls();
             result3.Should().HaveCount(numberOfElements).And.OnlyHaveUniqueItems().And.NotContainNulls();
@@ -280,7 +257,6 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         public static void Dummies___Should_return_random_list_with_specified_number_of_elements_and_one_or_more_nulls___When_parameter_createWith_is_OneOrMoreNulls()
         {
             // Arrange, Act
-            // ReSharper disable RedundantArgumentDefaultValue
             const int numberOfElements = 3;
             var result1 = Some.Dummies<int?>(numberOfElements, CreateWith.OneOrMoreNulls);
             var result2 = Some.Dummies<string>(numberOfElements, CreateWith.OneOrMoreNulls);
@@ -289,10 +265,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var result4 = Some.Dummies<int?>(1, CreateWith.OneOrMoreNulls);
             var result5 = Some.Dummies<string>(1, CreateWith.OneOrMoreNulls);
             var result6 = Some.Dummies<object>(1, CreateWith.OneOrMoreNulls);
-
-            // ReSharper restore RedundantArgumentDefaultValue
-
-            // Assert
+            // Assert
             result1.Should().HaveCount(numberOfElements).And.Contain((int?)null);
             result1.Where(_ => _ != null).Should().OnlyHaveUniqueItems();
 
@@ -311,16 +284,12 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         public static void Dummies___Should_return_random_list_with_specified_number_of_elements_and_zero_or_more_nulls___When_parameter_createWith_is_ZeroOrMoreNulls()
         {
             // Arrange, Act
-            // ReSharper disable RedundantArgumentDefaultValue
             const int numberOfElements = 100;
             var result1 = Some.Dummies<int?>(numberOfElements, CreateWith.ZeroOrMoreNulls);
             var result2 = Some.Dummies<string>(numberOfElements, CreateWith.ZeroOrMoreNulls);
             var result3 = Some.Dummies<object>(numberOfElements, CreateWith.ZeroOrMoreNulls);
             var result4 = Some.Dummies<double>(numberOfElements, CreateWith.ZeroOrMoreNulls);
-
-            // ReSharper restore RedundantArgumentDefaultValue
-
-            // Assert
+            // Assert
             result1.Should().HaveCount(numberOfElements);
             result1.Where(_ => _ != null).Should().OnlyHaveUniqueItems();
 
@@ -435,7 +404,6 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             result2AsSomeReadOnlyDummiesList.Should().NotBeNull();
             result3AsSomeReadOnlyDummiesList.Should().NotBeNull();
 
-            // ReSharper disable PossibleNullReferenceException
             result1AsSomeReadOnlyDummiesList.NumberOfElementsSpecifiedInCallToSomeDummies.Should().Be(numberOfElements1);
             result1AsSomeReadOnlyDummiesList.CreateWithSpecifiedInCallToSomeDummies.Should().Be(createWith);
 
@@ -444,14 +412,12 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
 
             result3AsSomeReadOnlyDummiesList.NumberOfElementsSpecifiedInCallToSomeDummies.Should().Be(0);
             result3AsSomeReadOnlyDummiesList.CreateWithSpecifiedInCallToSomeDummies.Should().Be(CreateWith.ZeroOrMoreNulls);
-            // ReSharper restore PossibleNullReferenceException
         }
 
         [Fact]
         public static void ReadOnlyDummies___Should_return_empty_list___When_parameter_numberOfElements_is_0()
         {
             // Arrange, Act
-            // ReSharper disable RedundantArgumentDefaultValue
             var result1 = Some.ReadOnlyDummies<double>(0, CreateWith.NoNulls);
             var result2 = Some.ReadOnlyDummies<double>(0, CreateWith.ZeroOrMoreNulls);
             var result3 = Some.ReadOnlyDummies<int?>(0, CreateWith.NoNulls);
@@ -460,10 +426,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var result6 = Some.ReadOnlyDummies<string>(0, CreateWith.ZeroOrMoreNulls);
             var result7 = Some.ReadOnlyDummies<object>(0, CreateWith.NoNulls);
             var result8 = Some.ReadOnlyDummies<object>(0, CreateWith.ZeroOrMoreNulls);
-
-            // ReSharper restore RedundantArgumentDefaultValue
-
-            // Assert
+            // Assert
             result1.Should().BeEmpty();
             result2.Should().BeEmpty();
             result3.Should().BeEmpty();
@@ -478,7 +441,6 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         public static void ReadOnlyDummies___Should_return_list_with_MinRandomNumberOfElements_to_MaxRandomNumberOfElements_elements___When_parameter_numberOfElements_is_not_specified()
         {
             // Arrange, Act
-            // ReSharper disable RedundantArgumentDefaultValue
             var result1 = Some.ReadOnlyDummies<double>(createWith: CreateWith.NoNulls);
             var result2 = Some.ReadOnlyDummies<double>(createWith: CreateWith.ZeroOrMoreNulls);
 
@@ -493,10 +455,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var result9 = Some.ReadOnlyDummies<object>(createWith: CreateWith.NoNulls);
             var result10 = Some.ReadOnlyDummies<object>(createWith: CreateWith.ZeroOrMoreNulls);
             var result11 = Some.ReadOnlyDummies<object>(createWith: CreateWith.OneOrMoreNulls);
-
-            // ReSharper restore RedundantArgumentDefaultValue
-
-            // Assert
+            // Assert
             result1.Count.Should().BeGreaterOrEqualTo(Some.MinRandomNumberOfElements).And.BeLessOrEqualTo(Some.MaxRandomNumberOfElements);
             result2.Count.Should().BeGreaterOrEqualTo(Some.MinRandomNumberOfElements).And.BeLessOrEqualTo(Some.MaxRandomNumberOfElements);
             result3.Count.Should().BeGreaterOrEqualTo(Some.MinRandomNumberOfElements).And.BeLessOrEqualTo(Some.MaxRandomNumberOfElements);
@@ -514,7 +473,6 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         public static void ReadOnlyDummies___Should_return_list_with_MinRandomNumberOfElements_to_MaxRandomNumberOfElements_elements___When_parameter_numberOfElements_is_negative()
         {
             // Arrange, Act
-            // ReSharper disable RedundantArgumentDefaultValue
             var result1 = Some.ReadOnlyDummies<double>(A.Dummy<NegativeInteger>(), CreateWith.NoNulls);
             var result2 = Some.ReadOnlyDummies<double>(A.Dummy<NegativeInteger>(), CreateWith.ZeroOrMoreNulls);
 
@@ -529,10 +487,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var result9 = Some.ReadOnlyDummies<object>(A.Dummy<NegativeInteger>(), CreateWith.NoNulls);
             var result10 = Some.ReadOnlyDummies<object>(A.Dummy<NegativeInteger>(), CreateWith.ZeroOrMoreNulls);
             var result11 = Some.ReadOnlyDummies<object>(A.Dummy<NegativeInteger>(), CreateWith.OneOrMoreNulls);
-
-            // ReSharper restore RedundantArgumentDefaultValue
-
-            // Assert
+            // Assert
             result1.Count.Should().BeGreaterOrEqualTo(Some.MinRandomNumberOfElements).And.BeLessOrEqualTo(Some.MaxRandomNumberOfElements);
             result2.Count.Should().BeGreaterOrEqualTo(Some.MinRandomNumberOfElements).And.BeLessOrEqualTo(Some.MaxRandomNumberOfElements);
             result3.Count.Should().BeGreaterOrEqualTo(Some.MinRandomNumberOfElements).And.BeLessOrEqualTo(Some.MaxRandomNumberOfElements);
@@ -550,16 +505,12 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         public static void ReadOnlyDummies___Should_return_random_list_with_specified_number_of_elements_and_no_nulls___When_parameter_createWith_is_not_specified()
         {
             // Arrange, Act
-            // ReSharper disable RedundantArgumentDefaultValue
             const int numberOfElements = 100;
             var result1 = Some.ReadOnlyDummies<double>(numberOfElements);
             var result2 = Some.ReadOnlyDummies<int?>(numberOfElements);
             var result3 = Some.ReadOnlyDummies<string>(numberOfElements);
             var result4 = Some.ReadOnlyDummies<object>(numberOfElements);
-
-            // ReSharper restore RedundantArgumentDefaultValue
-
-            // Assert
+            // Assert
             result1.Should().HaveCount(numberOfElements).And.OnlyHaveUniqueItems();
             result2.Should().HaveCount(numberOfElements).And.OnlyHaveUniqueItems().And.NotContainNulls();
             result3.Should().HaveCount(numberOfElements).And.OnlyHaveUniqueItems().And.NotContainNulls();
@@ -570,16 +521,12 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         public static void ReadOnlyDummies___Should_return_random_list_with_specified_number_of_elements_and_no_nulls___When_parameter_createWith_is_NoNulls()
         {
             // Arrange, Act
-            // ReSharper disable RedundantArgumentDefaultValue
             const int numberOfElements = 100;
             var result1 = Some.ReadOnlyDummies<double>(numberOfElements, CreateWith.NoNulls);
             var result2 = Some.ReadOnlyDummies<int?>(numberOfElements, CreateWith.NoNulls);
             var result3 = Some.ReadOnlyDummies<string>(numberOfElements, CreateWith.NoNulls);
             var result4 = Some.ReadOnlyDummies<object>(numberOfElements, CreateWith.NoNulls);
-
-            // ReSharper restore RedundantArgumentDefaultValue
-
-            // Assert
+            // Assert
             result1.Should().HaveCount(numberOfElements).And.OnlyHaveUniqueItems();
             result2.Should().HaveCount(numberOfElements).And.OnlyHaveUniqueItems().And.NotContainNulls();
             result3.Should().HaveCount(numberOfElements).And.OnlyHaveUniqueItems().And.NotContainNulls();
@@ -590,7 +537,6 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         public static void ReadOnlyDummies___Should_return_random_list_with_specified_number_of_elements_and_one_or_more_nulls___When_parameter_createWith_is_OneOrMoreNulls()
         {
             // Arrange, Act
-            // ReSharper disable RedundantArgumentDefaultValue
             const int numberOfElements = 3;
             var result1 = Some.ReadOnlyDummies<int?>(numberOfElements, CreateWith.OneOrMoreNulls);
             var result2 = Some.ReadOnlyDummies<string>(numberOfElements, CreateWith.OneOrMoreNulls);
@@ -599,10 +545,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var result4 = Some.ReadOnlyDummies<int?>(1, CreateWith.OneOrMoreNulls);
             var result5 = Some.ReadOnlyDummies<string>(1, CreateWith.OneOrMoreNulls);
             var result6 = Some.ReadOnlyDummies<object>(1, CreateWith.OneOrMoreNulls);
-
-            // ReSharper restore RedundantArgumentDefaultValue
-
-            // Assert
+            // Assert
             result1.Should().HaveCount(numberOfElements).And.Contain((int?)null);
             result1.Where(_ => _ != null).Should().OnlyHaveUniqueItems();
 
@@ -621,16 +564,12 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         public static void ReadOnlyDummies___Should_return_random_list_with_specified_number_of_elements_and_zero_or_more_nulls___When_parameter_createWith_is_ZeroOrMoreNulls()
         {
             // Arrange, Act
-            // ReSharper disable RedundantArgumentDefaultValue
             const int numberOfElements = 100;
             var result1 = Some.ReadOnlyDummies<int?>(numberOfElements, CreateWith.ZeroOrMoreNulls);
             var result2 = Some.ReadOnlyDummies<string>(numberOfElements, CreateWith.ZeroOrMoreNulls);
             var result3 = Some.ReadOnlyDummies<object>(numberOfElements, CreateWith.ZeroOrMoreNulls);
             var result4 = Some.ReadOnlyDummies<double>(numberOfElements, CreateWith.ZeroOrMoreNulls);
-
-            // ReSharper restore RedundantArgumentDefaultValue
-
-            // Assert
+            // Assert
             result1.Should().HaveCount(numberOfElements);
             result1.Where(_ => _ != null).Should().OnlyHaveUniqueItems();
 
@@ -642,7 +581,5 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
 
             result4.Should().HaveCount(numberOfElements).And.OnlyHaveUniqueItems();
         }
-
-        // ReSharper restore InconsistentNaming
     }
 }

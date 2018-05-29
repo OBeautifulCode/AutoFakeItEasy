@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ExtensionMethods.cs" company="OBeautifulCode">
-//   Copyright (c) OBeautifulCode. All rights reserved.
+//   Copyright (c) OBeautifulCode 2018. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -68,14 +68,16 @@ namespace OBeautifulCode.AutoFakeItEasy
 
                 if (someDummiesCallName != null)
                 {
-                    // ReSharper disable PossibleNullReferenceException
                     var someDummiesMethod = typeof(Some).GetMethods().Single(_ => _.Name == someDummiesCallName);
                     var typeOfElementsInList = referenceDummyType.GetGenericArguments().Single();
                     var someDummiesGenericMethod = someDummiesMethod.MakeGenericMethod(typeOfElementsInList);
+
+                    // ReSharper disable once PossibleNullReferenceException
                     var numberOfElements = referenceDummyType.GetProperty(nameof(ISomeDummies.NumberOfElementsSpecifiedInCallToSomeDummies)).GetValue(referenceDummy);
+
+                    // ReSharper disable once PossibleNullReferenceException
                     var createWith = referenceDummyType.GetProperty(nameof(ISomeDummies.CreateWithSpecifiedInCallToSomeDummies)).GetValue(referenceDummy);
                     referenceDummy = (T)someDummiesGenericMethod.Invoke(null, new[] { numberOfElements, createWith });
-                    // ReSharper restore PossibleNullReferenceException
                 }
                 else
                 {
@@ -113,7 +115,7 @@ namespace OBeautifulCode.AutoFakeItEasy
         /// <summary>
         /// Returns a reference dummy if it is not equal to a comparison dummy or
         /// creates new dummies of the same type until a dummy is created that does not equal the comparison dummy.
-        /// Uses the comparison dummy's implementation of <see cref="object.Equals(object)"/>
+        /// Uses the comparison dummy's implementation of <see cref="object.Equals(object)"/>.
         /// </summary>
         /// <param name="referenceDummy">The reference dummy.</param>
         /// <param name="comparisonDummy">A dummy to compare against.</param>
@@ -142,7 +144,7 @@ namespace OBeautifulCode.AutoFakeItEasy
         /// <summary>
         /// Returns a reference dummy if it is not in a set of comparison dummies or
         /// creates new dummies of the same type until a dummy is created that is not in the set of comparison dummies.
-        /// Uses the comparison dummy's implementation of <see cref="object.Equals(object)"/>
+        /// Uses the comparison dummy's implementation of <see cref="object.Equals(object)"/>.
         /// </summary>
         /// <param name="referenceDummy">The reference dummy.</param>
         /// <param name="comparisonDummies">The set of comparison dummies.</param>
@@ -173,7 +175,7 @@ namespace OBeautifulCode.AutoFakeItEasy
         /// <summary>
         /// Returns a reference dummy if it is not in a set of comparison dummies or
         /// creates new dummies of the same type until a dummy is created that is not in the set of comparison dummies.
-        /// Uses the comparison dummy's implementation of <see cref="object.Equals(object)"/>
+        /// Uses the comparison dummy's implementation of <see cref="object.Equals(object)"/>.
         /// </summary>
         /// <param name="referenceDummy">The reference dummy.</param>
         /// <param name="comparisonDummies">The set of comparison dummies.</param>
@@ -206,7 +208,7 @@ namespace OBeautifulCode.AutoFakeItEasy
         /// <summary>
         /// Returns a reference dummy if it is in a set of comparison dummies or
         /// creates new dummies of the same type until a dummy is created that is in the set of comparison dummies.
-        /// Uses the comparison dummy's implementation of <see cref="object.Equals(object)"/>
+        /// Uses the comparison dummy's implementation of <see cref="object.Equals(object)"/>.
         /// </summary>
         /// <param name="referenceDummy">The reference dummy.</param>
         /// <param name="comparisonDummies">The set of comparison dummies.</param>
@@ -240,7 +242,7 @@ namespace OBeautifulCode.AutoFakeItEasy
         /// <summary>
         /// Returns a reference dummy if it is in a set of comparison dummies or
         /// creates new dummies of the same type until a dummy is created that is in the set of comparison dummies.
-        /// Uses the comparison dummy's implementation of <see cref="object.Equals(object)"/>
+        /// Uses the comparison dummy's implementation of <see cref="object.Equals(object)"/>.
         /// </summary>
         /// <param name="referenceDummy">The reference dummy.</param>
         /// <param name="comparisonDummies">The set of comparison dummies.</param>
@@ -273,7 +275,7 @@ namespace OBeautifulCode.AutoFakeItEasy
         /// <summary>
         /// Returns a reference dummy if it is contained within a specified range (inclusive of endpoints)
         /// or creates new dummies of the same type until a dummy is created that is within the specified range.
-        /// Uses the comparison dummy's implementation of <see cref="IComparable.CompareTo(object)"/>
+        /// Uses the comparison dummy's implementation of <see cref="IComparable.CompareTo(object)"/>.
         /// </summary>
         /// <param name="referenceDummy">The reference dummy.</param>
         /// <param name="rangeStartInclusive">The start of the range.  The range is inclusive of this value.</param>
@@ -319,7 +321,7 @@ namespace OBeautifulCode.AutoFakeItEasy
         /// <summary>
         /// Returns a reference dummy if it is contained within a specified range (inclusive of endpoints)
         /// or creates new dummies of the same type until a dummy is created that is within the specified range.
-        /// Uses the comparison dummy's implementation of <see cref="IComparable.CompareTo(object)"/>
+        /// Uses the comparison dummy's implementation of <see cref="IComparable.CompareTo(object)"/>.
         /// </summary>
         /// <param name="referenceDummy">The reference dummy.</param>
         /// <param name="rangeStartInclusive">The start of the range.  The range is inclusive of this value.</param>
@@ -344,6 +346,11 @@ namespace OBeautifulCode.AutoFakeItEasy
             IComparer<T> comparer,
             int maxAttempts = -1)
         {
+            if (comparer == null)
+            {
+                throw new ArgumentNullException(nameof(comparer));
+            }
+
             // not throwing ArgumentNullException if start or end of range is null
             // according to the documentation of IComparer<T>, null is comparable
             // https://msdn.microsoft.com/en-us/library/xh5ks3b3(v=vs.110).aspx
@@ -360,7 +367,7 @@ namespace OBeautifulCode.AutoFakeItEasy
         /// <summary>
         /// Returns a reference dummy if it is not contained within a specified range (inclusive of endpoints)
         /// or creates new dummies of the same type until a dummy is created that is not within the specified range.
-        /// Uses the comparison dummy's implementation of <see cref="IComparable.CompareTo(object)"/>
+        /// Uses the comparison dummy's implementation of <see cref="IComparable.CompareTo(object)"/>.
         /// </summary>
         /// <param name="referenceDummy">The reference dummy.</param>
         /// <param name="rangeStartInclusive">The start of the range.  The range is inclusive of this value.</param>
@@ -406,7 +413,7 @@ namespace OBeautifulCode.AutoFakeItEasy
         /// <summary>
         /// Returns a reference dummy if it is not contained within a specified range (inclusive of endpoints)
         /// or creates new dummies of the same type until a dummy is created that is not within the specified range.
-        /// Uses the comparison dummy's implementation of <see cref="IComparable.CompareTo(object)"/>
+        /// Uses the comparison dummy's implementation of <see cref="IComparable.CompareTo(object)"/>.
         /// </summary>
         /// <param name="referenceDummy">The reference dummy.</param>
         /// <param name="rangeStartInclusive">The start of the range.  The range is inclusive of this value.</param>
@@ -431,6 +438,11 @@ namespace OBeautifulCode.AutoFakeItEasy
             IComparer<T> comparer,
             int maxAttempts = -1)
         {
+            if (comparer == null)
+            {
+                throw new ArgumentNullException(nameof(comparer));
+            }
+
             // not throwing ArgumentNullException if start or end of range is null
             // according to the documentation of IComparer<T>, null is comparable
             // https://msdn.microsoft.com/en-us/library/xh5ks3b3(v=vs.110).aspx

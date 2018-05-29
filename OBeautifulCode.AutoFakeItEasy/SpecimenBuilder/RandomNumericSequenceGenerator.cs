@@ -1,10 +1,9 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="RandomNumericSequenceGenerator.cs" company="OBeautifulCode">
-//   Copyright (c) OBeautifulCode. All rights reserved.
+//   Copyright (c) OBeautifulCode 2018. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-// ReSharper disable CheckNamespace
 namespace OBeautifulCode.AutoFakeItEasy
 {
     using System;
@@ -129,5 +128,3 @@ namespace OBeautifulCode.AutoFakeItEasy
         }
     }
 }
-
-// ReSharper restore CheckNamespace
