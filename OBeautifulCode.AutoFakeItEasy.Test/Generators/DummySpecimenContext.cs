@@ -8,7 +8,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
 {
     using System;
 
-    using Ploeh.AutoFixture.Kernel;
+    using AutoFixture.Kernel;
 
     internal class DummySpecimenContext : ISpecimenContext
     {

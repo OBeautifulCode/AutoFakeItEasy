@@ -9,11 +9,11 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
     using System;
     using System.Collections.Generic;
 
+    using AutoFixture.Kernel;
+
     using FluentAssertions;
 
     using OBeautifulCode.Math.Recipes;
-
-    using Ploeh.AutoFixture.Kernel;
 
     using Xunit;
 

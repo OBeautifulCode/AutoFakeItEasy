@@ -13,12 +13,12 @@ namespace OBeautifulCode.AutoFakeItEasy
     using System.Linq;
     using System.Reflection;
 
+    using AutoFixture;
+    using AutoFixture.Kernel;
+
     using FakeItEasy;
 
     using OBeautifulCode.Math.Recipes;
-
-    using Ploeh.AutoFixture;
-    using Ploeh.AutoFixture.Kernel;
 
     /// <summary>
     /// A dummy factory backed by AutoFixture.
@@ -305,9 +305,6 @@ namespace OBeautifulCode.AutoFakeItEasy
             fixture.Customizations.Insert(0, new AutoFakeItEasy.RandomNumericSequenceGenerator(short.MinValue, short.MaxValue + 2));
             fixture.Customizations.Insert(0, new AutoFakeItEasy.RandomBoolSequenceGenerator());
             fixture.Customizations.Insert(0, new AutoFakeItEasy.RandomEnumSequenceGenerator());
-            fixture.Customizations.Insert(0, new AutoFakeItEasy.ReadOnlyCollectionRelay());
-            fixture.Customizations.Insert(0, new AutoFakeItEasy.ReadOnlyListRelay());
-            fixture.Customizations.Insert(0, new AutoFakeItEasy.ReadOnlyDictionaryRelay());
         }
 
         private static void RegisterCustomTypes(

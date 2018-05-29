@@ -8,9 +8,9 @@ namespace OBeautifulCode.AutoFakeItEasy
 {
     using System;
 
-    using OBeautifulCode.Math.Recipes;
+    using AutoFixture.Kernel;
 
-    using Ploeh.AutoFixture.Kernel;
+    using OBeautifulCode.Math.Recipes;
 
     /// <summary>
     /// Creates random value <see langword="true"/> or <see langword="false"/>.

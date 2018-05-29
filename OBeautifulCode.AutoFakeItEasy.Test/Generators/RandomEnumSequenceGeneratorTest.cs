@@ -9,9 +9,9 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
     using System;
     using System.Linq;
 
-    using FluentAssertions;
+    using AutoFixture.Kernel;
 
-    using Ploeh.AutoFixture.Kernel;
+    using FluentAssertions;
 
     using Xunit;
 

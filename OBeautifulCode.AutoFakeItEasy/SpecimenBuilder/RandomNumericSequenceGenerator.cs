@@ -10,9 +10,9 @@ namespace OBeautifulCode.AutoFakeItEasy
     using System.Collections.Generic;
     using System.Linq;
 
-    using OBeautifulCode.Math.Recipes;
+    using AutoFixture.Kernel;
 
-    using Ploeh.AutoFixture.Kernel;
+    using OBeautifulCode.Math.Recipes;
 
     /// <summary>
     /// Creates a sequence of random, unique numbers.

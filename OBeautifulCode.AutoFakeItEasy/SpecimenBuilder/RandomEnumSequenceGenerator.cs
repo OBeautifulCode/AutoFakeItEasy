@@ -9,9 +9,9 @@ namespace OBeautifulCode.AutoFakeItEasy
     using System;
     using System.Linq;
 
-    using OBeautifulCode.Math.Recipes;
+    using AutoFixture.Kernel;
 
-    using Ploeh.AutoFixture.Kernel;
+    using OBeautifulCode.Math.Recipes;
 
     /// <summary>
     /// Generates random enum values in a round-robin fashion.
