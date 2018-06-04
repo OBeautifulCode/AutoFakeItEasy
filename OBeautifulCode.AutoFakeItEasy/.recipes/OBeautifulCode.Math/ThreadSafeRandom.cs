@@ -49,7 +49,8 @@ namespace OBeautifulCode.Math.Recipes
         /// A number used to calculate a starting value for the pseudo-random number sequence.
         /// If a negative number is specified, the absolute value of the number is used.
         /// </param>
-        public static void Reseed(int seed)
+        public static void Reseed(
+            int seed)
         {
             lock (Lock)
             {
@@ -84,8 +85,9 @@ namespace OBeautifulCode.Math.Recipes
         /// A 32-bit signed integer greater than or equal to zero, and less than maxValue; that is, the range of return values
         /// ordinarily includes zero but not maxValue. However, if maxValue equals zero, maxValue is returned.
         /// </returns>
-        /// <exception cref="ArgumentOutOfRangeException">maxValue is less than zero.</exception>
-        public static int Next(int maxValue)
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="maxValue"/> is less than zero.</exception>
+        public static int Next(
+            int maxValue)
         {
             lock (Lock)
             {
@@ -105,8 +107,10 @@ namespace OBeautifulCode.Math.Recipes
         /// A 32-bit signed integer greater than or equal to minValue and less than maxValue; that is, the range of
         /// return values includes minValue but not maxValue. If minValue equals maxValue, minValue is returned.
         /// </returns>
-        /// <exception cref="ArgumentOutOfRangeException">minValue is greater than maxValue.</exception>
-        public static int Next(int minValue, int maxValue)
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="minValue"/> is greater than <paramref name="maxValue"/>.</exception>
+        public static int Next(
+            int minValue, 
+            int maxValue)
         {
             lock (Lock)
             {
@@ -123,8 +127,9 @@ namespace OBeautifulCode.Math.Recipes
         /// To generate a cryptographically secured random number suitable for creating a random password,
         /// for example, use a method such as RNGCryptoServiceProvider.GetBytes.
         /// </remarks>
-        /// <exception cref="ArgumentNullException">buffer is null.</exception>
-        public static void NextBytes(byte[] buffer)
+        /// <exception cref="ArgumentNullException"><paramref name="buffer"/> is null.</exception>
+        public static void NextBytes(
+            byte[] buffer)
         {
             lock (Lock)
             {
