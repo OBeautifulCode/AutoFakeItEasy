@@ -11,6 +11,8 @@ namespace OBeautifulCode.AutoFakeItEasy
 
     using AutoFixture.Kernel;
 
+    using OBeautifulCode.Collection.Recipes;
+    using OBeautifulCode.Enum.Recipes;
     using OBeautifulCode.Math.Recipes;
 
     /// <summary>
@@ -40,10 +42,24 @@ namespace OBeautifulCode.AutoFakeItEasy
                 return new NoSpecimen();
             }
 
-            // get random enum value
-            var enumValues = Enum.GetValues(t).Cast<object>().ToList();
-            var randomIndex = ThreadSafeRandom.Next(0, enumValues.Count);
-            var result = enumValues[randomIndex];
+            Enum result;
+            if (t.IsFlagsEnum())
+            {
+                // note: probably more efficient way to do this
+                var individualFlags = t.GetIndividualFlags();
+                var combinations = individualFlags.GetCombinations().ToList();
+                var allPossibleValues = combinations.Select(_ => _.Aggregate((running, item) => running.BitwiseOr(item))).Distinct().ToList();
+                var randomIndex = ThreadSafeRandom.Next(0, allPossibleValues.Count);
+                result = allPossibleValues[randomIndex];
+            }
+            else
+            {
+                // get random enum value
+                var enumValues = EnumExtensions.GetEnumValues(t).ToList();
+                var randomIndex = ThreadSafeRandom.Next(0, enumValues.Count);
+                result = enumValues[randomIndex];
+            }
+
             return result;
         }
     }

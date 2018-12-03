@@ -122,5 +122,35 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
                 actualResult.Should().Contain(number);
             }
         }
+
+        [Fact]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", MessageId = "flags", Justification = "This term is required to describe the test.")]
+        public static void Create___Should_return_all_possible_combinations_of_flags___When_many_requests_are_made_for_a_flags_enum()
+        {
+            // Arrange
+            var dummyContainer = new DummySpecimenContext();
+            var systemUnderTest = new RandomEnumSequenceGenerator();
+            var request = typeof(PartyPeoples);
+            var expectedValues = new[]
+            {
+                PartyPeoples.None,
+                PartyPeoples.Jane,
+                PartyPeoples.Joe,
+                PartyPeoples.John,
+                PartyPeoples.Jane | PartyPeoples.Joe,
+                PartyPeoples.Jane | PartyPeoples.John,
+                PartyPeoples.Joe | PartyPeoples.John,
+                PartyPeoples.Jane | PartyPeoples.Joe | PartyPeoples.John,
+            };
+
+            // Act
+            var actualValues = Enumerable.Range(1, 1000).Select(_ => systemUnderTest.Create(request, dummyContainer)).Cast<PartyPeoples>().ToList();
+
+            // Assert
+            foreach (var expectedValue in expectedValues)
+            {
+                actualValues.Should().Contain(expectedValue);
+            }
+        }
     }
 }

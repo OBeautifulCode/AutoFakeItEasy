@@ -250,6 +250,7 @@ How it Works
 - [AutoFixture] has been customized so that:
   - Signed numeric types return positive, zero and negative numbers, instead of the default of positive numbers
   - `Enums` return random values instead of the default of sequential values
+  - `Flags` `Enums` return a random set of individual flags OR'ed (`|=`) together.
   - `Bools` are randomly selected instead of the default of sequential values (false, true, false, true, ...)
 
 
