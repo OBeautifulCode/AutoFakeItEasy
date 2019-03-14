@@ -7,7 +7,9 @@
 namespace OBeautifulCode.AutoFakeItEasy.Test
 {
     using System;
+    using System.Collections.Concurrent;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.Linq;
 
     using FakeItEasy;
@@ -977,6 +979,46 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             goodStuff.Should().Contain(MostlyGoodStuffInGenericInterfaceIndirect.Meditation);
             goodStuff.Should().Contain(MostlyGoodStuffInGenericInterfaceIndirect.WorkingFromHome);
             goodStuff.Should().Contain(MostlyGoodStuffInGenericInterfaceIndirect.Vacation);
+        }
+
+        [Fact]
+        public static void ADummy_ConcurrentBag___Should_return_populated_bag___When_called()
+        {
+            // Arrange, Act
+            var actual = A.Dummy<ConcurrentBag<string>>();
+
+            // Assert
+            actual.Should().NotBeEmpty();
+        }
+
+        [Fact]
+        public static void ADummy_ConcurrentDictionary___Should_return_populated_dictionary___When_called()
+        {
+            // Arrange, Act
+            var actual = A.Dummy<ConcurrentDictionary<string, string>>();
+
+            // Assert
+            actual.Should().NotBeEmpty();
+        }
+
+        [Fact]
+        public static void ADummy_ConcurrentStack___Should_return_populated_stack___When_called()
+        {
+            // Arrange, Act
+            var actual = A.Dummy<ConcurrentStack<string>>();
+
+            // Assert
+            actual.Should().NotBeEmpty();
+        }
+
+        [Fact]
+        public static void ADummy_ConcurrentQueue___Should_return_populated_queue___When_called()
+        {
+            // Arrange, Act
+            var actual = A.Dummy<ConcurrentQueue<string>>();
+
+            // Assert
+            actual.Should().NotBeEmpty();
         }
     }
 }

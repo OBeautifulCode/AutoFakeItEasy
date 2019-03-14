@@ -82,6 +82,7 @@
     <Compile Include="..\OBeautifulCode.AutoFakeItEasy\AutoFakeItEasyBootstrapper.cs">
       <Link>.recipes\OBeautifulCode.AutoFakeItEasy\AutoFakeItEasyBootstrapper.cs</Link>
     </Compile>
+    <Compile Include="SpecimenBuilders\ConcurrentCollectionSpecimenBuilderTest.cs" />
     <Compile Include="TypesForTesting\ClassHierarchy.cs" />
     <Compile Include="AutoFixtureBackedDummyFactoryTest.cs" />
     <Compile Include="TypesForTesting\ComparableDummies.cs" />

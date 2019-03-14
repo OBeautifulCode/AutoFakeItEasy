@@ -305,6 +305,7 @@ namespace OBeautifulCode.AutoFakeItEasy
             fixture.Customizations.Insert(0, new AutoFakeItEasy.RandomNumericSpecimenBuilder(short.MinValue, short.MaxValue + 2));
             fixture.Customizations.Insert(0, new AutoFakeItEasy.RandomBoolSpecimenBuilder());
             fixture.Customizations.Insert(0, new AutoFakeItEasy.RandomEnumSpecimenBuilder());
+            fixture.Customizations.Insert(0, new AutoFakeItEasy.ConcurrentCollectionSpecimenBuilder());
         }
 
         private static void RegisterCustomTypes(

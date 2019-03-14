@@ -85,6 +85,7 @@
     <Compile Include="CustomTypes\ZeroOrNegativeInteger.cs" />
     <Compile Include="CustomTypes\ZeroOrPositiveDouble.cs" />
     <Compile Include="ExtensionMethods.cs" />
+    <Compile Include="SpecimenBuilders\ConcurrentCollectionSpecimenBuilder.cs" />
     <Compile Include="SpecimenBuilders\RandomNumericSpecimenBuilder.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="ISomeDummies.cs" />
