@@ -100,7 +100,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         }
 
         [Fact]
-        public static void Create___Should_return_an_object_of_type_ConcurrentBag___When_parameter_request_is_typeof_ConcurrentBag()
+        public static void Create___Should_return_an_object_of_type_ConcurrentBag___When_parameter_request_is_type_of_ConcurrentBag()
         {
             // Arrange
             var container = new DummySpecimenContext();
@@ -115,7 +115,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         }
 
         [Fact]
-        public static void Create___Should_return_an_object_of_type_ConcurrentDictionary___When_parameter_request_is_typeof_ConcurrentDictionary()
+        public static void Create___Should_return_an_object_of_type_ConcurrentDictionary___When_parameter_request_is_type_of_ConcurrentDictionary()
         {
             // Arrange
             var container = new DummySpecimenContext();
@@ -130,7 +130,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         }
 
         [Fact]
-        public static void Create___Should_return_an_object_of_type_ConcurrentStack___When_parameter_request_is_typeof_ConcurrentStack()
+        public static void Create___Should_return_an_object_of_type_ConcurrentStack___When_parameter_request_is_type_of_ConcurrentStack()
         {
             // Arrange
             var container = new DummySpecimenContext();
@@ -145,7 +145,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         }
 
         [Fact]
-        public static void Create___Should_return_an_object_of_type_ConcurrentQueue___When_parameter_request_is_typeof_ConcurrentQueue()
+        public static void Create___Should_return_an_object_of_type_ConcurrentQueue___When_parameter_request_is_type_of_ConcurrentQueue()
         {
             // Arrange
             var container = new DummySpecimenContext();
