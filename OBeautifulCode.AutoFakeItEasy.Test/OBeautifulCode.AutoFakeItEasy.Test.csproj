@@ -100,10 +100,10 @@
     <Compile Include="CustomTypes\ZeroOrPositiveIntegerTest.cs" />
     <Compile Include="TypesForTesting\EqualityDummies.cs" />
     <Compile Include="ExtensionMethodsTest.cs" />
-    <Compile Include="Generators\DummySpecimenContext.cs" />
-    <Compile Include="Generators\RandomBoolSequenceGeneratorTest.cs" />
-    <Compile Include="Generators\RandomEnumSequenceGeneratorTest.cs" />
-    <Compile Include="Generators\RandomNumericSequenceGeneratorTest.cs" />
+    <Compile Include="SpecimenBuilders\DummySpecimenContext.cs" />
+    <Compile Include="SpecimenBuilders\RandomBoolSpecimenBuilderTest.cs" />
+    <Compile Include="SpecimenBuilders\RandomEnumSpecimenBuilderTest.cs" />
+    <Compile Include="SpecimenBuilders\RandomNumericSpecimenBuilderTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TypesForTesting\InterfaceAndImplementationDummies.cs" />
     <Compile Include="TypesForTesting\Number.cs" />

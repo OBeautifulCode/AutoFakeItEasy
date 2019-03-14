@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="RandomNumericSequenceGenerator.cs" company="OBeautifulCode">
+// <copyright file="RandomNumericSpecimenBuilder.cs" company="OBeautifulCode">
 //   Copyright (c) OBeautifulCode 2018. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
@@ -15,9 +15,9 @@ namespace OBeautifulCode.AutoFakeItEasy
     using OBeautifulCode.Math.Recipes;
 
     /// <summary>
-    /// Creates a sequence of random, unique numbers.
+    /// Creates random, unique numbers.
     /// </summary>
-    public class RandomNumericSequenceGenerator : ISpecimenBuilder
+    public class RandomNumericSpecimenBuilder : ISpecimenBuilder
     {
         private readonly long inclusiveLowerLimit;
         private readonly long exclusiveUpperLimit;
@@ -25,11 +25,11 @@ namespace OBeautifulCode.AutoFakeItEasy
         private HashSet<long> numbersUsed = new HashSet<long>();
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="RandomNumericSequenceGenerator" /> class.
+        /// Initializes a new instance of the <see cref="RandomNumericSpecimenBuilder" /> class.
         /// </summary>
         /// <param name="inclusiveLowerLimit">The lower limit.</param>
         /// <param name="exclusiveUpperLimit">The upper limit.</param>
-        public RandomNumericSequenceGenerator(
+        public RandomNumericSpecimenBuilder(
             long inclusiveLowerLimit,
             long exclusiveUpperLimit)
         {

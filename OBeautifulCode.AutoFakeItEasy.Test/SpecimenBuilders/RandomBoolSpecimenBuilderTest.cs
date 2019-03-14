@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="RandomBoolSequenceGeneratorTest.cs" company="OBeautifulCode">
+// <copyright file="RandomBoolSpecimenBuilderTest.cs" company="OBeautifulCode">
 //   Copyright (c) OBeautifulCode 2018. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
@@ -15,13 +15,13 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
 
     using Xunit;
 
-    public static class RandomBoolSequenceGeneratorTest
+    public static class RandomBoolSpecimenBuilderTest
     {
         [Fact]
         public static void Constructor___Should_return_an_object_that_is_assignable_to_ISpecimenBuilder___When_object_is_constructed()
         {
             // Arrange, Act
-            var systemUnderTest = new RandomBoolSequenceGenerator();
+            var systemUnderTest = new AutoFakeItEasy.RandomBoolSpecimenBuilder();
 
             // Assert
             systemUnderTest.Should().BeAssignableTo<ISpecimenBuilder>();
@@ -32,7 +32,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         {
             // Arrange
             var dummyContainer = new DummySpecimenContext();
-            var systemUnderTest = new RandomBoolSequenceGenerator();
+            var systemUnderTest = new AutoFakeItEasy.RandomBoolSpecimenBuilder();
             var expectedResult = new NoSpecimen();
 
             // Act
@@ -46,7 +46,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         public static void Create___Should_not_throw___When_called_with_null_container()
         {
             // Arrange
-            var systemUnderTest = new RandomBoolSequenceGenerator();
+            var systemUnderTest = new AutoFakeItEasy.RandomBoolSpecimenBuilder();
             var dummyRequest = new object();
 
             // Act
@@ -61,7 +61,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         {
             // Arrange
             var dummyContainer = new DummySpecimenContext();
-            var systemUnderTest = new RandomBoolSequenceGenerator();
+            var systemUnderTest = new AutoFakeItEasy.RandomBoolSpecimenBuilder();
             var expectedResult = new NoSpecimen();
             var request = new object();
 
@@ -77,7 +77,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         {
             // Arrange
             var dummyContainer = new DummySpecimenContext();
-            var systemUnderTest = new RandomBoolSequenceGenerator();
+            var systemUnderTest = new AutoFakeItEasy.RandomBoolSpecimenBuilder();
             var request = typeof(bool);
 
             // Act
@@ -92,7 +92,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         {
             // Arrange
             var dummyContainer = new DummySpecimenContext();
-            var systemUnderTest = new RandomBoolSequenceGenerator();
+            var systemUnderTest = new AutoFakeItEasy.RandomBoolSpecimenBuilder();
             var request = typeof(bool);
             var sequentialBools1 = new List<bool> { true, false, true, false, true, false, true, false };
             var sequentialBools2 = new List<bool> { false, true, false, true, false, true, false, true };
@@ -110,7 +110,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         {
             // Arrange
             var dummyContainer = new DummySpecimenContext();
-            var systemUnderTest = new RandomBoolSequenceGenerator();
+            var systemUnderTest = new AutoFakeItEasy.RandomBoolSpecimenBuilder();
             var request = typeof(bool);
 
             // Act

@@ -85,13 +85,13 @@
     <Compile Include="CustomTypes\ZeroOrNegativeInteger.cs" />
     <Compile Include="CustomTypes\ZeroOrPositiveDouble.cs" />
     <Compile Include="ExtensionMethods.cs" />
-    <Compile Include="SpecimenBuilder\RandomNumericSequenceGenerator.cs" />
+    <Compile Include="SpecimenBuilders\RandomNumericSpecimenBuilder.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="ISomeDummies.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="AutoFakeItEasyBootstrapper.cs" />
-    <Compile Include="SpecimenBuilder\RandomBoolSequenceGenerator.cs" />
-    <Compile Include="SpecimenBuilder\RandomEnumSequenceGenerator.cs" />
+    <Compile Include="SpecimenBuilders\RandomBoolSpecimenBuilder.cs" />
+    <Compile Include="SpecimenBuilders\RandomEnumSpecimenBuilder.cs" />
     <Compile Include="CustomTypes\ZeroOrPositiveInteger.cs" />
     <Compile Include="Some.cs" />
     <Compile Include="CreateWith.cs" />

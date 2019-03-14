@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="RandomNumericSequenceGeneratorTest.cs" company="OBeautifulCode">
+// <copyright file="RandomNumericSpecimenBuilderTest.cs" company="OBeautifulCode">
 //   Copyright (c) OBeautifulCode 2018. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
@@ -17,7 +17,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
 
     using Xunit;
 
-    public static class RandomNumericSequenceGeneratorTest
+    public static class RandomNumericSpecimenBuilderTest
     {
         [Fact]
         public static void Constructor___Should_throw_ArgumentOutOfRangeException___When_parameter_inclusiveLowerLimit_is_greater_than_or_equal_to_parameter_exclusiveUpperLimit()
@@ -26,8 +26,8 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var randomInt = ThreadSafeRandom.Next(int.MinValue + 1, int.MaxValue);
 
             // Act
-            var ex1 = Record.Exception(() => new RandomNumericSequenceGenerator(randomInt, randomInt));
-            var ex2 = Record.Exception(() => new RandomNumericSequenceGenerator(randomInt, randomInt - 1));
+            var ex1 = Record.Exception(() => new RandomNumericSpecimenBuilder(randomInt, randomInt));
+            var ex2 = Record.Exception(() => new RandomNumericSpecimenBuilder(randomInt, randomInt - 1));
 
             // Assert
             ex1.Should().BeOfType<ArgumentOutOfRangeException>();
@@ -41,8 +41,8 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var randomInt = ThreadSafeRandom.Next(int.MinValue, int.MaxValue);
 
             // Act
-            var ex1 = Record.Exception(() => new RandomNumericSequenceGenerator(randomInt, randomInt + 1));
-            var ex2 = Record.Exception(() => new RandomNumericSequenceGenerator(int.MinValue, int.MaxValue));
+            var ex1 = Record.Exception(() => new RandomNumericSpecimenBuilder(randomInt, randomInt + 1));
+            var ex2 = Record.Exception(() => new RandomNumericSpecimenBuilder(int.MinValue, int.MaxValue));
 
             // Assert
             ex1.Should().BeNull();
@@ -53,7 +53,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         public static void Constructor___Should_return_an_object_that_is_assignable_to_ISpecimenBuilder___When_object_is_constructed()
         {
             // Arrange, Act
-            var systemUnderTest = new RandomNumericSequenceGenerator(int.MinValue, int.MaxValue);
+            var systemUnderTest = new RandomNumericSpecimenBuilder(int.MinValue, int.MaxValue);
 
             // Assert
             systemUnderTest.Should().BeAssignableTo<ISpecimenBuilder>();
@@ -64,7 +64,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         {
             // Arrange
             var dummyContainer = new DummySpecimenContext();
-            var systemUnderTest = new RandomNumericSequenceGenerator(int.MinValue, int.MaxValue);
+            var systemUnderTest = new RandomNumericSpecimenBuilder(int.MinValue, int.MaxValue);
             var expectedResult = new NoSpecimen();
 
             // Act
@@ -78,7 +78,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         public static void Create___Should_not_throw___When_called_with_null_container()
         {
             // Arrange
-            var systemUnderTest = new RandomNumericSequenceGenerator(int.MinValue, int.MaxValue);
+            var systemUnderTest = new RandomNumericSpecimenBuilder(int.MinValue, int.MaxValue);
             var dummyRequest = new object();
 
             // Act
@@ -93,7 +93,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         {
             // Arrange
             var dummyContainer = new DummySpecimenContext();
-            var systemUnderTest = new RandomNumericSequenceGenerator(int.MinValue, int.MaxValue);
+            var systemUnderTest = new RandomNumericSpecimenBuilder(int.MinValue, int.MaxValue);
             var expectedResult = new NoSpecimen();
             var request = new object();
 
@@ -109,7 +109,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         {
             // Arrange
             var dummyContainer = new DummySpecimenContext();
-            var systemUnderTest = new RandomNumericSequenceGenerator(int.MinValue, int.MaxValue);
+            var systemUnderTest = new RandomNumericSpecimenBuilder(int.MinValue, int.MaxValue);
 
             // Act
             var actualByteResult = systemUnderTest.Create(typeof(byte), dummyContainer);
@@ -143,7 +143,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         {
             // Arrange
             var dummyContainer = new DummySpecimenContext();
-            var systemUnderTest = new RandomNumericSequenceGenerator(sbyte.MinValue, sbyte.MaxValue);
+            var systemUnderTest = new RandomNumericSpecimenBuilder(sbyte.MinValue, sbyte.MaxValue);
 
             // Act
             var actualResult = new List<short>();
@@ -161,7 +161,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         {
             // Arrange
             var dummyContainer = new DummySpecimenContext();
-            var systemUnderTest = new RandomNumericSequenceGenerator(sbyte.MinValue, sbyte.MaxValue);
+            var systemUnderTest = new RandomNumericSpecimenBuilder(sbyte.MinValue, sbyte.MaxValue);
             var pastResult = new List<short>();
             for (int i = sbyte.MinValue; i < sbyte.MaxValue; i++)
             {
@@ -180,7 +180,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         {
             // Arrange
             var dummyContainer = new DummySpecimenContext();
-            var systemUnderTest = new RandomNumericSequenceGenerator(sbyte.MinValue, sbyte.MaxValue);
+            var systemUnderTest = new RandomNumericSpecimenBuilder(sbyte.MinValue, sbyte.MaxValue);
 
             // Act
             var actualResult = new List<short>();

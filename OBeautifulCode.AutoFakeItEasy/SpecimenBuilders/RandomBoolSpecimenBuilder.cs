@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="RandomBoolSequenceGenerator.cs" company="OBeautifulCode">
+// <copyright file="RandomBoolSpecimenBuilder.cs" company="OBeautifulCode">
 //   Copyright (c) OBeautifulCode 2018. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
@@ -18,7 +18,7 @@ namespace OBeautifulCode.AutoFakeItEasy
     /// <remarks>
     /// Adapted from: <a href="https://github.com/AutoFixture/AutoFixture/blob/master/Src/AutoFixture/RandomNumericSequenceGenerator.cs"/>.
     /// </remarks>
-    public class RandomBoolSequenceGenerator : ISpecimenBuilder
+    public class RandomBoolSpecimenBuilder : ISpecimenBuilder
     {
         /// <summary>
         /// Returns <see langword="true"/> or <see langword="false"/> randomly.

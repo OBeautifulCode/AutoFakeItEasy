@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="RandomEnumSequenceGenerator.cs" company="OBeautifulCode">
+// <copyright file="RandomEnumSpecimenBuilder.cs" company="OBeautifulCode">
 //   Copyright (c) OBeautifulCode 2018. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
@@ -16,12 +16,12 @@ namespace OBeautifulCode.AutoFakeItEasy
     using OBeautifulCode.Math.Recipes;
 
     /// <summary>
-    /// Generates random enum values in a round-robin fashion.
+    /// Generates random enum values.
     /// </summary>
     /// <remarks>
     /// Adapted from <a href="https://github.com/AutoFixture/AutoFixture/blob/master/Src/AutoFixture/EnumGenerator.cs"/>.
     /// </remarks>
-    public class RandomEnumSequenceGenerator : ISpecimenBuilder
+    public class RandomEnumSpecimenBuilder : ISpecimenBuilder
     {
         /// <summary>
         /// Creates a new, random enum value based on a request.

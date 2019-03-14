@@ -302,9 +302,9 @@ namespace OBeautifulCode.AutoFakeItEasy
             // fix some of AutoFixture's poor defaults - see README.md
 
             // this will generate numbers in the range [-32768,32768]
-            fixture.Customizations.Insert(0, new AutoFakeItEasy.RandomNumericSequenceGenerator(short.MinValue, short.MaxValue + 2));
-            fixture.Customizations.Insert(0, new AutoFakeItEasy.RandomBoolSequenceGenerator());
-            fixture.Customizations.Insert(0, new AutoFakeItEasy.RandomEnumSequenceGenerator());
+            fixture.Customizations.Insert(0, new AutoFakeItEasy.RandomNumericSpecimenBuilder(short.MinValue, short.MaxValue + 2));
+            fixture.Customizations.Insert(0, new AutoFakeItEasy.RandomBoolSpecimenBuilder());
+            fixture.Customizations.Insert(0, new AutoFakeItEasy.RandomEnumSpecimenBuilder());
         }
 
         private static void RegisterCustomTypes(
