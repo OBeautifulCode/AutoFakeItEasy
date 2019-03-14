@@ -7,6 +7,7 @@
 namespace OBeautifulCode.AutoFakeItEasy.Test
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
 
     using FakeItEasy;
@@ -64,7 +65,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         }
 
         [Fact]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity", Justification = "This is not excessively complex.")]
+        [SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity", Justification = "This is not excessively complex.")]
         public static void Dummies___Should_not_throw___When_parameter_createWith_is_OneOrMoreNulls_and_type_to_create_is_not_a_value_type()
         {
             // Arrange, Act
@@ -230,7 +231,8 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var result2 = Some.Dummies<int?>(numberOfElements);
             var result3 = Some.Dummies<string>(numberOfElements);
             var result4 = Some.Dummies<object>(numberOfElements);
-            // Assert
+
+            // Assert
             result1.Should().HaveCount(numberOfElements).And.OnlyHaveUniqueItems();
             result2.Should().HaveCount(numberOfElements).And.OnlyHaveUniqueItems().And.NotContainNulls();
             result3.Should().HaveCount(numberOfElements).And.OnlyHaveUniqueItems().And.NotContainNulls();
@@ -246,7 +248,8 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var result2 = Some.Dummies<int?>(numberOfElements, CreateWith.NoNulls);
             var result3 = Some.Dummies<string>(numberOfElements, CreateWith.NoNulls);
             var result4 = Some.Dummies<object>(numberOfElements, CreateWith.NoNulls);
-            // Assert
+
+            // Assert
             result1.Should().HaveCount(numberOfElements).And.OnlyHaveUniqueItems();
             result2.Should().HaveCount(numberOfElements).And.OnlyHaveUniqueItems().And.NotContainNulls();
             result3.Should().HaveCount(numberOfElements).And.OnlyHaveUniqueItems().And.NotContainNulls();
@@ -265,7 +268,8 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var result4 = Some.Dummies<int?>(1, CreateWith.OneOrMoreNulls);
             var result5 = Some.Dummies<string>(1, CreateWith.OneOrMoreNulls);
             var result6 = Some.Dummies<object>(1, CreateWith.OneOrMoreNulls);
-            // Assert
+
+            // Assert
             result1.Should().HaveCount(numberOfElements).And.Contain((int?)null);
             result1.Where(_ => _ != null).Should().OnlyHaveUniqueItems();
 
@@ -289,7 +293,8 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var result2 = Some.Dummies<string>(numberOfElements, CreateWith.ZeroOrMoreNulls);
             var result3 = Some.Dummies<object>(numberOfElements, CreateWith.ZeroOrMoreNulls);
             var result4 = Some.Dummies<double>(numberOfElements, CreateWith.ZeroOrMoreNulls);
-            // Assert
+
+            // Assert
             result1.Should().HaveCount(numberOfElements);
             result1.Where(_ => _ != null).Should().OnlyHaveUniqueItems();
 
@@ -347,7 +352,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         }
 
         [Fact]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity", Justification = "This is not excessively complex.")]
+        [SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity", Justification = "This is not excessively complex.")]
         public static void ReadOnlyDummies___Should_not_throw___When_parameter_createWith_is_OneOrMoreNulls_and_type_to_create_is_not_a_value_type()
         {
             // Arrange, Act
@@ -426,7 +431,8 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var result6 = Some.ReadOnlyDummies<string>(0, CreateWith.ZeroOrMoreNulls);
             var result7 = Some.ReadOnlyDummies<object>(0, CreateWith.NoNulls);
             var result8 = Some.ReadOnlyDummies<object>(0, CreateWith.ZeroOrMoreNulls);
-            // Assert
+
+            // Assert
             result1.Should().BeEmpty();
             result2.Should().BeEmpty();
             result3.Should().BeEmpty();
@@ -455,7 +461,8 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var result9 = Some.ReadOnlyDummies<object>(createWith: CreateWith.NoNulls);
             var result10 = Some.ReadOnlyDummies<object>(createWith: CreateWith.ZeroOrMoreNulls);
             var result11 = Some.ReadOnlyDummies<object>(createWith: CreateWith.OneOrMoreNulls);
-            // Assert
+
+            // Assert
             result1.Count.Should().BeGreaterOrEqualTo(Some.MinRandomNumberOfElements).And.BeLessOrEqualTo(Some.MaxRandomNumberOfElements);
             result2.Count.Should().BeGreaterOrEqualTo(Some.MinRandomNumberOfElements).And.BeLessOrEqualTo(Some.MaxRandomNumberOfElements);
             result3.Count.Should().BeGreaterOrEqualTo(Some.MinRandomNumberOfElements).And.BeLessOrEqualTo(Some.MaxRandomNumberOfElements);
@@ -487,7 +494,8 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var result9 = Some.ReadOnlyDummies<object>(A.Dummy<NegativeInteger>(), CreateWith.NoNulls);
             var result10 = Some.ReadOnlyDummies<object>(A.Dummy<NegativeInteger>(), CreateWith.ZeroOrMoreNulls);
             var result11 = Some.ReadOnlyDummies<object>(A.Dummy<NegativeInteger>(), CreateWith.OneOrMoreNulls);
-            // Assert
+
+            // Assert
             result1.Count.Should().BeGreaterOrEqualTo(Some.MinRandomNumberOfElements).And.BeLessOrEqualTo(Some.MaxRandomNumberOfElements);
             result2.Count.Should().BeGreaterOrEqualTo(Some.MinRandomNumberOfElements).And.BeLessOrEqualTo(Some.MaxRandomNumberOfElements);
             result3.Count.Should().BeGreaterOrEqualTo(Some.MinRandomNumberOfElements).And.BeLessOrEqualTo(Some.MaxRandomNumberOfElements);
@@ -510,7 +518,8 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var result2 = Some.ReadOnlyDummies<int?>(numberOfElements);
             var result3 = Some.ReadOnlyDummies<string>(numberOfElements);
             var result4 = Some.ReadOnlyDummies<object>(numberOfElements);
-            // Assert
+
+            // Assert
             result1.Should().HaveCount(numberOfElements).And.OnlyHaveUniqueItems();
             result2.Should().HaveCount(numberOfElements).And.OnlyHaveUniqueItems().And.NotContainNulls();
             result3.Should().HaveCount(numberOfElements).And.OnlyHaveUniqueItems().And.NotContainNulls();
@@ -526,7 +535,8 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var result2 = Some.ReadOnlyDummies<int?>(numberOfElements, CreateWith.NoNulls);
             var result3 = Some.ReadOnlyDummies<string>(numberOfElements, CreateWith.NoNulls);
             var result4 = Some.ReadOnlyDummies<object>(numberOfElements, CreateWith.NoNulls);
-            // Assert
+
+            // Assert
             result1.Should().HaveCount(numberOfElements).And.OnlyHaveUniqueItems();
             result2.Should().HaveCount(numberOfElements).And.OnlyHaveUniqueItems().And.NotContainNulls();
             result3.Should().HaveCount(numberOfElements).And.OnlyHaveUniqueItems().And.NotContainNulls();
@@ -545,7 +555,8 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var result4 = Some.ReadOnlyDummies<int?>(1, CreateWith.OneOrMoreNulls);
             var result5 = Some.ReadOnlyDummies<string>(1, CreateWith.OneOrMoreNulls);
             var result6 = Some.ReadOnlyDummies<object>(1, CreateWith.OneOrMoreNulls);
-            // Assert
+
+            // Assert
             result1.Should().HaveCount(numberOfElements).And.Contain((int?)null);
             result1.Where(_ => _ != null).Should().OnlyHaveUniqueItems();
 
@@ -569,7 +580,8 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var result2 = Some.ReadOnlyDummies<string>(numberOfElements, CreateWith.ZeroOrMoreNulls);
             var result3 = Some.ReadOnlyDummies<object>(numberOfElements, CreateWith.ZeroOrMoreNulls);
             var result4 = Some.ReadOnlyDummies<double>(numberOfElements, CreateWith.ZeroOrMoreNulls);
-            // Assert
+
+            // Assert
             result1.Should().HaveCount(numberOfElements);
             result1.Where(_ => _ != null).Should().OnlyHaveUniqueItems();
 

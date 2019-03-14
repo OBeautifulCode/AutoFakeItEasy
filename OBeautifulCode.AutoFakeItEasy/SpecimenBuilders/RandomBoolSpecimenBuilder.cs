@@ -38,7 +38,9 @@ namespace OBeautifulCode.AutoFakeItEasy
                 return new NoSpecimen();
             }
 
-            return ThreadSafeRandom.Next(0, 2) == 0;
+            var result = ThreadSafeRandom.Next(0, 2) == 0;
+
+            return result;
         }
     }
 }

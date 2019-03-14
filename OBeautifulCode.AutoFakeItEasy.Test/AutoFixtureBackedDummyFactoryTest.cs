@@ -9,7 +9,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
     using System;
     using System.Collections.Concurrent;
     using System.Collections.Generic;
-    using System.Collections.ObjectModel;
+    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
 
     using FakeItEasy;
@@ -18,7 +18,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
 
     using Xunit;
 
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Justification = "Testing the dummy factory requires using many types.")]
+    [SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Justification = "Testing the dummy factory requires using many types.")]
     public static class AutoFixtureBackedDummyFactoryTest
     {
         private const int NumberOfCallsToCoverAllShortsRegardlessOfFixtureState = short.MaxValue * 4;

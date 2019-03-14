@@ -8,6 +8,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
     using System.Linq;
 
@@ -19,7 +20,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
 
     using Xunit;
 
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Justification = "there are a lot of methods to test")]
+    [SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Justification = "there are a lot of methods to test")]
     public static class ExtensionMethodsTest
     {
         [Fact]
@@ -1520,7 +1521,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         }
 
         [Fact]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1308:NormalizeStringsToUppercase", Justification = "purposely using lower-case to test equality comparer")]
+        [SuppressMessage("Microsoft.Globalization", "CA1308:NormalizeStringsToUppercase", Justification = "purposely using lower-case to test equality comparer")]
         public static void ThatIsNotIn_with_IEqualityComparer___Should_throw_InvalidOperation___When_maxAttempts_is_1_and_referenceDummy_is_in_set_of_comparisonDummies()
         {
             // Arrange
@@ -1767,7 +1768,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         }
 
         [Fact]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1308:NormalizeStringsToUppercase", Justification = "purposely using lower-case to test equality comparer")]
+        [SuppressMessage("Microsoft.Globalization", "CA1308:NormalizeStringsToUppercase", Justification = "purposely using lower-case to test equality comparer")]
         public static void ThatIsNotIn_with_IEqualityComparer___Should_return_new_dummy___When_referenceDummy_is_in_the_set_of_comparisonDummies_using_value_equality_regardless_of_maxAttempts()
         {
             // Arrange
@@ -2280,7 +2281,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         }
 
         [Fact]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1308:NormalizeStringsToUppercase", Justification = "purposely using lower-case to test equality comparer")]
+        [SuppressMessage("Microsoft.Globalization", "CA1308:NormalizeStringsToUppercase", Justification = "purposely using lower-case to test equality comparer")]
         public static void ThatIsIn_with_IEqualityComparer___Should_return_referenceDummy___When_referenceDummy_is_in_set_of_comparisonDummies_regardless_of_maxAttempts()
         {
             // Arrange

@@ -61,7 +61,9 @@ namespace OBeautifulCode.AutoFakeItEasy
                 return new NoSpecimen();
             }
 
-            return this.CreateRandom(type);
+            var result = this.CreateRandom(type);
+
+            return result;
         }
 
         private static long RandomLong(
@@ -71,7 +73,9 @@ namespace OBeautifulCode.AutoFakeItEasy
             var buffer = new byte[8];
             ThreadSafeRandom.NextBytes(buffer);
             var longRand = BitConverter.ToInt64(buffer, 0);
+
             var result = Math.Abs(longRand % (exclusiveMax - inclusiveMin)) + inclusiveMin;
+
             return result;
         }
 
@@ -109,22 +113,22 @@ namespace OBeautifulCode.AutoFakeItEasy
 
         private long GetNextRandom()
         {
-            long randomNumber;
+            long result;
 
             do
             {
-                randomNumber = RandomLong(this.inclusiveLowerLimit, this.exclusiveUpperLimit);
+                result = RandomLong(this.inclusiveLowerLimit, this.exclusiveUpperLimit);
             }
-            while (this.numbersUsed.Contains(randomNumber));
+            while (this.numbersUsed.Contains(result));
 
-            this.numbersUsed.Add(randomNumber);
+            this.numbersUsed.Add(result);
 
             if (this.numbersUsed.LongCount() == (this.exclusiveUpperLimit - this.inclusiveLowerLimit))
             {
                 this.numbersUsed = new HashSet<long>();
             }
 
-            return randomNumber;
+            return result;
         }
     }
 }

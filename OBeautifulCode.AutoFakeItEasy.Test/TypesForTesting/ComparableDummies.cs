@@ -8,10 +8,11 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
 
 #pragma warning disable SA1649 // File name must match first type name
 #pragma warning disable SA1402 // File may only contain a single class
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1036:OverrideMethodsOnComparableTypes", Justification = "this is for testing only.")]
+    [SuppressMessage("Microsoft.Design", "CA1036:OverrideMethodsOnComparableTypes", Justification = "this is for testing only.")]
     public class ComparableIntAsObject : IComparable<ComparableIntAsObject>
     {
         public ComparableIntAsObject(

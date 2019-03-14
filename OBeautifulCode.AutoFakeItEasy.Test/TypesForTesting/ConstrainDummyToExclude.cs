@@ -7,6 +7,7 @@
 namespace OBeautifulCode.AutoFakeItEasy.Test
 {
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
 
 #pragma warning disable SA1649 // File name must match first type name
 #pragma warning disable SA1402 // File may only contain a single class
@@ -159,25 +160,25 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
     {
         public string SomeProperty { get; set; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly", Justification = "For testing purposes.")]
+        [SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly", Justification = "For testing purposes.")]
         public IEnumerable<MostlyGoodStuffInGenericInterfaceIndirect> Enumerable { get; set; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly", Justification = "For testing purposes.")]
+        [SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly", Justification = "For testing purposes.")]
         public ICollection<MostlyGoodStuffInGenericInterfaceIndirect> Collection { get; set; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly", Justification = "For testing purposes.")]
+        [SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly", Justification = "For testing purposes.")]
         public IList<MostlyGoodStuffInGenericInterfaceIndirect> List { get; set; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly", Justification = "For testing purposes.")]
+        [SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly", Justification = "For testing purposes.")]
         public IReadOnlyCollection<MostlyGoodStuffInGenericInterfaceIndirect> ReadOnlyCollection { get; set; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly", Justification = "For testing purposes.")]
+        [SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly", Justification = "For testing purposes.")]
         public IReadOnlyList<MostlyGoodStuffInGenericInterfaceIndirect> ReadOnlyList { get; set; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly", Justification = "For testing purposes.")]
+        [SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly", Justification = "For testing purposes.")]
         public IDictionary<string, MostlyGoodStuffInGenericInterfaceIndirect> Dictionary { get; set; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly", Justification = "For testing purposes.")]
+        [SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly", Justification = "For testing purposes.")]
         public IReadOnlyDictionary<string, MostlyGoodStuffInGenericInterfaceIndirect> ReadOnlyDictionary { get; set; }
     }
 

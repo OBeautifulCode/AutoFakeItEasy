@@ -7,6 +7,7 @@
 namespace OBeautifulCode.AutoFakeItEasy.Test
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
 
     using AutoFixture.Kernel;
@@ -124,7 +125,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         }
 
         [Fact]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", MessageId = "flags", Justification = "This term is required to describe the test.")]
+        [SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", MessageId = "flags", Justification = "This term is required to describe the test.")]
         public static void Create___Should_return_all_possible_combinations_of_flags___When_many_requests_are_made_for_a_flags_enum()
         {
             // Arrange

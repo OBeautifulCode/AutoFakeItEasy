@@ -9,6 +9,7 @@ namespace OBeautifulCode.AutoFakeItEasy
     using System;
     using System.Collections.Concurrent;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
     using System.Linq;
     using System.Reflection;
@@ -43,7 +44,7 @@ namespace OBeautifulCode.AutoFakeItEasy
         /// <summary>
         /// Initializes static members of the <see cref="AutoFixtureBackedDummyFactory"/> class.
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = "These cannot be in-lined.")]
+        [SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = "These cannot be in-lined.")]
         static AutoFixtureBackedDummyFactory()
         {
             ConfigureRecursionBehavior(FixtureWithCreators);
@@ -161,7 +162,7 @@ namespace OBeautifulCode.AutoFakeItEasy
         /// <exception cref="ArgumentException">Only one of <paramref name="typesToExclude"/> and <paramref name="typesToInclude"/> can be specified.  Both are not null.</exception>
         /// <exception cref="ArgumentException"><paramref name="typesToExclude"/> is not null, but empty.</exception>
         /// <exception cref="ArgumentException"><paramref name="typesToInclude"/> is not null, but empty.</exception>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter", Justification = "In this case we just need the type, not a parameter of that type.")]
+        [SuppressMessage("Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter", Justification = "In this case we just need the type, not a parameter of that type.")]
         public static void UseRandomConcreteSubclassForDummy<T>(
             IEnumerable<Type> typesToExclude = null,
             IEnumerable<Type> typesToInclude = null)
@@ -236,7 +237,7 @@ namespace OBeautifulCode.AutoFakeItEasy
         /// Default is false; interfaces that implement <typeparamref name="T"/> will be excluded.
         /// </param>
         /// <typeparam name="T">The interface type.</typeparam>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter", Justification = "In this case we just need the type, not a parameter of that type.")]
+        [SuppressMessage("Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter", Justification = "In this case we just need the type, not a parameter of that type.")]
         public static void UseRandomInterfaceImplementationForDummy<T>(
             bool includeOtherInterfaces = false)
         {
@@ -268,7 +269,7 @@ namespace OBeautifulCode.AutoFakeItEasy
         }
 
         /// <inheritdoc />
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "factory caller will ensure this is not null")]
+        [SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "factory caller will ensure this is not null")]
         public bool CanCreate(
             Type type)
         {
