@@ -41,6 +41,8 @@ namespace OBeautifulCode.AutoFakeItEasy
 
         private static readonly Type[] SupportedUnregisteredInterfaces = { typeof(IEnumerable<>), typeof(IList<>), typeof(ICollection<>), typeof(IReadOnlyCollection<>), typeof(IReadOnlyList<>), typeof(IDictionary<,>), typeof(IReadOnlyDictionary<,>) };
 
+        private static readonly ConcurrentDictionary<Type, MethodInfo> TypeToAutoFixtureCreateMethodMap = new ConcurrentDictionary<Type, MethodInfo>();
+
         /// <summary>
         /// Initializes static members of the <see cref="AutoFixtureBackedDummyFactory"/> class.
         /// </summary>
@@ -281,6 +283,7 @@ namespace OBeautifulCode.AutoFakeItEasy
             Type type)
         {
             var result = CreateType(FixtureWithCreators, type);
+
             return result;
         }
 
@@ -380,14 +383,18 @@ namespace OBeautifulCode.AutoFakeItEasy
             Fixture fixture,
             Type type)
         {
-            // call the AutoFixture Create() method, lock because AutoFixture is not thread safe.
-            var autoFixtureGenericCreateMethod = AutoFixtureCreateMethod.MakeGenericMethod(type);
+            var autoFixtureGenericCreateMethod = TypeToAutoFixtureCreateMethodMap.GetOrAdd(type, t => AutoFixtureCreateMethod.MakeGenericMethod(type));
 
-            lock (FixtureLock)
-            {
-                var result = autoFixtureGenericCreateMethod.Invoke(null, new object[] { fixture });
-                return result;
-            }
+            // Previously, we were locking around this call because we were not sure whether
+            // Fixture is thread safe.  See: https://github.com/AutoFixture/AutoFixture/issues/211
+            // We removed the lock because we suspected that it was causing performance issues.
+            // We still lock in AddDummyCreator where we are mutating Fixture.  It's atypical to
+            // create dummies and configure the dummy factory at the same time, but technically
+            // that could cause an issue since we are no longer locking here.  In the typical usage
+            // pattern, the factory is configured and then used to create dummies.
+            var result = autoFixtureGenericCreateMethod.Invoke(null, new object[] { fixture });
+
+            return result;
         }
     }
 }
