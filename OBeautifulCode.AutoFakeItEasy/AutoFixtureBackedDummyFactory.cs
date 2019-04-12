@@ -306,10 +306,10 @@ namespace OBeautifulCode.AutoFakeItEasy
             // fix some of AutoFixture's poor defaults - see README.md
 
             // this will generate numbers in the range [-32768,32768]
-            fixture.Customizations.Insert(0, new AutoFakeItEasy.RandomNumericSpecimenBuilder(short.MinValue, short.MaxValue + 2));
-            fixture.Customizations.Insert(0, new AutoFakeItEasy.RandomBoolSpecimenBuilder());
-            fixture.Customizations.Insert(0, new AutoFakeItEasy.RandomEnumSpecimenBuilder());
-            fixture.Customizations.Insert(0, new AutoFakeItEasy.ConcurrentCollectionSpecimenBuilder());
+            fixture.Customizations.Insert(0, new RandomNumericSpecimenBuilder(short.MinValue, short.MaxValue + 2));
+            fixture.Customizations.Insert(0, new RandomBoolSpecimenBuilder());
+            fixture.Customizations.Insert(0, new RandomEnumSpecimenBuilder());
+            fixture.Customizations.Insert(0, new ConcurrentCollectionSpecimenBuilder());
         }
 
         private static void RegisterCustomTypes(
@@ -385,16 +385,13 @@ namespace OBeautifulCode.AutoFakeItEasy
         {
             var autoFixtureGenericCreateMethod = TypeToAutoFixtureCreateMethodMap.GetOrAdd(type, t => AutoFixtureCreateMethod.MakeGenericMethod(type));
 
-            // Previously, we were locking around this call because we were not sure whether
-            // Fixture is thread safe.  See: https://github.com/AutoFixture/AutoFixture/issues/211
-            // We removed the lock because we suspected that it was causing performance issues.
-            // We still lock in AddDummyCreator where we are mutating Fixture.  It's atypical to
-            // create dummies and configure the dummy factory at the same time, but technically
-            // that could cause an issue since we are no longer locking here.  In the typical usage
-            // pattern, the factory is configured and then used to create dummies.
-            var result = autoFixtureGenericCreateMethod.Invoke(null, new object[] { fixture });
+            // Lock because Fixture is not thread-safe: https://github.com/AutoFixture/AutoFixture/issues/211
+            lock (FixtureLock)
+            {
+                var result = autoFixtureGenericCreateMethod.Invoke(null, new object[] { fixture });
 
-            return result;
+                return result;
+            }
         }
     }
 }
