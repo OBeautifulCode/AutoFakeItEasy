@@ -171,8 +171,8 @@ namespace OBeautifulCode.AutoFakeItEasy
         /// <exception cref="ArgumentException"><paramref name="typesToInclude"/> is not null, but empty.</exception>
         [SuppressMessage("Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter", Justification = "In this case we just need the type, not a parameter of that type.")]
         public static void UseRandomConcreteSubclassForDummy<T>(
-            IEnumerable<Type> typesToExclude = null,
-            IEnumerable<Type> typesToInclude = null)
+            IReadOnlyCollection<Type> typesToExclude = null,
+            IReadOnlyCollection<Type> typesToInclude = null)
         {
             if ((typesToExclude != null) && (typesToInclude != null))
             {
@@ -194,6 +194,8 @@ namespace OBeautifulCode.AutoFakeItEasy
             var type = typeof(T);
 
             CacheAssemblyTypes(type.Assembly);
+            CacheAssemblyTypes(typesToInclude);
+            CacheAssemblyTypes(typesToExclude);
 
             var concreteSubclasses = CachedAssemblyToTypesMap
                 .SelectMany(_ => _.Value)
@@ -311,6 +313,21 @@ namespace OBeautifulCode.AutoFakeItEasy
             }
             catch (Exception)
             {
+            }
+        }
+
+        private static void CacheAssemblyTypes(
+            IReadOnlyCollection<Type> types)
+        {
+            if (types != null)
+            {
+                foreach (var type in types)
+                {
+                    if (type != null)
+                    {
+                        CacheAssemblyTypes(type.Assembly);
+                    }
+                }
             }
         }
 
