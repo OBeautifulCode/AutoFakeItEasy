@@ -59,8 +59,6 @@ namespace OBeautifulCode.AutoFakeItEasy
             AddCustomizations(FixtureWithoutCreators);
 
             RegisterCustomTypes(FixtureWithCreators);
-
-            CacheLoadedAssemblyTypes();
         }
 
         /// <inheritdoc />
@@ -193,6 +191,7 @@ namespace OBeautifulCode.AutoFakeItEasy
 
             var type = typeof(T);
 
+            CacheLoadedAssemblyTypes();
             CacheAssemblyTypes(type.Assembly);
             CacheAssemblyTypes(typesToInclude);
             CacheAssemblyTypes(typesToExclude);
@@ -255,6 +254,7 @@ namespace OBeautifulCode.AutoFakeItEasy
         {
             var type = typeof(T);
 
+            CacheLoadedAssemblyTypes();
             CacheAssemblyTypes(type.Assembly);
 
             var interfaceImplementations = CachedAssemblyToTypesMap
