@@ -20,6 +20,7 @@ namespace OBeautifulCode.AutoFakeItEasy
     using FakeItEasy;
 
     using OBeautifulCode.Math.Recipes;
+    using OBeautifulCode.Reflection.Recipes;
 
     /// <summary>
     /// A dummy factory backed by AutoFixture.
@@ -43,6 +44,8 @@ namespace OBeautifulCode.AutoFakeItEasy
 
         private static readonly ConcurrentDictionary<Type, MethodInfo> TypeToAutoFixtureCreateMethodMap = new ConcurrentDictionary<Type, MethodInfo>();
 
+        private static readonly ConcurrentDictionary<Assembly, IReadOnlyCollection<Type>> CachedAssemblyToTypesMap = new ConcurrentDictionary<Assembly, IReadOnlyCollection<Type>>();
+
         /// <summary>
         /// Initializes static members of the <see cref="AutoFixtureBackedDummyFactory"/> class.
         /// </summary>
@@ -56,6 +59,8 @@ namespace OBeautifulCode.AutoFakeItEasy
             AddCustomizations(FixtureWithoutCreators);
 
             RegisterCustomTypes(FixtureWithCreators);
+
+            CacheLoadedAssemblyTypes();
         }
 
         /// <inheritdoc />
@@ -187,8 +192,11 @@ namespace OBeautifulCode.AutoFakeItEasy
             }
 
             var type = typeof(T);
-            var concreteSubclasses = type.Assembly
-                .GetTypes()
+
+            CacheAssemblyTypes(type.Assembly);
+
+            var concreteSubclasses = CachedAssemblyToTypesMap
+                .SelectMany(_ => _.Value)
                 .Where(_ => _.IsSubclassOf(type))
                 .Where(_ => !_.IsAbstract)
                 .Where(CanCreateType)
@@ -244,8 +252,11 @@ namespace OBeautifulCode.AutoFakeItEasy
             bool includeOtherInterfaces = false)
         {
             var type = typeof(T);
-            var interfaceImplementations = type.Assembly
-                .GetTypes()
+
+            CacheAssemblyTypes(type.Assembly);
+
+            var interfaceImplementations = CachedAssemblyToTypesMap
+                .SelectMany(_ => _.Value)
                 .Where(t => type != t)
                 .Where(t => type.IsAssignableFrom(t))
                 .Where(t => includeOtherInterfaces || !t.IsInterface)
@@ -285,6 +296,39 @@ namespace OBeautifulCode.AutoFakeItEasy
             var result = CreateType(FixtureWithCreators, type);
 
             return result;
+        }
+
+        private static void CacheLoadedAssemblyTypes()
+        {
+            try
+            {
+                var assemblies = AssemblyLoader.GetLoadedAssemblies();
+
+                foreach (var assembly in assemblies)
+                {
+                    CacheAssemblyTypes(assembly);
+                }
+            }
+            catch (Exception)
+            {
+            }
+        }
+
+        private static void CacheAssemblyTypes(
+            Assembly assembly)
+        {
+            if (!CachedAssemblyToTypesMap.ContainsKey(assembly))
+            {
+                try
+                {
+                    var types = new[] { assembly }.GetTypesFromAssemblies();
+
+                    CachedAssemblyToTypesMap.TryAdd(assembly, types);
+                }
+                catch (Exception)
+                {
+                }
+            }
         }
 
         private static void ConfigureRecursionBehavior(
