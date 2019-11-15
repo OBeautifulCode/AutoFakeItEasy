@@ -13,6 +13,8 @@ namespace OBeautifulCode.AutoFakeItEasy
 
     using FakeItEasy;
 
+    using OBeautifulCode.Equality.Recipes;
+
     /// <summary>
     /// Some extension methods.
     /// </summary>
@@ -115,7 +117,7 @@ namespace OBeautifulCode.AutoFakeItEasy
         /// <summary>
         /// Returns a reference dummy if it is not equal to a comparison dummy or
         /// creates new dummies of the same type until a dummy is created that does not equal the comparison dummy.
-        /// Uses the comparison dummy's implementation of <see cref="object.Equals(object)"/>.
+        /// Uses <see cref="EqualityExtensions.IsEqualTo{T}(T, T, IEqualityComparer{T})"/>.
         /// </summary>
         /// <param name="referenceDummy">The reference dummy.</param>
         /// <param name="comparisonDummy">A dummy to compare against.</param>
@@ -136,15 +138,17 @@ namespace OBeautifulCode.AutoFakeItEasy
             T comparisonDummy,
             int maxAttempts = -1)
         {
-            bool Condition(T t) => !Equals(t, comparisonDummy);
+            bool Condition(T t) => !t.IsEqualTo(comparisonDummy);
+
             var result = ThatIs(referenceDummy, Condition, maxAttempts);
+
             return result;
         }
 
         /// <summary>
         /// Returns a reference dummy if it is not in a set of comparison dummies or
         /// creates new dummies of the same type until a dummy is created that is not in the set of comparison dummies.
-        /// Uses the comparison dummy's implementation of <see cref="object.Equals(object)"/>.
+        /// Uses <see cref="EqualityComparerHelper.GetEqualityComparerToUse{T}(IEqualityComparer{T})"/>.
         /// </summary>
         /// <param name="referenceDummy">The reference dummy.</param>
         /// <param name="comparisonDummies">The set of comparison dummies.</param>
@@ -167,15 +171,16 @@ namespace OBeautifulCode.AutoFakeItEasy
         {
             comparisonDummies = comparisonDummies?.ToList() ?? throw new ArgumentNullException(nameof(comparisonDummies));
 
-            bool Condition(T t) => !comparisonDummies.Contains(t);
+            bool Condition(T t) => !comparisonDummies.Contains(t, EqualityComparerHelper.GetEqualityComparerToUse<T>());
+
             var result = ThatIs(referenceDummy, Condition, maxAttempts);
+
             return result;
         }
 
         /// <summary>
         /// Returns a reference dummy if it is not in a set of comparison dummies or
         /// creates new dummies of the same type until a dummy is created that is not in the set of comparison dummies.
-        /// Uses the comparison dummy's implementation of <see cref="object.Equals(object)"/>.
         /// </summary>
         /// <param name="referenceDummy">The reference dummy.</param>
         /// <param name="comparisonDummies">The set of comparison dummies.</param>
@@ -201,14 +206,16 @@ namespace OBeautifulCode.AutoFakeItEasy
             comparisonDummies = comparisonDummies?.ToList() ?? throw new ArgumentNullException(nameof(comparisonDummies));
 
             bool Condition(T t) => !comparisonDummies.Contains(t, comparer);
+
             var result = ThatIs(referenceDummy, Condition, maxAttempts);
+
             return result;
         }
 
         /// <summary>
         /// Returns a reference dummy if it is in a set of comparison dummies or
         /// creates new dummies of the same type until a dummy is created that is in the set of comparison dummies.
-        /// Uses the comparison dummy's implementation of <see cref="object.Equals(object)"/>.
+        /// Uses <see cref="EqualityComparerHelper.GetEqualityComparerToUse{T}(IEqualityComparer{T})"/>.
         /// </summary>
         /// <param name="referenceDummy">The reference dummy.</param>
         /// <param name="comparisonDummies">The set of comparison dummies.</param>
@@ -229,20 +236,18 @@ namespace OBeautifulCode.AutoFakeItEasy
             IEnumerable<T> comparisonDummies,
             int maxAttempts = -1)
         {
-            if (comparisonDummies == null)
-            {
-                throw new ArgumentNullException(nameof(comparisonDummies));
-            }
+            comparisonDummies = comparisonDummies?.ToList() ?? throw new ArgumentNullException(nameof(comparisonDummies));
 
-            Func<T, bool> condition = comparisonDummies.Contains;
-            var result = ThatIs(referenceDummy, condition, maxAttempts);
+            bool Condition(T t) => comparisonDummies.Contains(t, EqualityComparerHelper.GetEqualityComparerToUse<T>());
+
+            var result = ThatIs(referenceDummy, Condition, maxAttempts);
+
             return result;
         }
 
         /// <summary>
         /// Returns a reference dummy if it is in a set of comparison dummies or
         /// creates new dummies of the same type until a dummy is created that is in the set of comparison dummies.
-        /// Uses the comparison dummy's implementation of <see cref="object.Equals(object)"/>.
         /// </summary>
         /// <param name="referenceDummy">The reference dummy.</param>
         /// <param name="comparisonDummies">The set of comparison dummies.</param>
@@ -268,7 +273,9 @@ namespace OBeautifulCode.AutoFakeItEasy
             comparisonDummies = comparisonDummies?.ToList() ?? throw new ArgumentNullException(nameof(comparisonDummies));
 
             bool Condition(T t) => comparisonDummies.Contains(t, comparer);
+
             var result = ThatIs(referenceDummy, Condition, maxAttempts);
+
             return result;
         }
 
