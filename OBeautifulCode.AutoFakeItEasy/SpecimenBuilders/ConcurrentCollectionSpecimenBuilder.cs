@@ -57,7 +57,7 @@ namespace OBeautifulCode.AutoFakeItEasy
                 return new NoSpecimen();
             }
 
-            var genericArguments = requestedType.GetGenericArguments();
+            var genericArguments = requestedType.GenericTypeArguments;
 
             Type constructorParameterType;
             if (unboundedGenericRequestedType == BagUnboundedGenericType)
