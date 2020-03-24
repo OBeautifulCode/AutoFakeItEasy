@@ -720,6 +720,39 @@ namespace OBeautifulCode.Type.Recipes
         }
 
         /// <summary>
+        /// Determines if the specified type is a closed <see cref="IEnumerable{T}"/>.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <returns>
+        /// true if the specified type is a closed <see cref="IEnumerable{T}"/>; otherwise false.
+        /// </returns>
+        /// <exception cref="ArgumentNullException"><paramref name="type"/> is null.</exception>
+        public static bool IsClosedSystemEnumerableType(
+            this Type type)
+        {
+            if (type == null)
+            {
+                throw new ArgumentNullException(nameof(type));
+            }
+
+            if (type.ContainsGenericParameters)
+            {
+                return false;
+            }
+
+            if (!type.IsGenericType)
+            {
+                return false;
+            }
+
+            var genericTypeDefinition = type.GetGenericTypeDefinition();
+
+            var result = genericTypeDefinition == EnumerableInterfaceGenericTypeDefinition;
+
+            return result;
+        }
+
+        /// <summary>
         /// Determines if the specified type is a closed version of one of the
         /// following ordered <see cref="System"/> Collection generic type definitions:
         /// <see cref="SystemOrderedCollectionGenericTypeDefinitions"/>.
@@ -921,6 +954,53 @@ namespace OBeautifulCode.Type.Recipes
             if (includeAssemblyDetails && assemblyDetailsTypes.Any())
             {
                 result = result + " || " + string.Join(" | ", assemblyDetailsTypes.Select(_ => _.ToAssemblyDetails()).ToArray());
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Gets a string representation of the specified type without the generic component.
+        /// For example, Dictionary&lt;string, string&gt; would be represented as 'Dictionary'.
+        /// </summary>
+        /// <remarks>
+        /// Adapted from: <a href="https://stackoverflow.com/a/6386234/356790" />.
+        /// </remarks>
+        /// <param name="type">The type.</param>
+        /// <returns>
+        /// A string representation of the specified type with the generic component stripped out.
+        /// </returns>
+        public static string ToStringWithoutGenericComponent(
+            this Type type)
+        {
+            if (type == null)
+            {
+                throw new ArgumentNullException(nameof(type));
+            }
+
+            string result;
+            if (ValueTypeToAliasMap.ContainsKey(type))
+            {
+                result = ValueTypeToAliasMap[type];
+            }
+            else if (type.IsArray)
+            {
+                result = type.GetElementType().ToStringWithoutGenericComponent() + "[]";
+            }
+            else
+            {
+                var isAnonymousType = type.IsAnonymousType();
+
+                var name = type.Name;
+
+                var index = name.IndexOf('`');
+
+                result = index == -1 ? name : name.Substring(0, index);
+
+                if (isAnonymousType)
+                {
+                    result = result.Replace("<>f__", string.Empty);
+                }
             }
 
             return result;

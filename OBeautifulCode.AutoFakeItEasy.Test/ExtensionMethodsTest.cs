@@ -1073,7 +1073,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         public static void ThatIsNot___Should_return_new_IList_with_specified_numberOfElements_and_specified_createWith___When_referenceDummy_was_created_by_a_called_to_SomeDummies_and_reference_equals_comparisonDummy()
         {
             // Arrange
-            var expectedSize = ThreadSafeRandom.Next(1, 10);
+            var expectedSize = ThreadSafeRandom.Next(2, 10);
             var referenceDummy = Some.Dummies<string>(expectedSize, CreateWith.OneOrMoreNulls);
 
             // Act
@@ -1449,7 +1449,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         public static void ThatIsNotIn_without_IEqualityComparer___Should_return_new_IList_with_specified_numberOfElements_and_specified_createWith___When_referenceDummy_was_created_by_a_called_to_SomeDummies_and_referenceDummy_contained_within_comparisonDummy()
         {
             // Arrange
-            var expectedSize = ThreadSafeRandom.Next(1, 10);
+            var expectedSize = ThreadSafeRandom.Next(2, 10);
             var referenceDummy = Some.Dummies<string>(expectedSize, CreateWith.OneOrMoreNulls);
 
             // Act
@@ -1466,7 +1466,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         public static void ThatIsNotIn_without_IEqualityComparer___Should_return_new_IReadOnlyList_with_specified_numberOfElements_and_specified_createWith___When_referenceDummy_was_created_by_a_call_to_SomeReadOnlyDummies_and_referenceDummy_contained_within_comparisonDummy()
         {
             // Arrange
-            var expectedSize = ThreadSafeRandom.Next(1, 10);
+            var expectedSize = ThreadSafeRandom.Next(2, 10);
             var referenceDummy = Some.ReadOnlyDummies<string>(expectedSize, CreateWith.OneOrMoreNulls);
 
             // Act
