@@ -324,6 +324,18 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         }
 
         [Fact]
+        public static void ADummy_Version___Should_return_random_version_using_major_minor_and_build_values___When_called()
+        {
+            // Arrange, Act
+            var actualResult = Enumerable.Range(1, 100).Select(_ => A.Dummy<Version>()).ToList();
+
+            // Assert
+            actualResult.ForEach(_ => _.Should().BeGreaterOrEqualTo(new Version(0, 0, 0)).And.BeLessOrEqualTo(new Version(int.MaxValue, int.MaxValue, int.MaxValue)));
+            actualResult.ForEach(_ => _.Revision.Should().Be(-1));
+            actualResult.Distinct().Count().Should().BeGreaterThan(1);
+        }
+
+        [Fact]
         public static void ADummy___Should_use_custom_dummy_creator___When_custom_dummy_creator_for_concrete_type_is_added()
         {
             // Arrange

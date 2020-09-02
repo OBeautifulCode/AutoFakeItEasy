@@ -59,6 +59,8 @@ namespace OBeautifulCode.AutoFakeItEasy
             AddCustomizations(FixtureWithoutCreators);
 
             RegisterCustomTypes(FixtureWithCreators);
+
+            RegisterSystemTypes(FixtureWithCreators);
         }
 
         /// <inheritdoc />
@@ -388,6 +390,12 @@ namespace OBeautifulCode.AutoFakeItEasy
 
             AddDummyCreator(fixture, PercentChangeAsDouble.CreateConstrainedValue);
             AddDummyCreator(fixture, PercentChangeAsDecimal.CreateConstrainedValue);
+        }
+
+        private static void RegisterSystemTypes(
+            Fixture fixture)
+        {
+            AddDummyCreator(fixture, () => new Version(A.Dummy<ZeroOrPositiveInteger>(), A.Dummy<ZeroOrPositiveInteger>(), A.Dummy<ZeroOrPositiveInteger>()));
         }
 
         private static void AddDummyCreator<T>(
