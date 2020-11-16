@@ -20,6 +20,8 @@ namespace OBeautifulCode.AutoFakeItEasy
     /// </summary>
     public static class ExtensionMethods
     {
+        private const int MaxAttempts = 1000;
+
         /// <summary>
         /// Returns a reference dummy if it meets a specified condition or
         /// creates new dummies of the same type until the condition is met.
@@ -30,15 +32,14 @@ namespace OBeautifulCode.AutoFakeItEasy
         /// The maximum number of times to attempt to create a dummy that meets the condition, before throwing.
         /// The reference dummy is itself considered the first attempt.  If this method creates a new dummy
         /// because the condition fails on the reference dummy, that is considered the second attempt.
-        /// If max attempts is zero or negative then the method tries an infinite number of times to meet the condition,
-        /// which is the default.
+        /// If max attempts is zero or negative then the method tries an infinite number of times to meet the condition.
         /// </param>
         /// <typeparam name="T">The type of dummy.</typeparam>
         /// <returns>Returns the reference dummy if it meets the specified condition.  Otherwise, returns a new dummy that meets the condition.</returns>
         public static T ThatIs<T>(
             this T referenceDummy,
             Func<T, bool> condition,
-            int maxAttempts = -1)
+            int maxAttempts = MaxAttempts)
         {
             if (condition == null)
             {
@@ -46,7 +47,9 @@ namespace OBeautifulCode.AutoFakeItEasy
             }
 
             var referenceDummyType = referenceDummy?.GetType();
+
             string someDummiesCallName = null;
+
             if ((referenceDummyType != null) && referenceDummyType.IsGenericType)
             {
                 var genericTypeDefinition = referenceDummyType.GetGenericTypeDefinition();
@@ -60,7 +63,8 @@ namespace OBeautifulCode.AutoFakeItEasy
                 }
             }
 
-            int attempts = 1;
+            var attempts = 1;
+
             while (!condition(referenceDummy))
             {
                 if (attempts == maxAttempts)
@@ -103,15 +107,14 @@ namespace OBeautifulCode.AutoFakeItEasy
         /// The maximum number of times to attempt to create a dummy that meets the condition, before throwing.
         /// The reference dummy is itself considered the first attempt.  If this method creates a new dummy
         /// because the condition fails on the reference dummy, that is considered the second attempt.
-        /// If max attempts is zero or negative then the method tries an infinite number of times to meet the condition,
-        /// which is the default.
+        /// If max attempts is zero or negative then the method tries an infinite number of times to meet the condition.
         /// </param>
         /// <typeparam name="T">The type of dummy.</typeparam>
         /// <returns>Returns the reference dummy if it meets the specified condition.  Otherwise, returns a new dummy that meets the condition.</returns>
         public static T Whose<T>(
             this T referenceDummy,
             Func<T, bool> condition,
-            int maxAttempts = -1)
+            int maxAttempts = MaxAttempts)
             => ThatIs(referenceDummy, condition, maxAttempts);
 
         /// <summary>
@@ -126,7 +129,7 @@ namespace OBeautifulCode.AutoFakeItEasy
         /// The reference dummy is itself considered the first attempt.  If this method creates a new dummy because
         /// the comparision dummy is equal to the reference dummy, that is considered the second attempt.
         /// If max attempts is zero or negative then the method tries an infinite number of times to create a dummy
-        /// that is not equal to the comparison dummy, which is the default.
+        /// that is not equal to the comparison dummy.
         /// </param>
         /// <typeparam name="T">The type of dummy.</typeparam>
         /// <returns>
@@ -136,7 +139,7 @@ namespace OBeautifulCode.AutoFakeItEasy
         public static T ThatIsNot<T>(
             this T referenceDummy,
             T comparisonDummy,
-            int maxAttempts = -1)
+            int maxAttempts = MaxAttempts)
         {
             bool Condition(T t) => !t.IsEqualTo(comparisonDummy);
 
@@ -157,7 +160,7 @@ namespace OBeautifulCode.AutoFakeItEasy
         /// The reference dummy is itself considered the first attempt.  If this method creates a new dummy because
         /// the comparision dummies contain the reference dummy, that is considered the second attempt.
         /// If max attempts is zero or negative then the method tries an infinite number of times to create a dummy
-        /// that is not in the set of comparison dummies, which is the default.
+        /// that is not in the set of comparison dummies.
         /// </param>
         /// <typeparam name="T">The type of dummy.</typeparam>
         /// <returns>
@@ -167,7 +170,7 @@ namespace OBeautifulCode.AutoFakeItEasy
         public static T ThatIsNotIn<T>(
             this T referenceDummy,
             IEnumerable<T> comparisonDummies,
-            int maxAttempts = -1)
+            int maxAttempts = MaxAttempts)
         {
             comparisonDummies = comparisonDummies?.ToList() ?? throw new ArgumentNullException(nameof(comparisonDummies));
 
@@ -190,7 +193,7 @@ namespace OBeautifulCode.AutoFakeItEasy
         /// The reference dummy is itself considered the first attempt.  If this method creates a new dummy because
         /// the comparision dummies contain the reference dummy, that is considered the second attempt.
         /// If max attempts is zero or negative then the method tries an infinite number of times to create a dummy
-        /// that is not in the set of comparison dummies, which is the default.
+        /// that is not in the set of comparison dummies.
         /// </param>
         /// <typeparam name="T">The type of dummy.</typeparam>
         /// <returns>
@@ -201,7 +204,7 @@ namespace OBeautifulCode.AutoFakeItEasy
             this T referenceDummy,
             IEnumerable<T> comparisonDummies,
             IEqualityComparer<T> comparer,
-            int maxAttempts = -1)
+            int maxAttempts = MaxAttempts)
         {
             comparisonDummies = comparisonDummies?.ToList() ?? throw new ArgumentNullException(nameof(comparisonDummies));
 
@@ -224,7 +227,7 @@ namespace OBeautifulCode.AutoFakeItEasy
         /// The reference dummy is itself considered the first attempt.  If this method creates a new dummy because
         /// the comparision dummies contain the reference dummy, that is considered the second attempt.
         /// If max attempts is zero or negative then the method tries an infinite number of times to create a dummy
-        /// that is in the set of comparison dummies, which is the default.
+        /// that is in the set of comparison dummies.
         /// </param>
         /// <typeparam name="T">The type of dummy.</typeparam>
         /// <returns>
@@ -234,7 +237,7 @@ namespace OBeautifulCode.AutoFakeItEasy
         public static T ThatIsIn<T>(
             this T referenceDummy,
             IEnumerable<T> comparisonDummies,
-            int maxAttempts = -1)
+            int maxAttempts = MaxAttempts)
         {
             comparisonDummies = comparisonDummies?.ToList() ?? throw new ArgumentNullException(nameof(comparisonDummies));
 
@@ -257,7 +260,7 @@ namespace OBeautifulCode.AutoFakeItEasy
         /// The reference dummy is itself considered the first attempt.  If this method creates a new dummy because
         /// the comparision dummies contain the reference dummy, that is considered the second attempt.
         /// If max attempts is zero or negative then the method tries an infinite number of times to create a dummy
-        /// that is in the set of comparison dummies, which is the default.
+        /// that is in the set of comparison dummies.
         /// </param>
         /// <typeparam name="T">The type of dummy.</typeparam>
         /// <returns>
@@ -268,7 +271,7 @@ namespace OBeautifulCode.AutoFakeItEasy
             this T referenceDummy,
             IEnumerable<T> comparisonDummies,
             IEqualityComparer<T> comparer,
-            int maxAttempts = -1)
+            int maxAttempts = MaxAttempts)
         {
             comparisonDummies = comparisonDummies?.ToList() ?? throw new ArgumentNullException(nameof(comparisonDummies));
 
@@ -292,7 +295,7 @@ namespace OBeautifulCode.AutoFakeItEasy
         /// The reference dummy is itself considered the first attempt.  If this method creates a new dummy because
         /// the reference dummy is not within the specified range, that is considered the second attempt.
         /// If max attempts is zero or negative then the method tries an infinite number of times to create a dummy
-        /// that is in the specified range, which is the default.
+        /// that is in the specified range.
         /// </param>
         /// <typeparam name="T">The type of dummy.</typeparam>
         /// <returns>
@@ -303,7 +306,7 @@ namespace OBeautifulCode.AutoFakeItEasy
             this T referenceDummy,
             T rangeStartInclusive,
             T rangeEndInclusive,
-            int maxAttempts = -1)
+            int maxAttempts = MaxAttempts)
             where T : IComparable<T>
         {
             if ((rangeStartInclusive != null) && (rangeEndInclusive != null))
@@ -322,6 +325,7 @@ namespace OBeautifulCode.AutoFakeItEasy
             bool Condition(T dummy) => dummy == null ? rangeStartInclusive == null : (dummy.CompareTo(rangeStartInclusive) >= 0) && (dummy.CompareTo(rangeEndInclusive) <= 0);
 
             var result = ThatIs(referenceDummy, Condition, maxAttempts);
+
             return result;
         }
 
@@ -339,7 +343,7 @@ namespace OBeautifulCode.AutoFakeItEasy
         /// The reference dummy is itself considered the first attempt.  If this method creates a new dummy because
         /// the reference dummy is not within the specified range, that is considered the second attempt.
         /// If max attempts is zero or negative then the method tries an infinite number of times to create a dummy
-        /// that is in the specified range, which is the default.
+        /// that is in the specified range.
         /// </param>
         /// <typeparam name="T">The type of dummy.</typeparam>
         /// <returns>
@@ -351,7 +355,7 @@ namespace OBeautifulCode.AutoFakeItEasy
             T rangeStartInclusive,
             T rangeEndInclusive,
             IComparer<T> comparer,
-            int maxAttempts = -1)
+            int maxAttempts = MaxAttempts)
         {
             if (comparer == null)
             {
@@ -367,7 +371,9 @@ namespace OBeautifulCode.AutoFakeItEasy
             }
 
             bool Condition(T dummy) => (comparer.Compare(dummy, rangeStartInclusive) >= 0) && (comparer.Compare(dummy, rangeEndInclusive) <= 0);
+
             var result = ThatIs(referenceDummy, Condition, maxAttempts);
+
             return result;
         }
 
@@ -384,7 +390,7 @@ namespace OBeautifulCode.AutoFakeItEasy
         /// The reference dummy is itself considered the first attempt.  If this method creates a new dummy because
         /// the reference dummy is within the specified range, that is considered the second attempt.
         /// If max attempts is zero or negative then the method tries an infinite number of times to create a dummy
-        /// that is not in the specified range, which is the default.
+        /// that is not in the specified range.
         /// </param>
         /// <typeparam name="T">The type of dummy.</typeparam>
         /// <returns>
@@ -395,7 +401,7 @@ namespace OBeautifulCode.AutoFakeItEasy
             this T referenceDummy,
             T rangeStartInclusive,
             T rangeEndInclusive,
-            int maxAttempts = -1)
+            int maxAttempts = MaxAttempts)
             where T : IComparable<T>
         {
             if ((rangeStartInclusive != null) && (rangeEndInclusive != null))
@@ -414,6 +420,7 @@ namespace OBeautifulCode.AutoFakeItEasy
             bool Condition(T dummy) => dummy == null ? rangeStartInclusive != null : (dummy.CompareTo(rangeStartInclusive) < 0) || (dummy.CompareTo(rangeEndInclusive) > 0);
 
             var result = ThatIs(referenceDummy, Condition, maxAttempts);
+
             return result;
         }
 
@@ -431,7 +438,7 @@ namespace OBeautifulCode.AutoFakeItEasy
         /// The reference dummy is itself considered the first attempt.  If this method creates a new dummy because
         /// the reference dummy is within the specified range, that is considered the second attempt.
         /// If max attempts is zero or negative then the method tries an infinite number of times to create a dummy
-        /// that is not in the specified range, which is the default.
+        /// that is not in the specified range.
         /// </param>
         /// <typeparam name="T">The type of dummy.</typeparam>
         /// <returns>
@@ -443,7 +450,7 @@ namespace OBeautifulCode.AutoFakeItEasy
             T rangeStartInclusive,
             T rangeEndInclusive,
             IComparer<T> comparer,
-            int maxAttempts = -1)
+            int maxAttempts = MaxAttempts)
         {
             if (comparer == null)
             {
@@ -459,7 +466,9 @@ namespace OBeautifulCode.AutoFakeItEasy
             }
 
             bool Condition(T dummy) => (comparer.Compare(dummy, rangeStartInclusive) < 0) || (comparer.Compare(dummy, rangeEndInclusive) > 0);
+
             var result = ThatIs(referenceDummy, Condition, maxAttempts);
+
             return result;
         }
     }
