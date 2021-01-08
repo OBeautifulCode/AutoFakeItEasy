@@ -324,6 +324,16 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
         }
 
         [Fact]
+        public static void ADummy_UtcDateTime___Should_always_return_Utc_DateTime___When_creating_many_object_of_type_UtcDateTime()
+        {
+            // Arrange, Act
+            var actualResult = Enumerable.Range(1, 1000).Select(_ => (DateTime)A.Dummy<UtcDateTime>()).ToList();
+
+            // Assert
+            actualResult.ForEach(_ => _.Kind.Should().Be(DateTimeKind.Utc));
+        }
+
+        [Fact]
         public static void ADummy_Version___Should_return_random_version_using_major_minor_and_build_values___When_called()
         {
             // Arrange, Act

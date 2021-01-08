@@ -82,6 +82,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include=".recipes\OBeautifulCode.CodeAnalysis\ObcSuppressBecause.cs" />
+    <Compile Include="CustomTypes\UtcDateTimeTest.cs" />
     <Compile Include="Properties\ProjectInfo.cs" />
     <Compile Include="SpecimenBuilders\ConcurrentCollectionSpecimenBuilderTest.cs" />
     <Compile Include="TypesForTesting\ClassHierarchy.cs" />

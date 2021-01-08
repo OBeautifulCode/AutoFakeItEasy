@@ -60,6 +60,7 @@
   <ItemGroup>
     <Compile Include=".recipes\OBeautifulCode.CodeAnalysis\ObcSuppressBecause.cs" />
     <Compile Include=".recipes\OBeautifulCode.Collection\EnumerableExtensions.cs" />
+    <Compile Include=".recipes\OBeautifulCode.DateTime\DateTimeExtensions.cs" />
     <Compile Include=".recipes\OBeautifulCode.Enum\EnumExtensions.cs" />
     <Compile Include=".recipes\OBeautifulCode.Equality\DateTimeEqualityComparer.cs" />
     <Compile Include=".recipes\OBeautifulCode.Equality\DictionaryEqualityComparer.cs" />
@@ -87,6 +88,7 @@
     <Compile Include="CustomTypes\PercentChangeAsDecimal.cs" />
     <Compile Include="CustomTypes\PercentChangeAsDouble.cs" />
     <Compile Include="CustomTypes\PositiveDouble.cs" />
+    <Compile Include="CustomTypes\UtcDateTime.cs" />
     <Compile Include="CustomTypes\PositiveInteger.cs" />
     <Compile Include="CustomTypes\ZeroOrNegativeDouble.cs" />
     <Compile Include="CustomTypes\ZeroOrNegativeInteger.cs" />

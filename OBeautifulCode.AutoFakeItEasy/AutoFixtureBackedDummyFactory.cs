@@ -19,6 +19,7 @@ namespace OBeautifulCode.AutoFakeItEasy
 
     using FakeItEasy;
 
+    using OBeautifulCode.DateTime.Recipes;
     using OBeautifulCode.Math.Recipes;
     using OBeautifulCode.Reflection.Recipes;
 
@@ -390,6 +391,8 @@ namespace OBeautifulCode.AutoFakeItEasy
 
             AddDummyCreator(fixture, PercentChangeAsDouble.CreateConstrainedValue);
             AddDummyCreator(fixture, PercentChangeAsDecimal.CreateConstrainedValue);
+
+            AddDummyCreator(fixture, () => new UtcDateTime(A.Dummy<DateTime>().ToUtc()));
         }
 
         private static void RegisterSystemTypes(
