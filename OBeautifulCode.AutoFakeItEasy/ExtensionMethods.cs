@@ -14,6 +14,7 @@ namespace OBeautifulCode.AutoFakeItEasy
     using FakeItEasy;
 
     using OBeautifulCode.Equality.Recipes;
+    using OBeautifulCode.Math.Recipes;
 
     /// <summary>
     /// Some extension methods.
@@ -378,6 +379,52 @@ namespace OBeautifulCode.AutoFakeItEasy
         }
 
         /// <summary>
+        /// Returns a reference integer dummy if it is contained within a specified range (inclusive of endpoints)
+        /// or creates a new integer that is within the specified range.
+        /// </summary>
+        /// <param name="referenceDummy">The reference dummy.</param>
+        /// <param name="rangeStartInclusive">The start of the range.  The range is inclusive of this value.</param>
+        /// <param name="rangeEndInclusive">The end of the range.  The range is inclusive of this value.</param>
+        /// <returns>
+        /// Returns the reference dummy if is in the specified range.
+        /// Otherwise, returns a new dummy that is in the specified range.
+        /// </returns>
+        public static int ThatIsInRange(
+            this int referenceDummy,
+            int rangeStartInclusive,
+            int rangeEndInclusive)
+        {
+            if (rangeStartInclusive > rangeEndInclusive)
+            {
+                throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, "{0} is > {1}", nameof(rangeStartInclusive), nameof(rangeEndInclusive)));
+            }
+
+            int result;
+
+            if ((referenceDummy >= rangeStartInclusive) && (referenceDummy <= rangeEndInclusive))
+            {
+                result = referenceDummy;
+            }
+            else
+            {
+                if (rangeEndInclusive < int.MaxValue)
+                {
+                    result = ThreadSafeRandom.Next(rangeStartInclusive, rangeEndInclusive + 1);
+                }
+                else if (rangeStartInclusive > int.MinValue)
+                {
+                    result = ThreadSafeRandom.Next(rangeStartInclusive - 1, rangeEndInclusive) + 1;
+                }
+                else
+                {
+                    throw new InvalidOperationException("Logically impossible to get here");
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
         /// Returns a reference dummy if it is not contained within a specified range (inclusive of endpoints)
         /// or creates new dummies of the same type until a dummy is created that is not within the specified range.
         /// Uses the comparison dummy's implementation of <see cref="IComparable.CompareTo(object)"/>.
@@ -468,6 +515,65 @@ namespace OBeautifulCode.AutoFakeItEasy
             bool Condition(T dummy) => (comparer.Compare(dummy, rangeStartInclusive) < 0) || (comparer.Compare(dummy, rangeEndInclusive) > 0);
 
             var result = ThatIs(referenceDummy, Condition, maxAttempts);
+
+            return result;
+        }
+
+        /// <summary>
+        /// Returns a reference integer dummy if it is not contained within a specified range (inclusive of endpoints)
+        /// or creates a new integer that is not within the specified range.
+        /// </summary>
+        /// <param name="referenceDummy">The reference dummy.</param>
+        /// <param name="rangeStartInclusive">The start of the range.  The range is inclusive of this value.</param>
+        /// <param name="rangeEndInclusive">The end of the range.  The range is inclusive of this value.</param>
+        /// <returns>
+        /// Returns the reference dummy if is not in the specified range.
+        /// Otherwise, returns a new dummy that is not in the specified range.
+        /// </returns>
+        public static int ThatIsNotInRange(
+            this int referenceDummy,
+            int rangeStartInclusive,
+            int rangeEndInclusive)
+        {
+            if (rangeStartInclusive > rangeEndInclusive)
+            {
+                throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, "{0} is > {1}", nameof(rangeStartInclusive), nameof(rangeEndInclusive)));
+            }
+
+            if ((rangeStartInclusive == int.MinValue) && (rangeEndInclusive == int.MaxValue))
+            {
+                throw new ArgumentException("All integers are within the specified range.");
+            }
+
+            int result;
+
+            if ((referenceDummy < rangeStartInclusive) || (referenceDummy > rangeEndInclusive))
+            {
+                result = referenceDummy;
+            }
+            else
+            {
+                if (rangeStartInclusive == int.MinValue)
+                {
+                    result = ThreadSafeRandom.Next(rangeEndInclusive, int.MaxValue) + 1;
+                }
+                else if (rangeEndInclusive == int.MaxValue)
+                {
+                    result = ThreadSafeRandom.Next(int.MinValue, rangeStartInclusive);
+                }
+                else
+                {
+                    // random choose between left and right-hand side of number line
+                    if (ThreadSafeRandom.Next(0, 2) == 0)
+                    {
+                        result = ThreadSafeRandom.Next(rangeEndInclusive, int.MaxValue) + 1;
+                    }
+                    else
+                    {
+                        result = ThreadSafeRandom.Next(int.MinValue, rangeStartInclusive);
+                    }
+                }
+            }
 
             return result;
         }

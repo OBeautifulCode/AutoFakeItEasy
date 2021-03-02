@@ -2383,7 +2383,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var referenceDummy = A.Dummy<int>();
 
             // Act
-            var ex1 = Record.Exception(() => referenceDummy.ThatIsInRange(11, 10));
+            var ex1 = Record.Exception(() => referenceDummy.ThatIsInRange<int>(11, 10));
             var ex2 = Record.Exception(() => referenceDummy.ThatIsInRange(11, 10, maxAttempts: 1));
 
             // Assert
@@ -2453,10 +2453,10 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var referenceDummy3 = new ComparableIntAsObject(50);
 
             // Act
-            var actual1 = referenceDummy1.ThatIsInRange(11, 11);
-            var actual2 = referenceDummy1.ThatIsInRange(11, 12);
-            var actual3 = referenceDummy1.ThatIsInRange(10, 11);
-            var actual4 = referenceDummy1.ThatIsInRange(10, 12);
+            var actual1 = referenceDummy1.ThatIsInRange<int>(11, 11);
+            var actual2 = referenceDummy1.ThatIsInRange<int>(11, 12);
+            var actual3 = referenceDummy1.ThatIsInRange<int>(10, 11);
+            var actual4 = referenceDummy1.ThatIsInRange<int>(10, 12);
 
             var actual5 = referenceDummy2.ThatIsInRange(null, null);
             var actual6 = referenceDummy2.ThatIsInRange(null, new ComparableIntAsObject(A.Dummy<int>()));
@@ -2495,7 +2495,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             // Act
             for (int x = 0; x < 1000; x++)
             {
-                actual1.Add(referenceDummy1.ThatIsInRange(startRangeInclusive, endRangeInclusive));
+                actual1.Add(referenceDummy1.ThatIsInRange<int>(startRangeInclusive, endRangeInclusive));
                 actual2.Add(referenceDummy2.ThatIsInRange(new ComparableIntAsObject(startRangeInclusive), new ComparableIntAsObject(endRangeInclusive)));
                 actual3.Add(referenceDummy3.ThatIsInRange(new ComparableIntAsObject(startRangeInclusive), new ComparableIntAsObject(endRangeInclusive)));
             }
@@ -2669,7 +2669,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var referenceDummy = A.Dummy<int>();
 
             // Act
-            var ex1 = Record.Exception(() => referenceDummy.ThatIsNotInRange(11, 10));
+            var ex1 = Record.Exception(() => referenceDummy.ThatIsNotInRange<int>(11, 10));
             var ex2 = Record.Exception(() => referenceDummy.ThatIsNotInRange(11, 10, maxAttempts: 1));
 
             // Assert
@@ -2735,10 +2735,10 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             var referenceDummy3 = new ComparableIntAsObject(50);
 
             // Act
-            var actual1 = referenceDummy1.ThatIsNotInRange(12, 12);
-            var actual2 = referenceDummy1.ThatIsNotInRange(10, 10);
-            var actual3 = referenceDummy1.ThatIsNotInRange(1, 10);
-            var actual4 = referenceDummy1.ThatIsNotInRange(12, 20);
+            var actual1 = referenceDummy1.ThatIsNotInRange<int>(12, 12);
+            var actual2 = referenceDummy1.ThatIsNotInRange<int>(10, 10);
+            var actual3 = referenceDummy1.ThatIsNotInRange<int>(1, 10);
+            var actual4 = referenceDummy1.ThatIsNotInRange<int>(12, 20);
 
             var actual5 = referenceDummy2.ThatIsNotInRange(new ComparableIntAsObject(50), new ComparableIntAsObject(100));
 
@@ -2783,7 +2783,7 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             // Act
             for (int x = 0; x < 1000; x++)
             {
-                actual1.Add(referenceDummy1.ThatIsNotInRange(startRangeInclusive, endRangeInclusive));
+                actual1.Add(referenceDummy1.ThatIsNotInRange<int>(startRangeInclusive, endRangeInclusive));
                 actual2.Add(referenceDummy2.ThatIsNotInRange(null, null));
                 actual3.Add(referenceDummy3.ThatIsNotInRange(null, new ComparableIntAsObject(endRangeInclusive)));
                 actual4.Add(referenceDummy4.ThatIsNotInRange(null, new ComparableIntAsObject(endRangeInclusive)));
@@ -2960,6 +2960,178 @@ namespace OBeautifulCode.AutoFakeItEasy.Test
             actual3.Select(_ => _.Value > endRangeInclusive).ToList().ForEach(_ => _.Should().BeTrue());
             actual4.Select(_ => _.Value > endRangeInclusive).ToList().ForEach(_ => _.Should().BeTrue());
             actual5.Select(_ => (_.Value < startRangeInclusive) || (_.Value > endRangeInclusive)).ToList().ForEach(_ => _.Should().BeTrue());
+        }
+
+        [Fact]
+        public static void ThatIsInRange_int___Should_throw_ArgumentException___When_parameter_rangeStartInclusive_is_less_than_parameter_rangeEndInclusive()
+        {
+            // Arrange
+            var referenceDummy = A.Dummy<int>();
+
+            // Act
+            var ex = Record.Exception(() => referenceDummy.ThatIsInRange(11, 10));
+
+            // Assert
+            ex.Should().BeOfType<ArgumentException>();
+            ex.Message.Should().Contain("rangeStartInclusive is > rangeEndInclusive");
+        }
+
+        [Fact]
+        public static void ThatIsInRange_int___Should_return_referenceDummy___When_referenceDummy_is_within_the_specified_range()
+        {
+            // Arrange
+            var referenceDummy = 11;
+
+            // Act
+            var actual1 = referenceDummy.ThatIsInRange(11, 11);
+            var actual2 = referenceDummy.ThatIsInRange(11, 12);
+            var actual3 = referenceDummy.ThatIsInRange(10, 11);
+            var actual4 = referenceDummy.ThatIsInRange(10, 12);
+
+            // Assert
+            actual1.Should().Be(referenceDummy);
+            actual2.Should().Be(referenceDummy);
+            actual3.Should().Be(referenceDummy);
+            actual4.Should().Be(referenceDummy);
+        }
+
+        [Fact]
+        public static void ThatIsInRange_int___Should_return_new_dummy_that_is_within_specified_range___When_referenceDummy_is_not_within_the_specified_range()
+        {
+            // Arrange
+            var startRangeInclusive = -192322;
+            var endRangeInclusive = 500000;
+
+            var referenceDummy1 = -192323;
+
+            var actual1 = new List<int>();
+
+            // Act
+            for (int x = 0; x < 1000; x++)
+            {
+                actual1.Add(referenceDummy1.ThatIsInRange(startRangeInclusive, endRangeInclusive));
+            }
+
+            // Assert
+            actual1.Select(_ => (_ >= startRangeInclusive) && (_ <= endRangeInclusive)).ToList().ForEach(_ => _.Should().BeTrue());
+        }
+
+        [Fact]
+        public static void ThatIsInRange_int___Should_return_new_dummy_that_is_within_specified_range___When_referenceDummy_is_not_within_the_specified_range_and_rangeEndInclusive_is_int_MaxValue()
+        {
+            // Arrange
+            var startRangeInclusive = -192322;
+            var endRangeInclusive = int.MaxValue;
+
+            var referenceDummy1 = int.MinValue;
+
+            var actual1 = new List<int>();
+
+            // Act
+            for (int x = 0; x < 1000; x++)
+            {
+                actual1.Add(referenceDummy1.ThatIsInRange(startRangeInclusive, endRangeInclusive));
+            }
+
+            var actual2 = A.Dummy<int>().ThatIsInRange(int.MaxValue, endRangeInclusive);
+
+            // Assert
+            actual1.Select(_ => (_ >= startRangeInclusive) && (_ <= endRangeInclusive)).ToList().ForEach(_ => _.Should().BeTrue());
+            actual2.Should().Be(int.MaxValue);
+        }
+
+        [Fact]
+        public static void ThatIsInRange_int___Should_return_new_dummy_that_is_within_specified_range___When_referenceDummy_is_not_within_the_specified_range_and_rangeStartInclusive_is_int_MinValue()
+        {
+            // Arrange
+            var startRangeInclusive = int.MinValue;
+            var endRangeInclusive = 50000;
+
+            var referenceDummy1 = int.MaxValue;
+
+            var actual1 = new List<int>();
+
+            // Act
+            for (int x = 0; x < 1000; x++)
+            {
+                actual1.Add(referenceDummy1.ThatIsInRange(startRangeInclusive, endRangeInclusive));
+            }
+
+            var actual2 = A.Dummy<int>().ThatIsInRange(startRangeInclusive, int.MinValue);
+
+            // Assert
+            actual1.Select(_ => (_ >= startRangeInclusive) && (_ <= endRangeInclusive)).ToList().ForEach(_ => _.Should().BeTrue());
+            actual2.Should().Be(int.MinValue);
+        }
+
+        [Fact]
+        public static void ThatIsNotInRange_int___Should_throw_ArgumentException___When_parameter_rangeStartInclusive_is_less_than_parameter_rangeEndInclusive()
+        {
+            // Arrange
+            var referenceDummy = A.Dummy<int>();
+
+            // Act
+            var ex = Record.Exception(() => referenceDummy.ThatIsNotInRange(11, 10));
+
+            // Assert
+            ex.Should().BeOfType<ArgumentException>();
+            ex.Message.Should().Contain("rangeStartInclusive is > rangeEndInclusive");
+        }
+
+        [Fact]
+        public static void ThatIsNotInRange_int___Should_throw_ArgumentException___When_parameter_rangeStartInclusive_is_int_MinValue_and_parameter_rangeEndInclusive_is_int_MaxValue()
+        {
+            // Arrange
+            var referenceDummy = A.Dummy<int>();
+
+            // Act
+            var ex = Record.Exception(() => referenceDummy.ThatIsNotInRange(int.MinValue, int.MaxValue));
+
+            // Assert
+            ex.Should().BeOfType<ArgumentException>();
+            ex.Message.Should().Contain("All integers are within the specified range.");
+        }
+
+        [Fact]
+        public static void ThatIsNotInRange_int___Should_return_referenceDummy___When_referenceDummy_is_not_within_the_specified_range()
+        {
+            // Arrange
+            var referenceDummy1 = 11;
+
+            // Act
+            var actual1 = referenceDummy1.ThatIsNotInRange(12, 12);
+            var actual2 = referenceDummy1.ThatIsNotInRange(10, 10);
+            var actual3 = referenceDummy1.ThatIsNotInRange(1, 10);
+            var actual4 = referenceDummy1.ThatIsNotInRange(12, 20);
+
+            // Assert
+            actual1.Should().Be(referenceDummy1);
+            actual2.Should().Be(referenceDummy1);
+            actual3.Should().Be(referenceDummy1);
+            actual4.Should().Be(referenceDummy1);
+        }
+
+        [Fact]
+        public static void ThatIsNotInRange_int___Should_return_new_dummy_that_is_not_within_specified_range___When_referenceDummy_is_within_the_specified_range()
+        {
+            // Arrange
+            var startRangeInclusive = int.MinValue + 10000;
+            var endRangeInclusive = int.MaxValue - 10000;
+
+            var referenceDummy1 = startRangeInclusive;
+
+            var actuals = new List<int>();
+
+            // Act
+            for (int x = 0; x < 1000; x++)
+            {
+                actuals.Add(referenceDummy1.ThatIsNotInRange(startRangeInclusive, endRangeInclusive));
+                actuals.Add(endRangeInclusive.ThatIsNotInRange(int.MinValue, endRangeInclusive));
+                actuals.Add(startRangeInclusive.ThatIsNotInRange(startRangeInclusive, int.MaxValue));
+            }
+
+            // Assert
+            actuals.Select(_ => (_ < startRangeInclusive) || (_ > endRangeInclusive)).ToList().ForEach(_ => _.Should().BeTrue());
         }
 
         private static bool ConditionThatCannnotBeMet(string input)
