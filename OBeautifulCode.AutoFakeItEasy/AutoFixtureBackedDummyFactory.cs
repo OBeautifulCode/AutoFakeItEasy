@@ -34,7 +34,7 @@ namespace OBeautifulCode.AutoFakeItEasy
 
         private static readonly object FixtureLock = new object();
 
-        private static readonly ConcurrentDictionary<Type, object> RegisteredTypes = new ConcurrentDictionary<Type, object>();
+        private static readonly ConcurrentDictionary<Type, object> CachedRegisteredTypes = new ConcurrentDictionary<Type, object>();
 
         private static readonly MethodInfo AutoFixtureCreateMethod =
             typeof(SpecimenFactory)
@@ -43,7 +43,7 @@ namespace OBeautifulCode.AutoFakeItEasy
 
         private static readonly Type[] SupportedUnregisteredInterfaces = { typeof(IEnumerable<>), typeof(IList<>), typeof(ICollection<>), typeof(IReadOnlyCollection<>), typeof(IReadOnlyList<>), typeof(IDictionary<,>), typeof(IReadOnlyDictionary<,>) };
 
-        private static readonly ConcurrentDictionary<Type, MethodInfo> TypeToAutoFixtureCreateMethodMap = new ConcurrentDictionary<Type, MethodInfo>();
+        private static readonly ConcurrentDictionary<Type, MethodInfo> CachedTypeToAutoFixtureCreateMethodMap = new ConcurrentDictionary<Type, MethodInfo>();
 
         private static readonly ConcurrentDictionary<Assembly, IReadOnlyCollection<Type>> CachedAssemblyToTypesMap = new ConcurrentDictionary<Assembly, IReadOnlyCollection<Type>>();
 
@@ -411,13 +411,13 @@ namespace OBeautifulCode.AutoFakeItEasy
             }
 
             var type = typeof(T);
-            RegisteredTypes.TryAdd(type, new object());
+            CachedRegisteredTypes.TryAdd(type, new object());
         }
 
         private static bool CanCreateType(
             Type type)
         {
-            if (RegisteredTypes.ContainsKey(type))
+            if (CachedRegisteredTypes.ContainsKey(type))
             {
                 return true;
             }
@@ -455,7 +455,7 @@ namespace OBeautifulCode.AutoFakeItEasy
             Fixture fixture,
             Type type)
         {
-            var autoFixtureGenericCreateMethod = TypeToAutoFixtureCreateMethodMap.GetOrAdd(type, t => AutoFixtureCreateMethod.MakeGenericMethod(type));
+            var autoFixtureGenericCreateMethod = CachedTypeToAutoFixtureCreateMethodMap.GetOrAdd(type, t => AutoFixtureCreateMethod.MakeGenericMethod(type));
 
             // Lock because Fixture is not thread-safe: https://github.com/AutoFixture/AutoFixture/issues/211
             lock (FixtureLock)
