@@ -30,6 +30,7 @@ namespace OBeautifulCode.AutoFakeItEasy
         #pragma warning restore SA1300
         {
             var result = FakeItEasy.Sdk.Create.Dummy(typeOfDummy);
+
             return result;
         }
     }
